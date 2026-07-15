@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 600" width="600" height="600">
+  <defs>
+    <linearGradient id="g6" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fcebdd"/>
+      <stop offset="1" stop-color="#f4d3b6"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="600" fill="url(#g6)"/>
+  <ellipse cx="300" cy="440" rx="110" ry="30" fill="#d9a97f" opacity="0.5"/>
+  <path d="M230 430 q-10 -120 70 -150 q80 30 70 150 Z" fill="#e08a4a"/>
+  <path d="M245 300 l-12 -46 l40 26 Z" fill="#e08a4a"/>
+  <path d="M355 300 l12 -46 l-40 26 Z" fill="#e08a4a"/>
+  <circle cx="272" cy="330" r="10" fill="#3a2a20"/>
+  <circle cx="328" cy="330" r="10" fill="#3a2a20"/>
+  <path d="M285 358 q15 14 30 0" stroke="#3a2a20" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M300 340 l-8 8 l8 8 l8 -8 Z" fill="#c25a3c"/>
+  <g stroke="#3a2a20" stroke-width="4" stroke-linecap="round">
+    <line x1="250" y1="352" x2="215" y2="346"/>
+    <line x1="250" y1="362" x2="216" y2="366"/>
+    <line x1="350" y1="352" x2="385" y2="346"/>
+    <line x1="350" y1="362" x2="384" y2="366"/>
+  </g>
+</svg>
