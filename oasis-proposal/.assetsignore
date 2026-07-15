@@ -1,0 +1,7 @@
+node_modules
+*.py
+README.md
+wrangler.toml
+.gitignore
+.assetsignore
+package-lock.json
