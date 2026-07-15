@@ -1,0 +1,626 @@
+<title>Wally marts — handmade arts &amp; crafts</title>
+<meta name="description" content="Wally marts — a small shop of original paintings, ceramics, and handmade little treasures." />
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #161311;
+    --surface-2: #0f0d0b;
+    --ink: #f6f0e7;
+    --ink-soft: #b0a598;
+    --accent: #e8843f;
+    --accent-dark: #cf6a28;
+    --line: #2b2620;
+    --danger: #ff8f8f;
+    --art-bg: #201b15;
+    --radius: 16px;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    --maxw: 1080px;
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img, svg { display: block; max-width: 100%; }
+
+  button { font-family: inherit; }
+
+  /* ---------- Preview ribbon ---------- */
+  .preview-note {
+    background: linear-gradient(90deg, var(--accent-dark), var(--accent));
+    color: #1a1206;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    padding: 7px 14px;
+    letter-spacing: 0.01em;
+  }
+
+  /* ---------- Header ---------- */
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    position: sticky;
+    top: 0;
+    z-index: 30;
+  }
+  .header-inner {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    letter-spacing: -0.01em;
+    background: none;
+    border: none;
+    color: var(--ink);
+    cursor: pointer;
+    padding: 0;
+  }
+  .brand-mark { color: var(--accent); font-size: 1.4rem; }
+  .cart-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 0.98rem;
+    cursor: pointer;
+  }
+  .cart-btn:hover { color: var(--ink); }
+  .cart-badge {
+    background: var(--accent);
+    color: #1a1206;
+    font-size: 0.72rem;
+    font-weight: 800;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .cart-badge.show { display: inline-flex; }
+
+  /* ---------- Layout ---------- */
+  .main {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 32px 20px 72px;
+  }
+  .hero { text-align: center; padding: 24px 0 34px; }
+  .hero-title {
+    font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+    margin: 0 0 12px;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  .hero-subtitle {
+    color: var(--ink-soft);
+    max-width: 560px;
+    margin: 0 auto;
+    font-size: 1.08rem;
+  }
+
+  /* ---------- Filters ---------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 28px;
+  }
+  .chip {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-soft);
+    padding: 8px 16px;
+    border-radius: 999px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .chip:hover { border-color: var(--accent); color: var(--ink); }
+  .chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #1a1206;
+  }
+
+  /* ---------- Product grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    text-align: left;
+    padding: 0;
+    color: inherit;
+    transition: transform 0.18s ease, border-color 0.18s ease;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+  .card:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  .card-image { aspect-ratio: 1 / 1; background: var(--art-bg); }
+  .card-image svg { width: 100%; height: 100%; }
+  .card-body { padding: 16px 18px 20px; }
+  .card-cat {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .card-name { margin: 0 0 8px; font-size: 1.06rem; line-height: 1.3; }
+  .card-price { margin: 0; font-weight: 700; font-size: 1.05rem; }
+
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 999px;
+    padding: 13px 26px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.15s ease, transform 0.1s ease, opacity 0.15s;
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn-primary { background: var(--accent); color: #1a1206; }
+  .btn-primary:hover { background: var(--accent-dark); }
+  .btn-ghost { background: #2a241d; color: var(--ink); }
+  .btn-ghost:hover { background: #352d24; }
+  .btn-block { width: 100%; }
+  .btn:disabled { opacity: 0.55; cursor: default; }
+
+  /* ---------- Overlays (product + cart) ---------- */
+  .scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+    z-index: 40;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+  .scrim.open { opacity: 1; pointer-events: auto; }
+
+  /* Product modal */
+  .modal {
+    position: fixed;
+    z-index: 50;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    pointer-events: none;
+  }
+  .modal-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    max-width: 760px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    transform: scale(0.96);
+    opacity: 0;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    pointer-events: auto;
+  }
+  .modal.open .modal-card { transform: scale(1); opacity: 1; }
+  .modal-img { background: var(--art-bg); }
+  .modal-img svg { width: 100%; height: 100%; }
+  .modal-body { padding: 28px; }
+  .modal-body h2 { margin: 8px 0 10px; font-size: 1.6rem; letter-spacing: -0.01em; }
+  .modal-price { font-size: 1.4rem; font-weight: 800; margin: 0 0 16px; }
+  .modal-desc { color: var(--ink-soft); margin: 0 0 24px; }
+  .modal-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid var(--line);
+    background: rgba(0,0,0,0.4);
+    color: var(--ink);
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 51;
+  }
+
+  /* Cart drawer */
+  .drawer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: min(420px, 100%);
+    background: var(--surface);
+    border-left: 1px solid var(--line);
+    z-index: 50;
+    transform: translateX(100%);
+    transition: transform 0.25s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .drawer-head h2 { margin: 0; font-size: 1.25rem; }
+  .drawer-body { flex: 1; overflow: auto; padding: 12px 20px; }
+  .drawer-foot { padding: 20px; border-top: 1px solid var(--line); }
+  .icon-btn {
+    background: none;
+    border: none;
+    color: var(--ink-soft);
+    font-size: 1.4rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .icon-btn:hover { color: var(--ink); }
+
+  .line {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .line:last-child { border-bottom: none; }
+  .line-thumb {
+    width: 64px; height: 64px;
+    border-radius: 12px;
+    background: var(--art-bg);
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .line-thumb svg { width: 100%; height: 100%; }
+  .line-main { flex: 1; min-width: 0; }
+  .line-name { font-weight: 700; font-size: 0.98rem; }
+  .line-sub { color: var(--ink-soft); font-size: 0.85rem; margin-top: 2px; }
+  .qty {
+    display: inline-flex;
+    align-items: center;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .qty button {
+    background: var(--surface-2);
+    border: none;
+    color: var(--ink);
+    width: 30px; height: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+  }
+  .qty button:hover { background: #2a241d; }
+  .qty span { min-width: 26px; text-align: center; font-weight: 700; font-size: 0.9rem; }
+  .line-remove {
+    background: none; border: none; color: var(--danger);
+    font-size: 0.8rem; cursor: pointer; padding: 4px 0 0;
+  }
+  .line-remove:hover { text-decoration: underline; }
+
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .total-row .amt { font-size: 1.5rem; font-weight: 800; }
+  .muted { color: var(--ink-soft); }
+  .small { font-size: 0.85rem; }
+
+  .empty { text-align: center; color: var(--ink-soft); padding: 48px 10px; }
+
+  /* Thank-you */
+  .thanks { text-align: center; padding: 30px 10px; }
+  .thanks .mark {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: #12301c; color: #5fd08a;
+    font-size: 2.1rem; font-weight: 800;
+    display: grid; place-items: center; margin: 0 auto 18px;
+  }
+
+  .footer {
+    border-top: 1px solid var(--line);
+    padding: 26px 20px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.9rem;
+  }
+
+  @media (max-width: 640px) {
+    .modal-card { grid-template-columns: 1fr; }
+    .modal-img { aspect-ratio: 16 / 10; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="preview-note">
+  Live preview · Checkout is a demo — real Visa &amp; debit payments turn on when you publish your own store
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <button class="brand" onclick="scrollTo({top:0,behavior:'smooth'})">
+      <span class="brand-mark" aria-hidden="true">&#10045;</span>
+      <span>Wally marts</span>
+    </button>
+    <button class="cart-btn" onclick="openCart()" aria-label="Open cart">
+      Cart
+      <span class="cart-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</header>
+
+<main class="main">
+  <section class="hero">
+    <h1 class="hero-title">Original arts &amp; handmade crafts</h1>
+    <p class="hero-subtitle">
+      One-of-a-kind paintings, ceramics, and little treasures — made by hand
+      and shipped with love.
+    </p>
+  </section>
+
+  <div class="filters" id="filters"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="footer">
+  Handmade with care · Wally marts
+</footer>
+
+<!-- Product modal -->
+<div class="scrim" id="scrim" onclick="closeAll()"></div>
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal-close" onclick="closeAll()" aria-label="Close">&#10005;</button>
+    <div class="modal-img" id="mImg"></div>
+    <div class="modal-body">
+      <span class="card-cat" id="mCat"></span>
+      <h2 id="mTitle"></h2>
+      <p class="modal-price" id="mPrice"></p>
+      <p class="modal-desc" id="mDesc"></p>
+      <button class="btn btn-primary btn-block" id="mAdd">Add to cart</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cart drawer -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="drawer-head">
+    <h2>Your cart</h2>
+    <button class="icon-btn" onclick="closeAll()" aria-label="Close cart">&#10005;</button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+  <div class="drawer-foot" id="drawerFoot"></div>
+</div>
+
+<script>
+  // ---- The artwork (inline so the preview is fully self-contained) ----
+  const ART = {
+    "art-1": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffd27a"/><stop offset="0.55" stop-color="#f2933f"/><stop offset="1" stop-color="#7d3b6b"/></linearGradient></defs><rect width="600" height="600" fill="url(#a1)"/><circle cx="300" cy="235" r="80" fill="#fff3d6" opacity="0.9"/><path d="M0 420 Q150 360 300 420 T600 420 V600 H0 Z" fill="#5a2b52" opacity="0.65"/><path d="M0 470 Q150 420 300 470 T600 470 V600 H0 Z" fill="#3d1c39" opacity="0.7"/></svg>',
+    "art-2": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dff3ef"/><stop offset="1" stop-color="#a7d8cf"/></linearGradient></defs><rect width="600" height="600" fill="url(#a2)"/><path d="M215 200 h150 a20 20 0 0 1 20 20 v150 a55 55 0 0 1 -55 55 h-80 a55 55 0 0 1 -55 -55 v-150 a20 20 0 0 1 20 -20 Z" fill="#6bab9f"/><path d="M385 235 h34 a34 34 0 0 1 0 68 h-34 Z" fill="none" stroke="#6bab9f" stroke-width="16"/><circle cx="265" cy="255" r="9" fill="#33564f"/><circle cx="315" cy="255" r="9" fill="#33564f"/><circle cx="290" cy="300" r="7" fill="#4c7d73"/></svg>',
+    "art-3": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1b3a63"/><stop offset="1" stop-color="#2f6f8f"/></linearGradient></defs><rect width="600" height="600" fill="url(#a3)"/><circle cx="220" cy="230" r="120" fill="#4fa3c7" opacity="0.55"/><circle cx="380" cy="340" r="150" fill="#7fd0e6" opacity="0.4"/><path d="M120 430 C220 360 380 500 500 400" stroke="#dff3ff" stroke-width="14" fill="none" stroke-linecap="round"/><path d="M150 180 C260 260 340 120 470 210" stroke="#bfe8f5" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.8"/></svg>',
+    "art-4": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" fill="#efe6d7"/><rect x="180" y="120" width="240" height="16" rx="8" fill="#b79b6e"/><g stroke="#c9b48c" stroke-width="10" stroke-linecap="round"><line x1="205" y1="150" x2="205" y2="380"/><line x1="245" y1="150" x2="245" y2="420"/><line x1="285" y1="150" x2="285" y2="360"/><line x1="325" y1="150" x2="325" y2="420"/><line x1="365" y1="150" x2="365" y2="380"/><line x1="395" y1="150" x2="395" y2="350"/></g><path d="M195 250 q105 40 210 0" stroke="#8a6f45" stroke-width="14" fill="none"/><path d="M195 310 q105 40 210 0" stroke="#c85a3c" stroke-width="14" fill="none"/><path d="M215 380 l80 60 l90 -70" stroke="#8a6f45" stroke-width="12" fill="none" stroke-linejoin="round"/></svg>',
+    "art-5": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><rect width="600" height="600" fill="#fbf4ec"/><line x1="300" y1="320" x2="300" y2="470" stroke="#5f8f5a" stroke-width="8"/><path d="M300 400 q-40 -20 -60 -60 q45 0 60 40 Z" fill="#7cb073"/><path d="M300 380 q40 -20 60 -60 q-45 0 -60 40 Z" fill="#7cb073"/><g fill="#e8739a"><circle cx="300" cy="270" r="34"/><circle cx="256" cy="290" r="30"/><circle cx="344" cy="290" r="30"/><circle cx="272" cy="238" r="30"/><circle cx="328" cy="238" r="30"/></g><circle cx="300" cy="268" r="20" fill="#f4c34e"/><g fill="#c79bd6"><circle cx="150" cy="180" r="16"/><circle cx="128" cy="192" r="14"/><circle cx="172" cy="192" r="14"/><circle cx="150" cy="205" r="10" fill="#f4c34e"/></g><g fill="#8fb3e8"><circle cx="460" cy="200" r="16"/><circle cx="438" cy="212" r="14"/><circle cx="482" cy="212" r="14"/><circle cx="460" cy="225" r="10" fill="#f4c34e"/></g></svg>',
+    "art-6": '<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="a6" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fcebdd"/><stop offset="1" stop-color="#f4d3b6"/></linearGradient></defs><rect width="600" height="600" fill="url(#a6)"/><ellipse cx="300" cy="440" rx="110" ry="30" fill="#d9a97f" opacity="0.5"/><path d="M230 430 q-10 -120 70 -150 q80 30 70 150 Z" fill="#e08a4a"/><path d="M245 300 l-12 -46 l40 26 Z" fill="#e08a4a"/><path d="M355 300 l12 -46 l-40 26 Z" fill="#e08a4a"/><circle cx="272" cy="330" r="10" fill="#3a2a20"/><circle cx="328" cy="330" r="10" fill="#3a2a20"/><path d="M285 358 q15 14 30 0" stroke="#3a2a20" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M300 340 l-8 8 l8 8 l8 -8 Z" fill="#c25a3c"/><g stroke="#3a2a20" stroke-width="4" stroke-linecap="round"><line x1="250" y1="352" x2="215" y2="346"/><line x1="250" y1="362" x2="216" y2="366"/><line x1="350" y1="352" x2="385" y2="346"/><line x1="350" y1="362" x2="384" y2="366"/></g></svg>'
+  };
+
+  // ---- Catalog (mirrors data/products.js) ----
+  const PRODUCTS = [
+    { id: "sunset-over-the-hills", name: "Sunset Over the Hills", cents: 12000, cat: "Painting", art: "art-1",
+      desc: "An original acrylic landscape on canvas, 40 x 30 cm. Warm golds and deep purples capture the last light of a summer evening. Signed on the back and ready to hang." },
+    { id: "hand-thrown-mug", name: "Hand-Thrown Ceramic Mug", cents: 3200, cat: "Craft", art: "art-2",
+      desc: "Wheel-thrown stoneware mug with a speckled sea-glass glaze. Holds about 350 ml, comfy handle, dishwasher and microwave safe. Each one is a little different." },
+    { id: "abstract-blue-study", name: "Abstract Blue Study", cents: 8500, cat: "Painting", art: "art-3",
+      desc: "A bold abstract in blues and teal, mixed media on wood panel, 30 x 30 cm. A calming statement piece for a desk, shelf, or gallery wall." },
+    { id: "woven-wall-hanging", name: "Woven Wall Hanging", cents: 5400, cat: "Craft", art: "art-4",
+      desc: "Hand-woven wall hanging in natural cotton and wool with wooden dowel. Roughly 35 cm wide. Adds warm, cozy texture to any room." },
+    { id: "wildflower-greeting-cards", name: "Wildflower Greeting Cards (Set of 6)", cents: 1800, cat: "Fun", art: "art-5",
+      desc: "A set of six blank greeting cards printed from original watercolour wildflower paintings. Includes kraft envelopes. Perfect for any occasion." },
+    { id: "tiny-clay-cat", name: "Tiny Clay Cat", cents: 2200, cat: "Fun", art: "art-6",
+      desc: "A hand-sculpted, hand-painted little clay cat, about 5 cm tall. Cheerful desk companion and a great small gift. No two are quite alike." }
+  ];
+
+  const money = (c) => "$" + (c / 100).toFixed(2);
+  const byId = (id) => PRODUCTS.find((p) => p.id === id);
+
+  // ---- State ----
+  let filter = "All";
+  const cart = new Map(); // id -> qty
+
+  // ---- Render: filters ----
+  function renderFilters() {
+    const cats = ["All", ...PRODUCTS.reduce((a, p) => a.includes(p.cat) ? a : [...a, p.cat], [])];
+    document.getElementById("filters").innerHTML = cats.map((c) =>
+      `<button class="chip ${c === filter ? "active" : ""}" onclick="setFilter('${c}')">${c}</button>`
+    ).join("");
+  }
+  function setFilter(c) { filter = c; renderFilters(); renderGrid(); }
+
+  // ---- Render: grid ----
+  function renderGrid() {
+    const shown = filter === "All" ? PRODUCTS : PRODUCTS.filter((p) => p.cat === filter);
+    document.getElementById("grid").innerHTML = shown.map((p) => `
+      <button class="card" onclick="openProduct('${p.id}')">
+        <div class="card-image">${ART[p.art]}</div>
+        <div class="card-body">
+          <span class="card-cat">${p.cat}</span>
+          <h3 class="card-name">${p.name}</h3>
+          <p class="card-price">${money(p.cents)}</p>
+        </div>
+      </button>`).join("");
+  }
+
+  // ---- Product modal ----
+  function openProduct(id) {
+    const p = byId(id);
+    document.getElementById("mImg").innerHTML = ART[p.art];
+    document.getElementById("mCat").textContent = p.cat;
+    document.getElementById("mTitle").textContent = p.name;
+    document.getElementById("mPrice").textContent = money(p.cents);
+    document.getElementById("mDesc").textContent = p.desc;
+    const addBtn = document.getElementById("mAdd");
+    addBtn.textContent = "Add to cart";
+    addBtn.disabled = false;
+    addBtn.onclick = () => {
+      addToCart(id);
+      addBtn.textContent = "✓ Added — view cart";
+      addBtn.onclick = () => { closeAll(); openCart(); };
+    };
+    document.getElementById("scrim").classList.add("open");
+    const m = document.getElementById("modal");
+    m.classList.add("open");
+    m.setAttribute("aria-hidden", "false");
+  }
+
+  // ---- Cart ----
+  function addToCart(id, n = 1) {
+    cart.set(id, (cart.get(id) || 0) + n);
+    updateBadge();
+  }
+  function changeQty(id, delta) {
+    const next = (cart.get(id) || 0) + delta;
+    if (next <= 0) cart.delete(id);
+    else cart.set(id, next);
+    updateBadge();
+    renderCart();
+  }
+  function removeItem(id) { cart.delete(id); updateBadge(); renderCart(); }
+
+  function totalCents() {
+    let t = 0;
+    for (const [id, q] of cart) t += byId(id).cents * q;
+    return t;
+  }
+  function count() {
+    let n = 0;
+    for (const q of cart.values()) n += q;
+    return n;
+  }
+  function updateBadge() {
+    const b = document.getElementById("cartBadge");
+    const n = count();
+    b.textContent = n;
+    b.classList.toggle("show", n > 0);
+  }
+
+  function openCart() {
+    renderCart();
+    document.getElementById("scrim").classList.add("open");
+    const d = document.getElementById("drawer");
+    d.classList.add("open");
+    d.setAttribute("aria-hidden", "false");
+  }
+
+  function renderCart() {
+    const body = document.getElementById("drawerBody");
+    const foot = document.getElementById("drawerFoot");
+    if (cart.size === 0) {
+      body.innerHTML = `<div class="empty">Your cart is empty.<br/>Find something handmade to love.</div>`;
+      foot.innerHTML = "";
+      return;
+    }
+    body.innerHTML = [...cart].map(([id, q]) => {
+      const p = byId(id);
+      return `<div class="line">
+        <div class="line-thumb">${ART[p.art]}</div>
+        <div class="line-main">
+          <div class="line-name">${p.name}</div>
+          <div class="line-sub">${money(p.cents)} each</div>
+          <button class="line-remove" onclick="removeItem('${id}')">Remove</button>
+        </div>
+        <div class="qty">
+          <button onclick="changeQty('${id}',-1)" aria-label="Decrease">&#8722;</button>
+          <span>${q}</span>
+          <button onclick="changeQty('${id}',1)" aria-label="Increase">&#43;</button>
+        </div>
+      </div>`;
+    }).join("");
+    foot.innerHTML = `
+      <div class="total-row"><span>Total</span><span class="amt">${money(totalCents())}</span></div>
+      <p class="muted small" style="margin:0 0 14px">Shipping is collected at checkout.</p>
+      <button class="btn btn-primary btn-block" onclick="checkout()">Checkout</button>`;
+  }
+
+  function checkout() {
+    const body = document.getElementById("drawerBody");
+    const foot = document.getElementById("drawerFoot");
+    foot.innerHTML = "";
+    body.innerHTML = `
+      <div class="thanks">
+        <div class="mark">&#10003;</div>
+        <h2 style="margin:0 0 8px">Thank you!</h2>
+        <p class="muted">This is a <strong>demo</strong> checkout, so no real payment was taken.</p>
+        <p class="muted small">In your published store, this button sends customers to a secure
+        Stripe page to pay by Visa, debit, or credit card.</p>
+        <button class="btn btn-ghost btn-block" style="margin-top:18px" onclick="resetCart()">Back to shop</button>
+      </div>`;
+    cart.clear();
+    updateBadge();
+  }
+  function resetCart() { closeAll(); }
+
+  function closeAll() {
+    document.getElementById("scrim").classList.remove("open");
+    const m = document.getElementById("modal");
+    m.classList.remove("open");
+    m.setAttribute("aria-hidden", "true");
+    const d = document.getElementById("drawer");
+    d.classList.remove("open");
+    d.setAttribute("aria-hidden", "true");
+  }
+
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeAll(); });
+
+  // ---- Init ----
+  renderFilters();
+  renderGrid();
+  updateBadge();
+</script>
