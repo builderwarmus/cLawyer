@@ -148,6 +148,39 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .chip:hover{color:var(--text); border-color:var(--gold)}
 @media (max-width:760px){ .tools{top:auto; bottom:14px; right:14px} }
 
+/* persistent "view live demo" floating button */
+.demo-fab{position:fixed; left:22px; bottom:22px; z-index:47; display:inline-flex; align-items:center; gap:10px;
+  padding:14px 20px; border-radius:999px; text-decoration:none; font-family:var(--sans); font-size:14px; font-weight:700;
+  letter-spacing:.01em; color:#20180a; background:linear-gradient(120deg,var(--gold),var(--gold-bright));
+  box-shadow:0 16px 40px -12px rgba(201,162,75,.7), 0 4px 14px rgba(0,0,0,.4);
+  transform:translateY(24px); opacity:0; pointer-events:none; transition:opacity .4s, transform .4s, box-shadow .25s}
+.demo-fab.show{opacity:1; transform:none; pointer-events:auto}
+.demo-fab:hover{box-shadow:0 22px 52px -12px rgba(201,162,75,.85), 0 4px 14px rgba(0,0,0,.4); transform:translateY(-2px)}
+.demo-fab:focus-visible{outline:2px solid var(--gold-bright); outline-offset:3px}
+.demo-fab b{font-size:16px; line-height:1}
+.demo-fab .pulse{width:9px; height:9px; border-radius:50%; background:#1e6b3f; position:relative; flex:none}
+.demo-fab .pulse::after{content:""; position:absolute; inset:-5px; border-radius:50%; border:2px solid rgba(20,60,30,.5); animation:fabpulse 2s infinite}
+@keyframes fabpulse{0%{transform:scale(.7); opacity:.9}100%{transform:scale(1.7); opacity:0}}
+@media (prefers-reduced-motion: reduce){ .demo-fab .pulse::after{animation:none} }
+@media (max-width:760px){ .demo-fab{left:14px; bottom:64px; padding:12px 16px; font-size:13px} }
+
+/* bold in-page callout linking to the live demo */
+.demo-cta{display:flex; align-items:center; justify-content:space-between; gap:24px; text-decoration:none;
+  margin-top:34px; padding:26px 30px; border-radius:18px; color:var(--text);
+  background:linear-gradient(120deg, rgba(201,162,75,.16), rgba(79,186,203,.10));
+  border:1px solid var(--gold); box-shadow:var(--shadow); transition:transform .2s, box-shadow .25s; position:relative; overflow:hidden}
+.demo-cta::before{content:""; position:absolute; inset:0; background:radial-gradient(80% 140% at 100% 0%, rgba(201,162,75,.18), transparent 60%); pointer-events:none}
+.demo-cta:hover{transform:translateY(-3px); box-shadow:0 30px 70px -24px rgba(201,162,75,.5)}
+.demo-cta:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+.demo-cta .dc-l{position:relative}
+.demo-cta .dc-ey{font-size:11px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); font-weight:700; display:block; margin-bottom:8px}
+.demo-cta .dc-h{font-family:var(--serif); font-size:clamp(22px,3vw,30px); color:var(--gold-bright); display:block; line-height:1.05}
+.demo-cta .dc-sub{font-size:13.5px; color:var(--muted); display:block; margin-top:8px}
+.demo-cta .dc-arrow{flex:none; position:relative; font-family:var(--sans); font-weight:700; font-size:15px; color:#20180a;
+  background:linear-gradient(120deg,var(--gold),var(--gold-bright)); padding:14px 22px; border-radius:999px; white-space:nowrap;
+  box-shadow:0 12px 30px -10px rgba(201,162,75,.7)}
+@media (max-width:640px){ .demo-cta{flex-direction:column; align-items:flex-start; gap:18px} .demo-cta .dc-arrow{align-self:stretch; text-align:center} }
+
 /* ================= AGE GATE ================= */
 .gate{position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px;
   background:radial-gradient(120% 120% at 50% 20%, rgba(9,17,21,.86), rgba(4,7,9,.97));
@@ -197,11 +230,11 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 
 /* hero background image (optional — falls back to gradients when absent) */
 .hero-bg{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
-.hero-bg img{width:100%; height:100%; object-fit:cover; opacity:.52; filter:saturate(1) contrast(1.02)}
+.hero-bg canvas{width:100%; height:100%; display:block; opacity:1}
 .hero-bg::after{content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(7,12,15,.40), rgba(7,12,15,.80)),
-             radial-gradient(95% 75% at 22% 42%, rgba(7,12,15,.06), rgba(7,12,15,.60))}
-:root[data-theme="light"] .hero-bg img, :root:not([data-theme]) .hero-bg img{opacity:.3}
+  background:linear-gradient(180deg, rgba(7,12,15,.20), rgba(7,12,15,.68)),
+             radial-gradient(105% 82% at 22% 44%, rgba(7,12,15,0), rgba(7,12,15,.62) 78%)}
+:root[data-theme="light"] .hero-bg canvas, :root:not([data-theme]) .hero-bg canvas{opacity:.5}
 .hero-inner{position:relative; z-index:1}
 
 /* four-floor image gallery (uses your photos when present) */
@@ -622,11 +655,13 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   <!-- buttons injected by JS -->
 </nav>
 
+<a class="demo-fab" id="demoFab" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener" aria-label="Open the live demo website in a new tab"><span class="pulse"></span> View the live demo <b>↗</b></a>
+
 <main>
 
 <!-- ================= HERO / THE OPPORTUNITY ================= -->
 <section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
-  <div class="hero-bg" data-imgwrap><img data-img data-src="hero.jpg" alt="" loading="eager" /></div>
+  <div class="hero-bg"><canvas id="herowater" aria-hidden="true"></canvas></div>
   <div class="hero-inner">
     <div class="brand rise">
       <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
@@ -636,7 +671,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     <h1 class="rise">Turn a landmark venue's<br>online presence into a <span class="aq">growth engine.</span></h1>
     <p class="tagline rise">A women-owned, four-floor water-themed members' club, running since 2010 and named one of Canada's fastest-growing businesses four times over. The current site is dated and flat — it undersells the room and leaves money on the table. This is the fix.</p>
     <div class="hero-cta rise">
-      <button class="btn primary" data-goto="sec-investment">See the investment</button>
+      <a class="btn primary" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener">Explore the live demo site ↗</a>
+      <button class="btn ghost" data-goto="sec-investment">See the investment</button>
       <button class="btn ghost" data-goto="sec-roi">How it pays back</button>
     </div>
     <div class="hero-meta rise">
@@ -671,6 +707,14 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     <div class="eyebrow rise"><span class="secnum"><span class="n">01</span></span> The Website</div>
     <h2 class="title rise">Descend through the four floors</h2>
     <p class="lead rise">A bespoke, image-led site built around the club's signature idea: scrolling through the four floors as if descending through the building — from the lounge, into the waters, through the playrooms, down to the private quarters. Elegant, dark, gold-accented and fully responsive — a world away from the current template. <em>(You're inside a working preview of it right now.)</em></p>
+    <a class="demo-cta rise" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener">
+      <span class="dc-l">
+        <span class="dc-ey">See it live</span>
+        <span class="dc-h">Explore the full demo website</span>
+        <span class="dc-sub">Walk the complete four-floor experience at oasis.craftwebstudios.ca — opens in a new tab.</span>
+      </span>
+      <span class="dc-arrow">Open the live site ↗</span>
+    </a>
     <div class="build-grid rise">
       <div class="card">
         <div class="card-head">
@@ -1147,7 +1191,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <footer>
   <div class="fbrand">Oasis Aqualounge</div>
   <div class="fmeta">CraftWeb Studios · Proposal · July 2026</div>
-  <div class="fmeta" style="margin-top:8px"><a href="https://oasisproposal.craftwebstudios.ca/">oasisproposal.craftwebstudios.ca</a></div>
+  <div style="margin-top:20px"><a class="btn primary" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener" style="text-decoration:none">Visit the live demo site ↗</a></div>
+  <div class="fmeta" style="margin-top:16px"><a href="https://oasisproposal.craftwebstudios.ca/">oasisproposal.craftwebstudios.ca</a></div>
 </footer>
 
 </main>
@@ -1226,6 +1271,15 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   });
   var floorBtns = $all(".floor-btn", elevator);
 
+  /* persistent demo button: reveal once the hero scrolls away */
+  (function(){
+    var fab=$("#demoFab"), hero=$("#sec-opportunity");
+    if(!fab || !hero) return;
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ fab.classList.toggle("show", !e.isIntersecting); });
+    }, {threshold:0.15}).observe(hero);
+  })();
+
   /* generic goto buttons */
   $all("[data-goto]").forEach(function(b){
     b.addEventListener("click", function(){
@@ -1280,13 +1334,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     img.addEventListener("error", fail);
     if(img.complete && img.naturalWidth===0) fail();
   }
-  // resolve every [data-src] image (hero, owners, mural…) through imgUrl
+  // resolve every [data-src] image (owners, mural…) through imgUrl
   $all("img[data-src]").forEach(function(img){ img.src = imgUrl(img.getAttribute("data-src")); });
-  // hero background image
-  (function(){
-    var wrap = $("[data-imgwrap]");
-    if(wrap) guardImg($("[data-img]", wrap), function(){ wrap.remove(); });
-  })();
   // generic feature images: on failure, hide the whole figure gracefully
   $all("img[data-figure]").forEach(function(img){
     guardImg(img, function(){ var fig = img.closest("[data-figwrap]"); if(fig) fig.remove(); else img.remove(); });
@@ -1462,6 +1511,48 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     msg.classList.add("show");
     toast("Thank you, "+name.split(" ")[0]+" — request noted (demo).");
   });
+
+  /* ---------- hero water surface (procedural caustics) ---------- */
+  (function(){
+    var cv = document.getElementById("herowater"); if(!cv) return;
+    var ctx = cv.getContext("2d");
+    var OW = 240, OH = 150;
+    var off = document.createElement("canvas"); off.width=OW; off.height=OH;
+    var octx = off.getContext("2d");
+    var frame = octx.createImageData(OW, OH), data = frame.data;
+    function light(){ var t=root.getAttribute("data-theme"); if(t) return t==="light"; return !window.matchMedia("(prefers-color-scheme: dark)").matches; }
+    function resize(){ cv.width=Math.max(2,Math.floor(cv.clientWidth*0.6)); cv.height=Math.max(2,Math.floor(cv.clientHeight*0.6)); }
+    function render(t){
+      var isL = light();
+      for(var y=0;y<OH;y++){
+        for(var x=0;x<OW;x++){
+          var v = Math.sin(x*0.10 + t)
+                + Math.sin(y*0.13 - t*0.9)
+                + Math.sin((x+y)*0.068 + t*0.6)
+                + Math.sin((x-y)*0.085 - t*0.7)
+                + Math.sin(Math.sqrt((x-OW*0.5)*(x-OW*0.5)+(y-OH*0.72)*(y-OH*0.72))*0.085 - t*1.05);
+          var n=(v+5)/10; if(n<0)n=0; else if(n>1)n=1;
+          var caustic=n*n*n, glow=Math.pow(n,1.5), i=(y*OW+x)*4;
+          if(isL){
+            data[i]=170+caustic*74; data[i+1]=204+caustic*46; data[i+2]=206+caustic*44;
+          } else {
+            data[i]  = 8  + glow*30 + caustic*74;
+            data[i+1] = 32 + glow*88 + caustic*150;
+            data[i+2] = 44 + glow*100 + caustic*140;
+          }
+          data[i+3]=255;
+        }
+      }
+      octx.putImageData(frame,0,0);
+      ctx.imageSmoothingEnabled=true;
+      ctx.drawImage(off,0,0,cv.width,cv.height);
+    }
+    var t=0;
+    function loop(){ t+=0.017; render(t); requestAnimationFrame(loop); }
+    resize();
+    if(reduce){ render(1.9); } else { loop(); }
+    var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz=setTimeout(function(){ resize(); if(reduce) render(1.9); }, 200); });
+  })();
 
   /* ---------- members app demo ---------- */
   (function(){
