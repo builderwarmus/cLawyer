@@ -197,11 +197,11 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 
 /* hero background image (optional — falls back to gradients when absent) */
 .hero-bg{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
-.hero-bg img{width:100%; height:100%; object-fit:cover; opacity:.34; filter:saturate(.85)}
+.hero-bg img{width:100%; height:100%; object-fit:cover; opacity:.52; filter:saturate(1) contrast(1.02)}
 .hero-bg::after{content:""; position:absolute; inset:0;
-  background:linear-gradient(180deg, rgba(7,12,15,.55), rgba(7,12,15,.82)),
-             radial-gradient(90% 70% at 20% 40%, rgba(7,12,15,.2), rgba(7,12,15,.7))}
-:root[data-theme="light"] .hero-bg img, :root:not([data-theme]) .hero-bg img{opacity:.22}
+  background:linear-gradient(180deg, rgba(7,12,15,.40), rgba(7,12,15,.80)),
+             radial-gradient(95% 75% at 22% 42%, rgba(7,12,15,.06), rgba(7,12,15,.60))}
+:root[data-theme="light"] .hero-bg img, :root:not([data-theme]) .hero-bg img{opacity:.3}
 .hero-inner{position:relative; z-index:1}
 
 /* four-floor image gallery (uses your photos when present) */
@@ -285,6 +285,108 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
   font-family:var(--serif); color:#F3EBD6; font-size:16px}
 .owner-fig .cap span{display:block; color:var(--gold); font-size:10px; letter-spacing:.22em;
   text-transform:uppercase; margin-bottom:5px; font-family:var(--sans)}
+
+/* ================= MEMBERS APP DEMO ================= */
+.appdemo{display:grid; grid-template-columns:312px 1fr; gap:52px; margin-top:20px; align-items:center}
+@media(max-width:900px){.appdemo{grid-template-columns:1fr; justify-items:center; gap:34px}}
+.phone-wrap{display:flex; justify-content:center}
+.phone{width:308px; height:640px; border-radius:46px; background:#04070a; padding:11px; position:relative;
+  border:1px solid var(--line); box-shadow:0 50px 100px -34px rgba(0,0,0,.9), inset 0 0 0 2px rgba(255,255,255,.04)}
+.phone .notch{position:absolute; top:11px; left:50%; transform:translateX(-50%); width:110px; height:24px;
+  background:#04070a; border-radius:0 0 15px 15px; z-index:6}
+.screen{width:100%; height:100%; border-radius:36px; overflow:hidden; background:#0A1216; display:flex; flex-direction:column; position:relative}
+.sb{height:32px; flex:none; display:flex; align-items:center; justify-content:space-between; padding:8px 20px 0 22px;
+  font-size:11px; color:var(--text); font-variant-numeric:tabular-nums; font-weight:600}
+.sb .sig{display:flex; gap:4px; align-items:center}
+.sb .sig i{width:4px; height:4px; border-radius:50%; background:var(--muted); display:inline-block}
+.appbar{flex:none; padding:6px 18px 12px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line-soft)}
+.appbar .b{font-family:var(--serif); color:var(--gold-bright); font-size:16px; letter-spacing:.02em}
+.appbar .who{font-size:10.5px; color:var(--muted)}
+.screens{flex:1; position:relative; overflow:hidden}
+.ascr{position:absolute; inset:0; overflow-y:auto; padding:16px 15px 18px; opacity:0; transform:translateX(10px);
+  pointer-events:none; transition:opacity .28s, transform .28s}
+.ascr.active{opacity:1; transform:none; pointer-events:auto}
+.ascr::-webkit-scrollbar{width:0}
+.scr-h{font-family:var(--serif); font-size:18px; color:var(--text); margin-bottom:2px}
+.scr-sub{font-size:11px; color:var(--muted); margin-bottom:14px}
+.tabbar{flex:none; display:flex; border-top:1px solid var(--line-soft); background:rgba(5,9,12,.96)}
+.atab{flex:1; border:0; background:none; cursor:pointer; padding:8px 2px 9px; color:var(--faint);
+  display:flex; flex-direction:column; align-items:center; gap:3px; font-family:var(--sans); font-size:8.5px; letter-spacing:.05em; transition:color .2s}
+.atab .ic{width:22px; height:22px; display:grid; place-items:center; font-size:15px; line-height:1}
+.atab.on{color:var(--gold-bright)}
+.atab:focus-visible{outline:2px solid var(--gold); outline-offset:-3px; border-radius:8px}
+
+/* membership card */
+.memcard{border-radius:18px; padding:17px 18px 16px; color:#20180a; position:relative; overflow:hidden;
+  background:linear-gradient(140deg,#E6CA86 0%,#C9A24B 42%,#8a6a26 100%); box-shadow:0 18px 34px -16px rgba(0,0,0,.75)}
+.memcard::after{content:""; position:absolute; inset:0; background:radial-gradient(120% 90% at 88% 8%, rgba(255,255,255,.4), transparent 46%)}
+.memcard>*{position:relative; z-index:1}
+.memcard .mc-top{display:flex; justify-content:space-between; align-items:center; font-size:9px; letter-spacing:.14em; text-transform:uppercase; font-weight:800}
+.memcard .mc-top .tier{background:rgba(30,18,4,.16); padding:3px 7px; border-radius:20px}
+.memcard .qr{width:92px; height:92px; margin:13px auto 12px; background:#fff; border-radius:9px; padding:7px; box-shadow:0 4px 10px rgba(0,0,0,.25)}
+.memcard .qr canvas{width:100%; height:100%; image-rendering:pixelated; display:block}
+.memcard .mc-name{font-family:var(--serif); font-size:23px; line-height:1}
+.memcard .mc-meta{font-size:10.5px; opacity:.82; margin-top:3px; letter-spacing:.02em}
+.wbtns{display:flex; gap:8px; margin-top:14px}
+.wbtns button{flex:1; border:1px solid var(--line-soft); background:#05090c; color:var(--text); border-radius:11px;
+  padding:10px 6px; font-size:10.5px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:5px; font-family:var(--sans)}
+.wbtns button:hover{border-color:var(--gold)}
+.enter{margin-top:12px; text-align:center; font-size:11px; color:var(--gold-bright); letter-spacing:.14em; text-transform:uppercase}
+
+/* generic app UI bits */
+.arow{display:flex; align-items:center; gap:11px; padding:11px 12px; border:1px solid var(--line-soft);
+  border-radius:13px; margin-bottom:9px; background:rgba(255,255,255,.015)}
+.arow .av{width:34px; height:34px; border-radius:50%; flex:none; display:grid; place-items:center;
+  font-family:var(--serif); font-size:14px; color:#20180a; background:linear-gradient(140deg,var(--gold-bright),var(--gold))}
+.arow .nm{font-size:13px; color:var(--text)}
+.arow .mt{font-size:10.5px; color:var(--muted); margin-top:1px}
+.arow .right{margin-left:auto}
+.dotlive{width:7px; height:7px; border-radius:50%; background:var(--good); display:inline-block; box-shadow:0 0 0 3px rgba(95,185,138,.18)}
+.pill{font-size:9px; letter-spacing:.08em; text-transform:uppercase; padding:5px 9px; border-radius:20px; border:1px solid var(--gold); color:var(--gold-bright); background:none; cursor:pointer}
+.pill:hover{background:rgba(201,162,75,.12)}
+.switchrow{display:flex; align-items:center; justify-content:space-between; padding:14px; border:1px solid var(--line-soft); border-radius:13px; margin-bottom:11px}
+.switchrow .lab{font-size:13px; color:var(--text)}
+.switchrow .lab small{display:block; color:var(--muted); font-size:10.5px; margin-top:2px}
+.sw{width:44px; height:26px; border-radius:20px; background:#1b2b31; border:1px solid var(--line-soft); position:relative; cursor:pointer; flex:none; transition:background .25s}
+.sw::after{content:""; position:absolute; top:2px; left:2px; width:20px; height:20px; border-radius:50%; background:#8aa0a6; transition:transform .25s, background .25s}
+.sw.on{background:linear-gradient(120deg,var(--gold),var(--gold-bright))}
+.sw.on::after{transform:translateX(18px); background:#20180a}
+.livecount{text-align:center; padding:16px 0 6px}
+.livecount .n{font-family:var(--serif); font-size:44px; color:var(--gold-bright); line-height:1; font-variant-numeric:tabular-nums}
+.livecount .l{font-size:11px; color:var(--muted); margin-top:4px}
+.menuitem{display:flex; align-items:center; gap:10px; padding:11px 12px; border:1px solid var(--line-soft); border-radius:13px; margin-bottom:9px}
+.menuitem .nm{font-size:13px; color:var(--text)}
+.menuitem .pr{font-size:11px; color:var(--muted); margin-top:1px}
+.menuitem .add{margin-left:auto; width:28px; height:28px; border-radius:9px; border:1px solid var(--gold); color:var(--gold-bright); background:none; font-size:16px; cursor:pointer; line-height:1}
+.menuitem .add:hover{background:rgba(201,162,75,.14)}
+.cartbar{position:sticky; bottom:0; margin:8px -3px -6px; padding:13px 15px; border-radius:13px;
+  background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#20180a; display:flex; align-items:center; justify-content:space-between;
+  font-size:12.5px; font-weight:700; cursor:pointer; box-shadow:0 -6px 18px -8px rgba(0,0,0,.6)}
+.cartbar.empty{background:#12212a; color:var(--faint); box-shadow:none; cursor:default}
+.slots{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px}
+.slot{border:1px solid var(--line-soft); border-radius:9px; padding:8px 10px; font-size:11px; color:var(--muted); cursor:pointer; font-variant-numeric:tabular-nums}
+.slot:hover{border-color:var(--gold)}
+.slot.sel{background:var(--gold); border-color:var(--gold); color:#20180a; font-weight:700}
+.slot.taken{opacity:.32; cursor:not-allowed; text-decoration:line-through}
+.confirmbtn{width:100%; padding:13px; border-radius:12px; border:0; background:linear-gradient(120deg,var(--gold),var(--gold-bright));
+  color:#20180a; font-weight:700; font-size:13px; cursor:pointer; margin-top:4px; font-family:var(--sans)}
+.confirmbtn:disabled{opacity:.4; cursor:not-allowed; filter:grayscale(.4)}
+.ptoast{position:absolute; left:14px; right:14px; bottom:74px; z-index:8; background:var(--surface-2);
+  border:1px solid var(--gold); color:var(--text); padding:11px 14px; border-radius:11px; font-size:12px;
+  text-align:center; opacity:0; transform:translateY(8px); transition:opacity .3s, transform .3s; pointer-events:none}
+.ptoast.show{opacity:1; transform:none}
+.safety{margin-top:6px; padding:13px; border:1px solid rgba(224,120,120,.4); background:rgba(224,120,120,.07);
+  border-radius:13px; display:flex; align-items:center; gap:10px}
+.safety .sos{width:40px; height:40px; border-radius:50%; background:#c2413f; color:#fff; display:grid; place-items:center; font-size:11px; font-weight:800; flex:none; cursor:pointer; letter-spacing:.04em}
+
+/* right-side sync panel */
+.appside .revtag{display:inline-block; margin-top:16px; font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+  padding:6px 12px; border-radius:20px; border:1px solid var(--gold); color:var(--gold-bright)}
+.appside .revtag.rev{border-color:var(--aqua); color:var(--aqua)}
+.appside h3{transition:opacity .25s}
+.installrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:22px}
+.installrow .ip{font-size:11px; color:var(--muted); border:1px solid var(--line-soft); border-radius:20px; padding:7px 13px}
+.installrow .ip b{color:var(--gold-bright)}
 
 /* ================= INVESTMENT BUILDER ================= */
 .invest{display:grid; grid-template-columns:1.35fr .9fr; gap:26px; margin-top:48px; align-items:start}
@@ -635,8 +737,97 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   <div class="wrap">
     <div class="eyebrow rise"><span class="secnum"><span class="n">03</span></span> The Members App</div>
     <h2 class="title rise">The differentiator</h2>
-    <p class="lead rise">A private companion app that lets members connect, transact and stay engaged — lifting spend-per-visit and repeat visits. We recommend launching as an installable web app (PWA): works on every phone, no app-store approval, with native apps as funded future add-ons. Modules phase to manage budget.</p>
-    <div class="build-grid rise">
+    <p class="lead rise">A private companion app <b>and members' area</b> that lets members connect, transact and stay engaged — lifting spend-per-visit and repeat visits. We recommend launching as an installable web app (PWA): works on every phone, no app-store approval, with native apps as funded future add-ons. <em>This is a live, tappable preview — try every tab.</em></p>
+
+    <div class="appdemo rise">
+      <div class="phone-wrap">
+        <div class="phone">
+          <div class="notch"></div>
+          <div class="screen">
+            <div class="sb"><span>11:24</span><span class="sig"><i></i><i></i><i></i> Oasis</span></div>
+            <div class="appbar"><span class="b">Oasis</span><span class="who">Alexei · #0231</span></div>
+            <div class="screens">
+              <!-- CARD -->
+              <div class="ascr active" data-screen="card">
+                <div class="memcard">
+                  <div class="mc-top"><span>Oasis · Aqualounge</span><span class="tier">Founding</span></div>
+                  <div class="qr"><canvas data-qr="member-0231-oasis"></canvas></div>
+                  <div class="mc-name">Alexei M.</div>
+                  <div class="mc-meta">Member since 2021 · No. 0231</div>
+                </div>
+                <div class="wbtns">
+                  <button data-ptoast="Added to Apple Wallet."> Apple Wallet</button>
+                  <button data-ptoast="Added to Google Wallet.">Google Wallet</button>
+                </div>
+                <div class="enter">Tap at the door to enter</div>
+              </div>
+              <!-- TONIGHT -->
+              <div class="ascr" data-screen="tonight">
+                <div class="scr-h">Tonight</div>
+                <div class="scr-sub">Friday · Aqua After Dark</div>
+                <div class="switchrow"><div class="lab">Attending tonight<small>Show in the live count</small></div><div class="sw on" data-switch="attend"></div></div>
+                <div class="switchrow"><div class="lab">Incognito mode<small>Hide me from the directory</small></div><div class="sw" data-switch="incognito"></div></div>
+                <div class="livecount"><div class="n" data-live>42</div><div class="l">members here now</div></div>
+              </div>
+              <!-- MEMBERS -->
+              <div class="ascr" data-screen="members">
+                <div class="scr-h">Who's here tonight</div>
+                <div class="scr-sub">Double-opt-in · moderated</div>
+                <div class="arow"><div class="av">J</div><div><div class="nm">Jordan · they/them</div><div class="mt"><span class="dotlive"></span> here now</div></div><button class="pill right" data-ptoast="Connection request sent.">Connect</button></div>
+                <div class="arow"><div class="av">M</div><div><div class="nm">Mara · she/her</div><div class="mt"><span class="dotlive"></span> here now</div></div><button class="pill right" data-ptoast="Connection request sent.">Connect</button></div>
+                <div class="arow"><div class="av">D</div><div><div class="nm">Dan &amp; Kit · couple</div><div class="mt"><span class="dotlive"></span> here now</div></div><button class="pill right" data-ptoast="Connection request sent.">Connect</button></div>
+                <div class="arow"><div class="av">R</div><div><div class="nm">Rey · he/him</div><div class="mt">arriving soon</div></div><button class="pill right" data-ptoast="Connection request sent.">Connect</button></div>
+              </div>
+              <!-- ORDER -->
+              <div class="ascr" data-screen="order">
+                <div class="scr-h">Bar &amp; poolside</div>
+                <div class="scr-sub">Routed straight to staff</div>
+                <div class="menuitem"><div><div class="nm">House Negroni</div><div class="pr">$16 · member $14</div></div><button class="add" data-add="14">+</button></div>
+                <div class="menuitem"><div><div class="nm">Champagne, glass</div><div class="pr">$18 · member $16</div></div><button class="add" data-add="16">+</button></div>
+                <div class="menuitem"><div><div class="nm">Poolside spritz</div><div class="pr">$15 · member $13</div></div><button class="add" data-add="13">+</button></div>
+                <div class="menuitem"><div><div class="nm">Sparkling water</div><div class="pr">$6</div></div><button class="add" data-add="6">+</button></div>
+                <div class="cartbar empty" data-cart><span data-cart-label>Add drinks to send</span><span data-cart-total></span></div>
+              </div>
+              <!-- BOOK -->
+              <div class="ascr" data-screen="book">
+                <div class="scr-h">Private room</div>
+                <div class="scr-sub">Hourly · 1 PM – 2 AM</div>
+                <div class="slots" data-slots>
+                  <span class="slot taken">7:00</span><span class="slot taken">8:00</span>
+                  <span class="slot">9:00</span><span class="slot">10:00</span>
+                  <span class="slot">11:00</span><span class="slot taken">12:00</span>
+                  <span class="slot">1:00</span>
+                </div>
+                <button class="confirmbtn" data-confirm disabled>Select a time</button>
+                <div class="safety"><div class="sos" data-ptoast="Staff alerted to your location — help is coming.">SOS</div><div class="mt" style="font-size:11.5px">Discreet safety alert — quietly notifies staff to your location.</div></div>
+              </div>
+            </div>
+            <div class="tabbar">
+              <button class="atab on" data-tab="card"><span class="ic">▦</span>Card</button>
+              <button class="atab" data-tab="tonight"><span class="ic">◐</span>Tonight</button>
+              <button class="atab" data-tab="members"><span class="ic">◇</span>Members</button>
+              <button class="atab" data-tab="order"><span class="ic">◈</span>Order</button>
+              <button class="atab" data-tab="book"><span class="ic">▤</span>Book</button>
+            </div>
+            <div class="ptoast" data-phone-toast></div>
+          </div>
+        </div>
+      </div>
+      <div class="appside">
+        <div class="eyebrow" style="margin-bottom:14px">Installable · PWA · No app store</div>
+        <h3 class="serif" style="font-size:clamp(26px,3.4vw,34px)" data-appside-title>Digital membership card</h3>
+        <p class="lead" style="margin-top:12px" data-appside-desc>Wallet-based entry (Apple &amp; Google Wallet) — fast, private, no fumbling at the door. The foundation every other module plugs into.</p>
+        <span class="revtag" data-appside-tag>Foundation</span>
+        <div class="installrow">
+          <span class="ip">Works on <b>every phone</b></span>
+          <span class="ip">Add to <b>home screen</b></span>
+          <span class="ip"><b>Age-verified</b> accounts</span>
+        </div>
+        <p style="color:var(--faint); font-size:13px; margin-top:20px">Every tab above is a Phase 1 module — the same members' area on the demo site, in your pocket.</p>
+      </div>
+    </div>
+
+    <div class="build-grid rise" style="margin-top:44px">
       <div class="card">
         <div class="card-head"><h3>Core Membership Platform</h3><span class="tag">Phase 1 · Now</span></div>
         <div class="card-body">
@@ -1271,6 +1462,103 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     msg.classList.add("show");
     toast("Thank you, "+name.split(" ")[0]+" — request noted (demo).");
   });
+
+  /* ---------- members app demo ---------- */
+  (function(){
+    var demo = $(".appdemo"); if(!demo) return;
+
+    // faux-QR renderer (deterministic from a seed string; no Math.random)
+    $all("canvas[data-qr]", demo).forEach(function(cv){
+      var n=23, ctx=cv.getContext("2d"); cv.width=n; cv.height=n;
+      var s=cv.getAttribute("data-qr"), h=2166136261;
+      for(var i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=(h*16777619)>>>0; }
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,n,n); ctx.fillStyle="#0b0b0b";
+      for(var y=0;y<n;y++)for(var x=0;x<n;x++){
+        var v=Math.abs(Math.sin((x*12.9898+y*78.233+h*0.0001))*43758.5453); v-=Math.floor(v);
+        if(v>0.52) ctx.fillRect(x,y,1,1);
+      }
+      function finder(ox,oy){ ctx.fillStyle="#fff"; ctx.fillRect(ox-1,oy-1,9,9); ctx.fillStyle="#0b0b0b";
+        ctx.fillRect(ox,oy,7,7); ctx.fillStyle="#fff"; ctx.fillRect(ox+1,oy+1,5,5);
+        ctx.fillStyle="#0b0b0b"; ctx.fillRect(ox+2,oy+2,3,3); }
+      finder(0,0); finder(n-7,0); finder(0,n-7);
+    });
+
+    // in-phone toast
+    var pToast = $("[data-phone-toast]", demo), pT;
+    function phoneToast(msg){ pToast.textContent=msg; pToast.classList.add("show");
+      clearTimeout(pT); pT=setTimeout(function(){ pToast.classList.remove("show"); }, 2200); }
+    $all("[data-ptoast]", demo).forEach(function(el){
+      el.addEventListener("click", function(){ phoneToast(el.getAttribute("data-ptoast")); });
+    });
+
+    // tab switching + side-panel sync
+    var copy = {
+      card:   {t:"Digital membership card", d:"Wallet-based entry (Apple &amp; Google Wallet) — fast, private, no fumbling at the door. The foundation every other module plugs into.", tag:"Foundation", rev:false},
+      tonight:{t:"Attending tonight", d:"A live, anonymized “who’s coming” signal that drives attendance — with incognito mode for total discretion.", tag:"Engagement", rev:false},
+      members:{t:"Who’s here tonight", d:"A discreet, paginated directory. Members connect by double-opt-in QR; chat stays moderated.", tag:"Retention", rev:false},
+      order:  {t:"In-venue bar ordering", d:"Drinks from either bar, routed straight to staff. This is where spend-per-visit climbs — the app paying for itself.", tag:"Revenue", rev:true},
+      book:   {t:"Reservations, hire &amp; safety", d:"Hourly private-room booking (1 PM–2 AM), off-hours venue enquiries, plus a discreet staff safety alert.", tag:"Revenue", rev:true}
+    };
+    var title=$("[data-appside-title]"), desc=$("[data-appside-desc]"), tag=$("[data-appside-tag]");
+    var tabs=$all(".atab", demo), scrs=$all(".ascr", demo);
+    tabs.forEach(function(tb){
+      tb.addEventListener("click", function(){
+        var key=tb.getAttribute("data-tab");
+        tabs.forEach(function(x){ x.classList.toggle("on", x===tb); });
+        scrs.forEach(function(s){ s.classList.toggle("active", s.getAttribute("data-screen")===key); });
+        var c=copy[key]; if(c){ title.innerHTML=c.t; desc.innerHTML=c.d; tag.textContent=c.tag; tag.classList.toggle("rev", !!c.rev); }
+      });
+    });
+
+    // toggles (attend / incognito) with live count response
+    var liveEl=$("[data-live]", demo), base=42;
+    $all("[data-switch]", demo).forEach(function(sw){
+      sw.addEventListener("click", function(){
+        sw.classList.toggle("on");
+        if(sw.getAttribute("data-switch")==="attend" && liveEl){
+          var on=sw.classList.contains("on");
+          liveEl.textContent = on ? base : (base-1);
+          phoneToast(on ? "You’re in tonight’s count." : "You’re hidden from the count.");
+        }
+        if(sw.getAttribute("data-switch")==="incognito"){
+          phoneToast(sw.classList.contains("on") ? "Incognito on — you’re invisible." : "Incognito off.");
+        }
+      });
+    });
+
+    // bar order cart
+    var cart=$("[data-cart]", demo), cLabel=$("[data-cart-label]", demo), cTotal=$("[data-cart-total]", demo);
+    var count=0, total=0;
+    $all("[data-add]", demo).forEach(function(btn){
+      btn.addEventListener("click", function(){
+        count++; total+=parseInt(btn.getAttribute("data-add"),10);
+        cart.classList.remove("empty");
+        cLabel.textContent = "Send " + count + (count===1?" drink":" drinks") + " to the bar";
+        cTotal.textContent = CAD.format(total);
+      });
+    });
+    cart.addEventListener("click", function(){
+      if(count===0) return;
+      phoneToast(count + (count===1?" drink":" drinks") + " sent — " + CAD.format(total) + ". Staff notified.");
+      count=0; total=0; cart.classList.add("empty");
+      cLabel.textContent="Add drinks to send"; cTotal.textContent="";
+    });
+
+    // booking slots
+    var confirm=$("[data-confirm]", demo), chosen=null;
+    $all("[data-slots] .slot", demo).forEach(function(sl){
+      if(sl.classList.contains("taken")) return;
+      sl.addEventListener("click", function(){
+        $all("[data-slots] .slot", demo).forEach(function(x){ x.classList.remove("sel"); });
+        sl.classList.add("sel"); chosen=sl.textContent.trim();
+        confirm.disabled=false; confirm.textContent="Confirm "+chosen+" · Private Room 3";
+      });
+    });
+    confirm.addEventListener("click", function(){
+      if(!chosen) return;
+      phoneToast("Booked "+chosen+" · Private Room 3. See you tonight.");
+    });
+  })();
 
   /* ---------- ambient water canvas ---------- */
   var cv = $("#water"), ctx = cv.getContext("2d"), W, H, dpr = Math.min(window.devicePixelRatio||1, 1.6);
