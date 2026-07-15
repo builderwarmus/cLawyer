@@ -5,6 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Oasis Aqualounge — Website, Brand Photography &amp; Members App · CraftWeb Studios</title>
 <meta name="description" content="A revenue-driving digital reimagining for Toronto's landmark 19+ members' club. Interactive proposal by CraftWeb Studios." />
+<link rel="canonical" href="https://oasisproposal.craftwebstudios.ca/" />
+<meta name="theme-color" content="#0A1216" />
+<meta name="robots" content="noindex, nofollow" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="CraftWeb Studios" />
+<meta property="og:url" content="https://oasisproposal.craftwebstudios.ca/" />
+<meta property="og:title" content="Oasis Aqualounge — Interactive Proposal" />
+<meta property="og:description" content="A revenue-driving digital reimagining for Toronto's landmark 19+ members' club. Website, brand photography &amp; members app." />
+<meta property="og:image" content="https://oasisproposal.craftwebstudios.ca/images/og-cover.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Oasis Aqualounge — Interactive Proposal" />
+<meta name="twitter:description" content="A revenue-driving digital reimagining for Toronto's landmark 19+ members' club." />
+<meta name="twitter:image" content="https://oasisproposal.craftwebstudios.ca/images/og-cover.jpg" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8C%8A%3C/text%3E%3C/svg%3E" />
 <style>
 /* ============================================================
    OASIS AQUALOUNGE — Interactive Proposal
@@ -180,6 +194,34 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .scroll-hint .arrow{width:1px; height:34px; background:linear-gradient(var(--gold),transparent); animation:drop 2.2s infinite}
 @keyframes drop{0%{opacity:0; transform:translateY(-8px)}40%{opacity:1}100%{opacity:0; transform:translateY(10px)}}
 @media (prefers-reduced-motion: reduce){.scroll-hint .arrow{animation:none}}
+
+/* hero background image (optional — falls back to gradients when absent) */
+.hero-bg{position:absolute; inset:0; z-index:0; overflow:hidden; pointer-events:none}
+.hero-bg img{width:100%; height:100%; object-fit:cover; opacity:.34; filter:saturate(.85)}
+.hero-bg::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(7,12,15,.55), rgba(7,12,15,.82)),
+             radial-gradient(90% 70% at 20% 40%, rgba(7,12,15,.2), rgba(7,12,15,.7))}
+:root[data-theme="light"] .hero-bg img, :root:not([data-theme]) .hero-bg img{opacity:.22}
+.hero-inner{position:relative; z-index:1}
+
+/* four-floor image gallery (uses your photos when present) */
+.floors-band{margin-top:52px}
+.floors-band .fb-cap{font-size:12px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold);
+  margin-bottom:18px; display:flex; align-items:center; gap:12px}
+.floors-band .fb-cap::before{content:""; width:28px; height:1px; background:var(--gold)}
+.floor-tiles{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
+@media (max-width:760px){.floor-tiles{grid-template-columns:repeat(2,1fr)}}
+.floor-tile{position:relative; aspect-ratio:3/4; border-radius:16px; overflow:hidden;
+  border:1px solid var(--line-soft); background:linear-gradient(160deg,var(--g1,#1E6B78),var(--g2,#0A1216));
+  display:flex; align-items:flex-end; isolation:isolate}
+.floor-tile img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0}
+.floor-tile::after{content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(180deg, transparent 35%, rgba(6,10,13,.85))}
+.floor-tile .ft-label{position:relative; z-index:2; padding:16px 16px 18px}
+.floor-tile .ft-n{font-size:10px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); display:block}
+.floor-tile .ft-name{font-family:var(--serif); font-size:19px; color:#F3EBD6; margin-top:4px; display:block}
+.floor-tile.empty::before{content:"Photo"; position:absolute; inset:0; z-index:1; display:grid; place-items:center;
+  color:rgba(255,255,255,.28); font-size:11px; letter-spacing:.3em; text-transform:uppercase}
 
 /* stat band */
 .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line-soft);
@@ -459,6 +501,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 
 <!-- ================= HERO / THE OPPORTUNITY ================= -->
 <section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
+  <div class="hero-bg" data-imgwrap><img data-img alt="" src="images/hero.jpg" loading="eager" /></div>
   <div class="hero-inner">
     <div class="brand rise">
       <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
@@ -524,6 +567,10 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
           </ul>
         </div>
       </div>
+    </div>
+    <div class="floors-band rise">
+      <div class="fb-cap">The descent · four floors</div>
+      <div class="floor-tiles" id="floorTiles"></div>
     </div>
   </div>
 </section>
@@ -862,7 +909,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 
 <footer>
   <div class="fbrand">Oasis Aqualounge</div>
-  <div class="fmeta">CraftWeb Studios · craftwebstudios.ca · Proposal · July 2026</div>
+  <div class="fmeta">CraftWeb Studios · Proposal · July 2026</div>
+  <div class="fmeta" style="margin-top:8px"><a href="https://oasisproposal.craftwebstudios.ca/">oasisproposal.craftwebstudios.ca</a></div>
 </footer>
 
 </main>
@@ -979,6 +1027,45 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     n.className = "node" + (i>=steps.length-3 ? " warm":"");
     n.innerHTML = '<div class="step">Step '+(i+1)+'</div><div class="name">'+s+'</div>';
     funnel.appendChild(n);
+  });
+
+  /* ---------- graceful images ---------- */
+  // Any <img> that 404s (e.g. before real photos are dropped in /images) is
+  // removed so the gradient fallback shows. Uses JS listeners (no inline
+  // handlers) so it works under strict CSP too.
+  function guardImg(img, onFail){
+    if(!img) return;
+    function fail(){ if(onFail) onFail(img); else img.remove(); }
+    img.addEventListener("error", fail);
+    if(img.complete && img.naturalWidth===0) fail();
+  }
+  // hero background image
+  (function(){
+    var wrap = $("[data-imgwrap]");
+    if(wrap) guardImg($("[data-img]", wrap), function(){ wrap.remove(); });
+  })();
+
+  /* ---------- four-floor gallery ---------- */
+  var floors = [
+    {n:"Floor 1", name:"The Lounge",       file:"floor-lounge.jpg",    g1:"#3A2A4A", g2:"#0A1216"},
+    {n:"Floor 2", name:"The Waters",       file:"floor-waters.jpg",    g1:"#1E6B78", g2:"#0A1216"},
+    {n:"Floor 3", name:"The Playrooms",    file:"floor-playrooms.jpg", g1:"#4A3A1E", g2:"#0A1216"},
+    {n:"Floor 4", name:"Private Quarters", file:"floor-quarters.jpg",  g1:"#1E4A44", g2:"#0A1216"}
+  ];
+  var ftEl = $("#floorTiles");
+  floors.forEach(function(f){
+    var tile = document.createElement("div");
+    tile.className = "floor-tile";
+    tile.style.setProperty("--g1", f.g1); tile.style.setProperty("--g2", f.g2);
+    var img = document.createElement("img");
+    img.alt = f.name; img.loading = "lazy"; img.src = "images/" + f.file;
+    tile.appendChild(img);
+    var lab = document.createElement("div");
+    lab.className = "ft-label";
+    lab.innerHTML = '<span class="ft-n">'+f.n+'</span><span class="ft-name">'+f.name+'</span>';
+    tile.appendChild(lab);
+    guardImg(img, function(){ img.remove(); tile.classList.add("empty"); });
+    ftEl.appendChild(tile);
   });
 
   /* ---------- investment builder ---------- */
