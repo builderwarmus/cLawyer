@@ -1,5 +1,10 @@
 # Wally marts 🎨
 
+> **Putting it on Cloudflare?** Use the ready-to-upload website in the
+> **[`site/`](site/) folder** and follow **[`site/README.md`](site/README.md)**.
+> That version is built for Cloudflare Pages (drag-and-drop, no build step).
+> The guide below covers the alternative Next.js + Vercel setup.
+
 Your very own online store for arts, crafts, and paintings. Customers can
 browse your pieces, add them to a cart, and pay by **Visa, debit, or credit
 card** through Stripe's secure checkout.
