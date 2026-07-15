@@ -4,7 +4,7 @@ import { CartProvider } from "../lib/cart-context";
 import Layout from "../components/Layout";
 
 // The shop's name. Change this to your own store name.
-export const SHOP_NAME = "The Little Art Shop";
+export const SHOP_NAME = "Wally marts";
 
 export default function App({ Component, pageProps }) {
   return (

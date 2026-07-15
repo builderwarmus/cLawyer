@@ -1,4 +1,4 @@
-# The Little Art Shop 🎨
+# Wally marts 🎨
 
 Your very own online store for arts, crafts, and paintings. Customers can
 browse your pieces, add them to a cart, and pay by **Visa, debit, or credit
