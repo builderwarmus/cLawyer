@@ -263,6 +263,29 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .note-inline{margin-top:22px; padding:18px 20px; border-left:2px solid var(--aqua);
   background:rgba(79,186,203,.06); border-radius:0 12px 12px 0; color:var(--muted); font-size:14.5px}
 
+/* full-width signature image band */
+.mural{position:relative; margin-top:36px; border-radius:20px; overflow:hidden;
+  border:1px solid var(--line-soft); box-shadow:var(--shadow); max-height:440px}
+.mural img{display:block; width:100%; height:100%; max-height:440px; object-fit:cover}
+.mural .mural-cap{position:absolute; left:0; bottom:0; right:0; padding:26px 24px 18px;
+  background:linear-gradient(transparent, rgba(6,10,13,.82)); color:#F3EBD6;
+  font-family:var(--serif); font-size:16px; letter-spacing:.02em}
+.mural .mural-cap span{color:var(--gold); font-size:10.5px; letter-spacing:.24em; text-transform:uppercase;
+  display:block; margin-bottom:5px; font-family:var(--sans)}
+
+/* meet the owners */
+.owners-grid{display:grid; grid-template-columns:1fr 1.25fr; gap:18px; margin-top:44px; align-items:stretch}
+@media (max-width:760px){.owners-grid{grid-template-columns:1fr}}
+.owner-fig{position:relative; border-radius:18px; overflow:hidden; border:1px solid var(--line-soft);
+  background:var(--surface); min-height:280px; box-shadow:var(--shadow)}
+.owner-fig img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.owner-fig::after{content:""; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 55%, rgba(6,10,13,.6))}
+.owner-fig .cap{position:absolute; left:0; right:0; bottom:0; z-index:1; padding:20px 20px 18px;
+  font-family:var(--serif); color:#F3EBD6; font-size:16px}
+.owner-fig .cap span{display:block; color:var(--gold); font-size:10px; letter-spacing:.22em;
+  text-transform:uppercase; margin-bottom:5px; font-family:var(--sans)}
+
 /* ================= INVESTMENT BUILDER ================= */
 .invest{display:grid; grid-template-columns:1.35fr .9fr; gap:26px; margin-top:48px; align-items:start}
 @media (max-width:880px){.invest{grid-template-columns:1fr}}
@@ -501,7 +524,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 
 <!-- ================= HERO / THE OPPORTUNITY ================= -->
 <section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
-  <div class="hero-bg" data-imgwrap><img data-img alt="" src="images/hero.jpg" loading="eager" /></div>
+  <div class="hero-bg" data-imgwrap><img data-img data-src="hero.jpg" alt="" loading="eager" /></div>
   <div class="hero-inner">
     <div class="brand rise">
       <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
@@ -581,7 +604,11 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     <div class="eyebrow rise"><span class="secnum"><span class="n">02</span></span> Brand Photography &amp; Video</div>
     <h2 class="title rise">Class, not amateur</h2>
     <p class="lead rise">The design is only as striking as the visuals behind it. The current clips — muddy audio, uneven pacing, a script that tries too hard — work against a premium brand. We recommend a dedicated, discreet on-site shoot: a fully-owned, on-brand image and video library that respects the club's strict no-guest-photography policy.</p>
-    <div class="build-grid rise">
+    <figure class="mural rise" data-figwrap style="margin:0 0 0 0">
+      <img data-figure data-src="mermaid.jpg" alt="The signature underwater mermaid mural at Oasis Aqualounge" loading="lazy" />
+      <figcaption class="mural-cap"><span>Your current photography</span>The signature mural — imagine it shot with directed lighting</figcaption>
+    </figure>
+    <div class="build-grid rise" style="margin-top:26px">
       <div class="card">
         <div class="card-head">
           <h3>On-Site Photo &amp; Video Production</h3>
@@ -648,6 +675,25 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
           </ul>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MEET THE OWNERS ================= -->
+<section class="floor" id="sec-owners" data-floor="•" data-label="Meet the Owners">
+  <div class="wrap">
+    <div class="eyebrow rise">Women-owned since 2010</div>
+    <h2 class="title rise">Meet the owners</h2>
+    <p class="lead rise">Oasis isn't a chain or a franchise — it's a women-owned Toronto institution built and run by the people who believe in it, four times over one of Canada's fastest-growing businesses. The new site puts them front and centre: a boutique <em>About</em> with a proper "Meet the Owners" feature that turns first-time visitors into people who trust the room before they ever walk in.</p>
+    <div class="owners-grid rise">
+      <figure class="owner-fig" data-figwrap style="margin:0">
+        <img data-figure data-src="owners.jpg" alt="The women who own and run Oasis Aqualounge" loading="lazy" />
+        <figcaption class="cap"><span>The owners</span>The team behind the club, since 2010</figcaption>
+      </figure>
+      <figure class="owner-fig" data-figwrap style="margin:0">
+        <img data-figure data-src="team.jpg" alt="The Oasis Aqualounge community and staff" loading="lazy" />
+        <figcaption class="cap"><span>The community</span>Staff &amp; members — the room the app keeps coming back</figcaption>
+      </figure>
     </div>
   </div>
 </section>
@@ -945,6 +991,10 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   var CAD2 = new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2});
   function $(s,el){return (el||document).querySelector(s);}
   function $all(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s));}
+  // Image source resolver: real files under images/ in the deployed site,
+  // or inline data-URIs (window.__OASIS_IMG__) in the standalone preview.
+  var IMG_DATA = window.__OASIS_IMG__ || {};
+  function imgUrl(name){ return IMG_DATA[name] || ("images/" + name); }
 
   /* ---------- toast ---------- */
   var toastEl = $("#toast"), toastT;
@@ -1039,11 +1089,17 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     img.addEventListener("error", fail);
     if(img.complete && img.naturalWidth===0) fail();
   }
+  // resolve every [data-src] image (hero, owners, mural…) through imgUrl
+  $all("img[data-src]").forEach(function(img){ img.src = imgUrl(img.getAttribute("data-src")); });
   // hero background image
   (function(){
     var wrap = $("[data-imgwrap]");
     if(wrap) guardImg($("[data-img]", wrap), function(){ wrap.remove(); });
   })();
+  // generic feature images: on failure, hide the whole figure gracefully
+  $all("img[data-figure]").forEach(function(img){
+    guardImg(img, function(){ var fig = img.closest("[data-figwrap]"); if(fig) fig.remove(); else img.remove(); });
+  });
 
   /* ---------- four-floor gallery ---------- */
   var floors = [
@@ -1058,7 +1114,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     tile.className = "floor-tile";
     tile.style.setProperty("--g1", f.g1); tile.style.setProperty("--g2", f.g2);
     var img = document.createElement("img");
-    img.alt = f.name; img.loading = "lazy"; img.src = "images/" + f.file;
+    img.alt = f.name; img.loading = "lazy"; img.src = imgUrl(f.file);
     tile.appendChild(img);
     var lab = document.createElement("div");
     lab.className = "ft-label";
