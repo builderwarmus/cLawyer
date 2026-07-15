@@ -1,0 +1,1181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Oasis Aqualounge — Website, Brand Photography &amp; Members App · CraftWeb Studios</title>
+<meta name="description" content="A revenue-driving digital reimagining for Toronto's landmark 19+ members' club. Interactive proposal by CraftWeb Studios." />
+<style>
+/* ============================================================
+   OASIS AQUALOUNGE — Interactive Proposal
+   Nocturnal water palette · descend-through-the-floors layout
+   ============================================================ */
+
+:root{
+  /* dark (primary, committed nocturnal world) */
+  --ink:#070C0F;
+  --ground:#0A1216;
+  --surface:#0F1A20;
+  --surface-2:#14242C;
+  --line:rgba(233,205,150,.14);
+  --line-soft:rgba(255,255,255,.06);
+  --gold:#C9A24B;
+  --gold-bright:#E6CA86;
+  --aqua:#4FBACb;
+  --aqua-deep:#1E6B78;
+  --text:#ECE3D1;
+  --muted:#93A6AC;
+  --faint:#5E7278;
+  --good:#5FB98A;
+  --shadow:0 30px 80px -30px rgba(0,0,0,.8);
+  --glow:rgba(79,186,203,.10); --veilb:rgba(7,12,15,.55);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --maxw:1080px;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --ink:#EDE7DB; --ground:#F4EFE5; --surface:#FBF7EF; --surface-2:#F5EEDF;
+    --line:rgba(120,90,30,.22); --line-soft:rgba(0,0,0,.07);
+    --gold:#9A742A; --gold-bright:#7E5D18; --aqua:#1B7A88; --aqua-deep:#0E5561;
+    --text:#241A0E; --muted:#6C5C46; --faint:#93826A;
+    --shadow:0 24px 60px -32px rgba(60,40,10,.35);
+    --glow:rgba(201,162,75,.12); --veilb:rgba(120,90,30,.05);
+  }
+}
+:root[data-theme="light"]{
+  --ink:#EDE7DB; --ground:#F4EFE5; --surface:#FBF7EF; --surface-2:#F5EEDF;
+  --line:rgba(120,90,30,.22); --line-soft:rgba(0,0,0,.07);
+  --gold:#9A742A; --gold-bright:#7E5D18; --aqua:#1B7A88; --aqua-deep:#0E5561;
+  --text:#241A0E; --muted:#6C5C46; --faint:#93826A;
+  --shadow:0 24px 60px -32px rgba(60,40,10,.35);
+  --glow:rgba(201,162,75,.12); --veilb:rgba(120,90,30,.05);
+}
+:root[data-theme="dark"]{
+  --ink:#070C0F; --ground:#0A1216; --surface:#0F1A20; --surface-2:#14242C;
+  --line:rgba(233,205,150,.14); --line-soft:rgba(255,255,255,.06);
+  --gold:#C9A24B; --gold-bright:#E6CA86; --aqua:#4FBACb; --aqua-deep:#1E6B78;
+  --text:#ECE3D1; --muted:#93A6AC; --faint:#5E7278;
+  --shadow:0 30px 80px -30px rgba(0,0,0,.8);
+  --glow:rgba(79,186,203,.10); --veilb:rgba(7,12,15,.55);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0; background:var(--ground); color:var(--text);
+  font-family:var(--sans); line-height:1.6; font-size:17px;
+  -webkit-font-smoothing:antialiased; overflow-x:hidden;
+}
+#water{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.9}
+.veil{position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 55%),
+    linear-gradient(180deg, transparent 0%, var(--veilb) 100%);
+}
+main{position:relative; z-index:1}
+/* reserve room for the fixed elevator rail so content never underlaps it */
+@media (min-width:761px) and (max-width:1180px){ main{padding-right:100px} }
+@media (min-width:1181px) and (max-width:1640px){ main{padding-right:272px} }
+
+a{color:var(--gold-bright); text-decoration:none}
+h1,h2,h3{font-family:var(--serif); font-weight:500; line-height:1.08; text-wrap:balance; margin:0}
+p{margin:0}
+.serif{font-family:var(--serif)}
+
+/* ---- shared layout ---- */
+.wrap{max-width:var(--maxw); margin:0 auto; padding:0 26px}
+.floor{padding:118px 0; position:relative}
+.eyebrow{font-family:var(--sans); font-size:12px; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--gold); font-weight:600; display:flex; align-items:center; gap:14px; margin-bottom:22px}
+.eyebrow::before{content:""; width:34px; height:1px; background:linear-gradient(90deg,var(--gold),transparent)}
+.lead{color:var(--muted); font-size:19px; max-width:64ch; margin-top:18px}
+h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
+.kicker-num{font-family:var(--serif); color:var(--gold); font-size:15px; letter-spacing:.3em}
+
+/* reveal on scroll */
+.rise{opacity:0; transform:translateY(26px); transition:opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1)}
+.rise.in{opacity:1; transform:none}
+@media (prefers-reduced-motion: reduce){.rise{opacity:1; transform:none; transition:none}}
+
+/* ---- elevator floor panel ---- */
+.elevator{position:fixed; right:24px; top:50%; transform:translateY(-50%); z-index:40;
+  display:flex; flex-direction:column; gap:2px; padding:16px 14px;
+  background:linear-gradient(160deg, rgba(20,36,44,.86), rgba(10,18,22,.9));
+  border:1px solid var(--line); border-radius:16px; backdrop-filter:blur(10px);
+  box-shadow:var(--shadow); max-height:82vh}
+.elevator .cap{font-size:9.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--faint);
+  text-align:center; padding-bottom:8px; margin-bottom:6px; border-bottom:1px solid var(--line-soft)}
+.floor-btn{display:flex; align-items:center; gap:11px; background:none; border:0; cursor:pointer;
+  padding:7px 8px; border-radius:9px; color:var(--muted); font-family:var(--sans); text-align:left;
+  transition:background .25s, color .25s; width:100%}
+.floor-btn:hover{background:rgba(255,255,255,.04); color:var(--text)}
+.floor-btn .dot{width:11px; height:11px; border-radius:50%; flex:none; position:relative;
+  border:1.5px solid var(--faint); transition:all .3s}
+.floor-btn .lbl{font-size:11px; letter-spacing:.13em; text-transform:uppercase; white-space:nowrap;
+  opacity:.9; transition:opacity .3s}
+.floor-btn.active{color:var(--gold-bright)}
+.floor-btn.active .dot{border-color:var(--gold); background:var(--gold);
+  box-shadow:0 0 0 3px rgba(201,162,75,.18), 0 0 14px 2px rgba(201,162,75,.55)}
+.floor-btn:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+@media (max-width:1180px){ .elevator .lbl{display:none} .elevator{padding:14px 10px; right:16px} }
+@media (max-width:760px){ .elevator{display:none} }
+
+/* depth meter (mobile + ambient) */
+.depth{position:fixed; left:0; top:0; height:3px; z-index:45; width:100%;
+  background:linear-gradient(90deg,var(--aqua-deep),var(--aqua)); transform-origin:0 50%; transform:scaleX(0)}
+
+/* theme toggle */
+.tools{position:fixed; top:18px; right:20px; z-index:46; display:flex; gap:8px}
+.chip{background:rgba(20,36,44,.7); border:1px solid var(--line); color:var(--muted);
+  border-radius:999px; padding:8px 13px; font-size:12px; letter-spacing:.08em; cursor:pointer;
+  backdrop-filter:blur(8px); font-family:var(--sans); transition:color .2s,border-color .2s}
+.chip:hover{color:var(--text); border-color:var(--gold)}
+@media (max-width:760px){ .tools{top:auto; bottom:14px; right:14px} }
+
+/* ================= AGE GATE ================= */
+.gate{position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px;
+  background:radial-gradient(120% 120% at 50% 20%, rgba(9,17,21,.86), rgba(4,7,9,.97));
+  backdrop-filter:blur(14px); transition:opacity .6s}
+.gate.hide{opacity:0; pointer-events:none}
+.gate-card{max-width:440px; text-align:center; border:1px solid var(--line); border-radius:22px;
+  padding:46px 40px; background:linear-gradient(165deg, rgba(18,32,39,.9), rgba(9,16,20,.95));
+  box-shadow:var(--shadow)}
+.gate-card .mark{font-family:var(--serif); font-size:15px; letter-spacing:.5em; color:var(--gold);
+  text-transform:uppercase; margin-bottom:26px}
+.gate-card h1{font-size:34px; margin-bottom:14px}
+.gate-card p{color:var(--muted); font-size:15px; margin-bottom:30px}
+.gate-actions{display:flex; flex-direction:column; gap:12px}
+.btn{font-family:var(--sans); font-size:14.5px; letter-spacing:.05em; border-radius:12px; cursor:pointer;
+  padding:15px 24px; border:1px solid var(--line); background:transparent; color:var(--text);
+  transition:transform .15s, background .25s, border-color .25s, box-shadow .25s}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#231a08;
+  border-color:transparent; font-weight:700; box-shadow:0 12px 30px -12px rgba(201,162,75,.6)}
+.btn.primary:hover{box-shadow:0 16px 40px -12px rgba(201,162,75,.75)}
+.btn.ghost{color:var(--muted)}
+.btn.ghost:hover{color:var(--text); border-color:var(--gold)}
+.gate-note{font-size:11.5px; color:var(--faint); margin-top:22px; letter-spacing:.04em}
+.gate-exit{display:none}
+.gate.exited .gate-enterview{display:none}
+.gate.exited .gate-exit{display:block}
+
+/* ================= HERO ================= */
+.hero{min-height:100svh; display:flex; align-items:center; position:relative; padding:120px 0 80px}
+.hero-inner{max-width:var(--maxw); margin:0 auto; padding:0 26px; width:100%}
+.brand{font-family:var(--serif); letter-spacing:.02em; margin-bottom:40px; display:flex; align-items:baseline; gap:14px}
+.brand .o{font-size:26px; color:var(--gold-bright)}
+.brand .sub{font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--faint); font-family:var(--sans)}
+.hero h1{font-size:clamp(40px,8vw,88px); letter-spacing:-.02em; line-height:1.02}
+.hero h1 .aq{font-style:italic; color:var(--gold-bright)}
+.hero .tagline{font-size:clamp(18px,2.4vw,23px); color:var(--muted); max-width:60ch; margin-top:28px}
+.hero-meta{display:flex; flex-wrap:wrap; gap:34px; margin-top:52px; padding-top:30px; border-top:1px solid var(--line-soft)}
+.hero-meta div .k{font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); margin-bottom:6px}
+.hero-meta div .v{font-size:15px; color:var(--text); font-family:var(--serif)}
+.hero-cta{margin-top:44px; display:flex; gap:14px; flex-wrap:wrap}
+.scroll-hint{position:absolute; bottom:26px; left:50%; transform:translateX(-50%); color:var(--faint);
+  font-size:11px; letter-spacing:.3em; text-transform:uppercase; display:flex; flex-direction:column;
+  align-items:center; gap:8px}
+.scroll-hint .arrow{width:1px; height:34px; background:linear-gradient(var(--gold),transparent); animation:drop 2.2s infinite}
+@keyframes drop{0%{opacity:0; transform:translateY(-8px)}40%{opacity:1}100%{opacity:0; transform:translateY(10px)}}
+@media (prefers-reduced-motion: reduce){.scroll-hint .arrow{animation:none}}
+
+/* stat band */
+.stats{display:grid; grid-template-columns:repeat(4,1fr); gap:1px; background:var(--line-soft);
+  border:1px solid var(--line-soft); border-radius:16px; overflow:hidden; margin-top:60px}
+.stats .cell{background:var(--surface); padding:26px 22px}
+.stats .n{font-family:var(--serif); font-size:clamp(26px,4vw,40px); color:var(--gold-bright); letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.stats .c{font-size:12px; color:var(--muted); margin-top:8px; letter-spacing:.02em}
+@media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+/* ================= FUNNEL ================= */
+.funnel{display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:10px; margin-top:44px}
+.node{position:relative; border:1px solid var(--line-soft); border-radius:12px; padding:16px 14px;
+  background:var(--surface); cursor:default; transition:transform .25s, border-color .25s, background .25s; overflow:hidden}
+.node::before{content:""; position:absolute; left:0; top:0; height:100%; width:3px;
+  background:linear-gradient(var(--gold),var(--aqua)); opacity:.5; transition:opacity .25s}
+.node .step{font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase}
+.node .name{font-family:var(--serif); font-size:16px; margin-top:6px; color:var(--text)}
+.node:hover{transform:translateY(-4px); border-color:var(--gold); background:var(--surface-2)}
+.node:hover::before{opacity:1}
+.node.warm .name{color:var(--gold-bright)}
+
+/* ================= BUILD CARDS ================= */
+.build-grid{display:grid; grid-template-columns:1fr; gap:22px; margin-top:48px}
+.card{border:1px solid var(--line-soft); border-radius:20px; background:var(--surface);
+  overflow:hidden; box-shadow:var(--shadow)}
+.card-head{display:flex; align-items:flex-start; justify-content:space-between; gap:20px;
+  padding:30px 34px; border-bottom:1px solid var(--line-soft); background:linear-gradient(160deg, var(--surface-2), transparent)}
+.card-head h3{font-size:26px}
+.card-head .tag{font-size:10px; letter-spacing:.24em; text-transform:uppercase; color:#231a08;
+  background:linear-gradient(120deg,var(--gold),var(--gold-bright)); padding:6px 12px; border-radius:999px;
+  font-weight:700; font-family:var(--sans); white-space:nowrap}
+.card-head .tag.rec{background:transparent; color:var(--aqua); border:1px solid var(--aqua)}
+.card-body{padding:26px 34px 34px}
+.card-body>p{color:var(--muted); margin-bottom:18px}
+.feats{list-style:none; padding:0; margin:0; display:grid; gap:13px}
+.feats li{display:flex; gap:13px; align-items:flex-start; font-size:15.5px; color:var(--text)}
+.feats li .mk{color:var(--gold); flex:none; margin-top:3px; font-size:13px}
+.feats li b{color:var(--gold-bright); font-weight:600}
+.note-inline{margin-top:22px; padding:18px 20px; border-left:2px solid var(--aqua);
+  background:rgba(79,186,203,.06); border-radius:0 12px 12px 0; color:var(--muted); font-size:14.5px}
+
+/* ================= INVESTMENT BUILDER ================= */
+.invest{display:grid; grid-template-columns:1.35fr .9fr; gap:26px; margin-top:48px; align-items:start}
+@media (max-width:880px){.invest{grid-template-columns:1fr}}
+.lines{border:1px solid var(--line-soft); border-radius:18px; overflow:hidden; background:var(--surface)}
+.line{display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center;
+  padding:18px 22px; border-bottom:1px solid var(--line-soft); cursor:pointer; transition:background .2s}
+.line:last-child{border-bottom:0}
+.line:hover{background:var(--surface-2)}
+.line.req{cursor:default; opacity:1}
+.tick{width:22px; height:22px; border-radius:7px; border:1.5px solid var(--faint); flex:none;
+  display:grid; place-items:center; transition:all .2s; color:#231a08; font-size:13px}
+.line.on .tick{background:var(--gold); border-color:var(--gold)}
+.line.off .tick{background:transparent}
+.line.off{opacity:.5}
+.line .ln-name{display:block; font-family:var(--serif); font-size:16.5px}
+.line .ln-desc{display:block; font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45}
+.line .ln-price{font-family:var(--serif); font-size:17px; color:var(--gold-bright); font-variant-numeric:tabular-nums; white-space:nowrap}
+.line .lock{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
+.summary{border:1px solid var(--line); border-radius:18px; padding:28px 26px; background:linear-gradient(165deg,var(--surface-2),var(--surface)); position:sticky; top:24px}
+.summary h3{font-size:14px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-family:var(--sans); margin-bottom:20px}
+.srow{display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; font-size:14.5px; color:var(--muted); border-bottom:1px dashed var(--line-soft)}
+.srow .amt{font-family:var(--serif); color:var(--text); font-variant-numeric:tabular-nums}
+.srow.total{border-bottom:0; margin-top:10px; padding-top:18px; border-top:1px solid var(--line)}
+.srow.total .lbl2{color:var(--text); font-size:15px; font-weight:600}
+.srow.total .amt{font-size:26px; color:var(--gold-bright)}
+.summary .hint{font-size:11.5px; color:var(--faint); margin-top:16px; line-height:1.5}
+.phase2{margin-top:20px; padding:16px 18px; border:1px dashed var(--line); border-radius:12px; color:var(--muted); font-size:13px}
+.phase2 b{color:var(--gold-bright)}
+
+/* ================= ROI CALCULATOR ================= */
+.roi{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:48px; align-items:stretch}
+@media (max-width:880px){.roi{grid-template-columns:1fr}}
+.levers{border:1px solid var(--line-soft); border-radius:18px; background:var(--surface); padding:26px 28px}
+.lever{padding:16px 0; border-bottom:1px solid var(--line-soft)}
+.lever:last-child{border-bottom:0}
+.lever .top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:12px}
+.lever .lname{font-size:14px; color:var(--text)}
+.lever .lval{font-family:var(--serif); color:var(--gold-bright); font-size:16px; font-variant-numeric:tabular-nums}
+input[type=range]{-webkit-appearance:none; appearance:none; width:100%; height:4px; border-radius:4px;
+  background:linear-gradient(90deg,var(--aqua-deep),var(--aqua)); outline:none; cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none; appearance:none; width:20px; height:20px;
+  border-radius:50%; background:var(--gold-bright); border:2px solid var(--ground); cursor:pointer;
+  box-shadow:0 0 0 4px rgba(201,162,75,.2), 0 2px 8px rgba(0,0,0,.4)}
+input[type=range]::-moz-range-thumb{width:20px; height:20px; border-radius:50%; background:var(--gold-bright);
+  border:2px solid var(--ground); cursor:pointer; box-shadow:0 0 0 4px rgba(201,162,75,.2)}
+input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(201,162,75,.5)}
+.lever .sub{font-size:11.5px; color:var(--faint); margin-top:9px; letter-spacing:.02em}
+.toggle-lever{display:flex; align-items:center; gap:10px; margin-bottom:12px}
+.toggle-lever .lname{flex:1}
+.mini-tick{width:20px; height:20px; border-radius:6px; border:1.5px solid var(--faint); flex:none; cursor:pointer;
+  display:grid; place-items:center; color:#231a08; font-size:12px; transition:all .2s}
+.lever.active .mini-tick{background:var(--gold); border-color:var(--gold)}
+.readout{border:1px solid var(--line); border-radius:18px; background:linear-gradient(165deg,var(--surface-2),var(--surface));
+  padding:34px 30px; display:flex; flex-direction:column; justify-content:center}
+.readout .big{font-family:var(--serif); font-size:clamp(44px,8vw,64px); color:var(--gold-bright);
+  letter-spacing:-.02em; font-variant-numeric:tabular-nums; line-height:1}
+.readout .big .pfx{font-size:.5em; color:var(--muted); vertical-align:.35em; margin-right:4px}
+.readout .cap{font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); margin-bottom:14px}
+.readout .payback{margin-top:30px; padding-top:24px; border-top:1px solid var(--line-soft); display:flex; gap:26px; flex-wrap:wrap}
+.readout .payback .item .n{font-family:var(--serif); font-size:28px; color:var(--text); font-variant-numeric:tabular-nums}
+.readout .payback .item .l{font-size:11.5px; color:var(--muted); margin-top:4px; max-width:20ch}
+.readout .annual{margin-top:24px; font-size:13px; color:var(--muted)}
+.readout .annual b{color:var(--aqua); font-family:var(--serif); font-size:16px}
+.disclaimer{font-size:12px; color:var(--faint); margin-top:24px; max-width:70ch; line-height:1.6}
+
+/* value columns */
+.valcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; margin-top:40px}
+.valcol{border:1px solid var(--line-soft); border-radius:16px; padding:24px; background:var(--surface)}
+.valcol h4{font-family:var(--serif); font-size:18px; color:var(--gold-bright); margin-bottom:14px}
+.valcol ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.valcol li{font-size:14px; color:var(--muted); padding-left:18px; position:relative}
+.valcol li::before{content:"·"; position:absolute; left:2px; color:var(--gold); font-size:20px; top:-4px}
+
+/* ================= EVENTS CALENDAR ================= */
+.events{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; margin-top:44px}
+.ev{border:1px solid var(--line-soft); border-radius:16px; overflow:hidden; background:var(--surface);
+  cursor:pointer; transition:transform .25s, border-color .25s; text-align:left; padding:0; color:inherit; font-family:inherit}
+.ev:hover{transform:translateY(-5px); border-color:var(--gold)}
+.ev:focus-visible{outline:2px solid var(--gold); outline-offset:3px}
+.ev .banner{height:96px; position:relative; display:flex; align-items:flex-end; padding:14px}
+.ev .banner .date{font-family:var(--serif); color:var(--text); font-size:13px; letter-spacing:.06em; z-index:1}
+.ev .body{padding:16px 16px 20px}
+.ev .body h4{font-family:var(--serif); font-size:19px; margin-bottom:6px}
+.ev .body .sm{font-size:12.5px; color:var(--muted)}
+.ev .body .status{margin-top:12px; font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--gold)}
+.ev .body .status.sold{color:var(--aqua)}
+
+/* modal */
+.modal{position:fixed; inset:0; z-index:90; display:none; place-items:center; padding:24px;
+  background:rgba(4,7,9,.8); backdrop-filter:blur(8px)}
+.modal.open{display:grid}
+.flyer{max-width:420px; width:100%; border:1px solid var(--line); border-radius:20px; overflow:hidden;
+  background:var(--surface); box-shadow:var(--shadow)}
+.flyer .top{padding:34px 30px; position:relative}
+.flyer .top .lbl{font-size:11px; letter-spacing:.3em; text-transform:uppercase; color:var(--gold)}
+.flyer .top h3{font-size:30px; margin:12px 0 8px}
+.flyer .top .when{color:var(--muted); font-size:14px}
+.flyer .b{padding:24px 30px 30px}
+.flyer .b p{color:var(--muted); font-size:14px; margin-bottom:20px}
+.flyer .acts{display:flex; gap:10px; flex-wrap:wrap}
+.flyer .acts .btn{flex:1; padding:12px 14px; font-size:13px; min-width:110px}
+.close-x{position:absolute; top:16px; right:18px; background:none; border:0; color:var(--muted);
+  font-size:22px; cursor:pointer; line-height:1}
+.close-x:hover{color:var(--text)}
+
+/* ================= TIMELINE ================= */
+.timeline{margin-top:44px; position:relative; padding-left:28px}
+.timeline::before{content:""; position:absolute; left:5px; top:8px; bottom:8px; width:2px;
+  background:linear-gradient(var(--gold),var(--aqua),transparent)}
+.tl{position:relative; padding:0 0 30px 30px}
+.tl::before{content:""; position:absolute; left:-24px; top:5px; width:12px; height:12px; border-radius:50%;
+  background:var(--ground); border:2px solid var(--gold)}
+.tl .wk{font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); font-weight:600}
+.tl h4{font-family:var(--serif); font-size:20px; margin:6px 0 6px}
+.tl p{color:var(--muted); font-size:14px}
+.tl.future::before{border-color:var(--aqua); background:var(--surface)}
+
+/* ================= WHY / COMPARISON ================= */
+.compare{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:44px; border:1px solid var(--line-soft);
+  border-radius:18px; overflow:hidden}
+@media (max-width:640px){.compare{grid-template-columns:1fr}}
+.compare .col{padding:30px}
+.compare .col.them{background:var(--surface); border-right:1px solid var(--line-soft)}
+.compare .col.us{background:linear-gradient(165deg,var(--surface-2),var(--surface))}
+.compare h4{font-family:var(--sans); font-size:12px; letter-spacing:.24em; text-transform:uppercase; margin-bottom:20px}
+.compare .them h4{color:var(--faint)}
+.compare .us h4{color:var(--gold)}
+.compare ul{list-style:none; margin:0; padding:0; display:grid; gap:14px}
+.compare li{font-size:15px; display:flex; gap:12px; align-items:flex-start}
+.compare .them li{color:var(--muted)}
+.compare .them li .m{color:var(--faint)}
+.compare .us li{color:var(--text)}
+.compare .us li .m{color:var(--good)}
+
+/* ================= TERMS ================= */
+.terms{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:20px; margin-top:44px}
+.tcard{border:1px solid var(--line-soft); border-radius:16px; padding:26px; background:var(--surface)}
+.tcard h4{font-family:var(--sans); font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:16px}
+.tcard ul{list-style:none; margin:0; padding:0; display:grid; gap:11px}
+.tcard li{font-size:14px; color:var(--muted); padding-left:16px; position:relative}
+.tcard li::before{content:"·"; position:absolute; left:2px; color:var(--gold); font-size:18px; top:-3px}
+
+/* ================= ACCEPTANCE ================= */
+.accept{border:1px solid var(--line); border-radius:22px; margin-top:48px; overflow:hidden;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface)); box-shadow:var(--shadow)}
+.accept .a-head{padding:36px 38px 8px}
+.accept .a-head h3{font-size:30px}
+.accept .a-head p{color:var(--muted); margin-top:10px; font-size:15px; max-width:60ch}
+.pkgs{display:grid; grid-template-columns:1fr 1fr; gap:16px; padding:26px 38px}
+@media (max-width:640px){.pkgs{grid-template-columns:1fr}}
+.pkg{border:1px solid var(--line-soft); border-radius:16px; padding:22px; cursor:pointer; transition:all .2s; background:var(--surface)}
+.pkg:hover{border-color:var(--gold)}
+.pkg.sel{border-color:var(--gold); background:var(--surface-2); box-shadow:0 0 0 1px var(--gold) inset}
+.pkg .pk{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.pkg .pname{font-family:var(--serif); font-size:19px; color:var(--text)}
+.pkg .pprice{font-family:var(--serif); color:var(--gold-bright); font-size:18px; font-variant-numeric:tabular-nums}
+.pkg .pdesc{font-size:13px; color:var(--muted); margin-top:10px}
+.pkg .radio{width:16px;height:16px;border-radius:50%;border:1.5px solid var(--faint); display:inline-grid; place-items:center; margin-right:8px; vertical-align:-2px}
+.pkg.sel .radio{border-color:var(--gold)}
+.pkg.sel .radio::after{content:""; width:8px; height:8px; border-radius:50%; background:var(--gold)}
+.sign{padding:8px 38px 40px}
+.sign .frow{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:18px}
+@media (max-width:640px){.sign .frow{grid-template-columns:1fr}}
+.field label{display:block; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); margin-bottom:8px}
+.field input{width:100%; background:var(--ground); border:1px solid var(--line-soft); border-radius:11px;
+  padding:13px 15px; color:var(--text); font-family:var(--serif); font-size:16px}
+.field input:focus{outline:none; border-color:var(--gold)}
+.accept-actions{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:8px}
+.accept-actions .btn.primary{padding:16px 34px}
+.confirm-msg{display:none; color:var(--good); font-size:14px; align-items:center; gap:8px}
+.confirm-msg.show{display:flex}
+
+/* payment schedule strip */
+.paystrip{display:flex; gap:2px; border-radius:12px; overflow:hidden; margin-top:6px; border:1px solid var(--line-soft)}
+.paystrip .seg{padding:16px 18px; background:var(--surface); flex:1; text-align:center}
+.paystrip .seg .pct{font-family:var(--serif); font-size:22px; color:var(--gold-bright)}
+.paystrip .seg .wh{font-size:11px; color:var(--muted); margin-top:4px; letter-spacing:.04em}
+
+/* footer */
+footer{padding:60px 0 80px; border-top:1px solid var(--line-soft); margin-top:40px; text-align:center; color:var(--faint)}
+footer .fbrand{font-family:var(--serif); font-size:22px; color:var(--gold-bright); letter-spacing:.03em}
+footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; margin-top:12px}
+
+/* toast */
+.toast{position:fixed; bottom:26px; left:50%; transform:translateX(-50%) translateY(20px); z-index:120;
+  background:var(--surface-2); border:1px solid var(--gold); color:var(--text); padding:14px 22px;
+  border-radius:12px; font-size:14px; box-shadow:var(--shadow); opacity:0; pointer-events:none;
+  transition:opacity .3s, transform .3s}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+/* section number chips */
+.secnum{display:inline-flex; align-items:baseline; gap:12px}
+.secnum .n{font-family:var(--serif); color:var(--gold); font-size:14px; border:1px solid var(--line);
+  border-radius:8px; padding:3px 9px; letter-spacing:.05em}
+</style>
+</head>
+<body>
+
+<!-- ambient water -->
+<canvas id="water" aria-hidden="true"></canvas>
+<div class="veil" aria-hidden="true"></div>
+
+<!-- ================= AGE GATE ================= -->
+<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
+  <div class="gate-card">
+    <div class="gate-enterview">
+      <div class="mark">Oasis · Aqualounge</div>
+      <h1 id="gate-h">Are you 19 or older?</h1>
+      <p>Oasis Aqualounge is a 19+ members' venue. This proposal contains material intended for adults. Please confirm your age to continue.</p>
+      <div class="gate-actions">
+        <button class="btn primary" id="gate-yes">I am 19 or older — enter</button>
+        <button class="btn ghost" id="gate-no">I am under 19</button>
+      </div>
+      <div class="gate-note">231 Mutual St, Toronto · Est. 2010 · A CraftWeb Studios proposal</div>
+    </div>
+    <div class="gate-exit">
+      <div class="mark">Oasis · Aqualounge</div>
+      <h1>Come back when you're 19.</h1>
+      <p>You must be of legal age to view this venue's material. Thanks for stopping by.</p>
+    </div>
+  </div>
+</div>
+
+<!-- depth meter + tools + elevator -->
+<div class="depth" id="depth" aria-hidden="true"></div>
+<div class="tools">
+  <button class="chip" id="themeBtn" aria-label="Toggle light or dark theme">◐ Theme</button>
+</div>
+
+<nav class="elevator" id="elevator" aria-label="Floor navigation">
+  <div class="cap">Descend</div>
+  <!-- buttons injected by JS -->
+</nav>
+
+<main>
+
+<!-- ================= HERO / THE OPPORTUNITY ================= -->
+<section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
+  <div class="hero-inner">
+    <div class="brand rise">
+      <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
+      <span class="sub">Prepared by CraftWeb Studios</span>
+    </div>
+    <div class="eyebrow rise">The Opportunity</div>
+    <h1 class="rise">Turn a landmark venue's<br>online presence into a <span class="aq">growth engine.</span></h1>
+    <p class="tagline rise">A women-owned, four-floor water-themed members' club, running since 2010 and named one of Canada's fastest-growing businesses four times over. The current site is dated and flat — it undersells the room and leaves money on the table. This is the fix.</p>
+    <div class="hero-cta rise">
+      <button class="btn primary" data-goto="sec-investment">See the investment</button>
+      <button class="btn ghost" data-goto="sec-roi">How it pays back</button>
+    </div>
+    <div class="hero-meta rise">
+      <div><div class="k">Prepared for</div><div class="v">Oasis Aqualounge · 231 Mutual St</div></div>
+      <div><div class="k">Date</div><div class="v">July 5, 2026</div></div>
+      <div><div class="k">Valid for</div><div class="v">30 days</div></div>
+      <div><div class="k">Three workstreams</div><div class="v">Site · Photography · App</div></div>
+    </div>
+    <div class="stats rise">
+      <div class="cell"><div class="n">385%</div><div class="c">5-year growth · No. 193 on the 2018 Growth 500</div></div>
+      <div class="cell"><div class="n">~300</div><div class="c">Venue capacity across four floors</div></div>
+      <div class="cell"><div class="n">≈ $10.6k</div><div class="c">Est. monthly revenue lift (conservative)</div></div>
+      <div class="cell"><div class="n">3–4 mo</div><div class="c">Estimated payback on Phase 1</div></div>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span>Descend</span><span class="arrow"></span></div>
+</section>
+
+<!-- ================= THE JOURNEY / FUNNEL ================= -->
+<section class="floor" id="sec-journey" data-floor="1" data-label="How Oasis Wins">
+  <div class="wrap">
+    <div class="eyebrow rise">The Big Picture</div>
+    <h2 class="title rise">How Oasis wins</h2>
+    <p class="lead rise">Every feature in this proposal exists for one reason: to move a stranger, one step at a time, into a loyal member who spends more and comes back. Nothing here is decoration — it's a system. <em>Hover a step to trace the path.</em></p>
+    <div class="funnel rise" id="funnel"></div>
+  </div>
+</section>
+
+<!-- ================= 01 THE WEBSITE ================= -->
+<section class="floor" id="sec-website" data-floor="2" data-label="The Website">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">01</span></span> The Website</div>
+    <h2 class="title rise">Descend through the four floors</h2>
+    <p class="lead rise">A bespoke, image-led site built around the club's signature idea: scrolling through the four floors as if descending through the building — from the lounge, into the waters, through the playrooms, down to the private quarters. Elegant, dark, gold-accented and fully responsive — a world away from the current template. <em>(You're inside a working preview of it right now.)</em></p>
+    <div class="build-grid rise">
+      <div class="card">
+        <div class="card-head">
+          <h3>Custom Website Build</h3>
+          <span class="tag">Phase 1 · Now</span>
+        </div>
+        <div class="card-body">
+          <p>Design and front-end build of the full experience, ready for your photography.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>Bespoke <b>UI/UX in the Oasis brand</b> — dark, gold &amp; aqua, boutique typography</span></li>
+            <li><span class="mk">◆</span><span>Signature <b>"descend through the four floors"</b> scroll experience with a vintage elevator panel, parallax &amp; live floor status</span></li>
+            <li><span class="mk">◆</span><span><b>19+ age gate</b>; interactive events calendar — click a night to open its flyer, save it, set a reminder or invite a guest</span></li>
+            <li><span class="mk">◆</span><span>Boutique <b>About with Meet the Owners</b>, cinematic media gallery, and a video section that upsells merch, member benefits &amp; partner sponsors</span></li>
+            <li><span class="mk">◆</span><span>Standalone <b>House Rules</b> — general plus tailored guidelines for Couples, Women &amp; Trans Folks, Solo Males and Trans &amp; LGBTQ+ guests, site-wide</span></li>
+            <li><span class="mk">◆</span><span>Accurate <b>day-membership &amp; admission</b> pages (pay-per-visit, extended memberships) with clear calls-to-action</span></li>
+            <li><span class="mk">◆</span><span><b>Live chat &amp; lead capture</b> — captures messages, member IDs or emails, and promo-consent into your database</span></li>
+            <li><span class="mk">◆</span><span><b>Private Hire</b> section — off-hours venue rental (private shows, content creators, film &amp; photo shoots) with enquiry capture</span></li>
+            <li><span class="mk">◆</span><span>Self-serve CMS, mobile-first responsive build, <b>SEO foundations, analytics &amp; launch</b></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 PHOTOGRAPHY ================= -->
+<section class="floor" id="sec-photo" data-floor="3" data-label="Photography &amp; Video">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">02</span></span> Brand Photography &amp; Video</div>
+    <h2 class="title rise">Class, not amateur</h2>
+    <p class="lead rise">The design is only as striking as the visuals behind it. The current clips — muddy audio, uneven pacing, a script that tries too hard — work against a premium brand. We recommend a dedicated, discreet on-site shoot: a fully-owned, on-brand image and video library that respects the club's strict no-guest-photography policy.</p>
+    <div class="build-grid rise">
+      <div class="card">
+        <div class="card-head">
+          <h3>On-Site Photo &amp; Video Production</h3>
+          <span class="tag rec">Recommended</span>
+        </div>
+        <div class="card-body">
+          <p>Captured after-hours by our production team; you approve every frame before it's used.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>Discreet <b>after-hours session across all four floors</b> — lounge, pool &amp; courtyard, playrooms, private quarters</span></li>
+            <li><span class="mk">◆</span><span>Styled interior, ambience, bar, pool &amp; sauna photography (no guests; fully consented talent only if used)</span></li>
+            <li><span class="mk">◆</span><span>Polished <b>short-form vertical video</b> to replace the current clips — for the hero, social &amp; ads</span></li>
+            <li><span class="mk">◆</span><span>Professional editing, colour grading, clean audio &amp; retouching</span></li>
+            <li><span class="mk">◆</span><span><b>Full commercial usage rights</b> — an image library Oasis owns outright</span></li>
+          </ul>
+          <div class="note-inline">We built this concept on Oasis's existing photos on purpose — no fabricated renders, no stock. The design elevates what you already have. Now imagine this exact experience with a directed shoot behind it: consistent lighting, cinematic composition, drone &amp; establishing shots, high-end video loops. Every page you've seen quietly upgrades.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 THE APP ================= -->
+<section class="floor" id="sec-app" data-floor="4" data-label="The Members App">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">03</span></span> The Members App</div>
+    <h2 class="title rise">The differentiator</h2>
+    <p class="lead rise">A private companion app that lets members connect, transact and stay engaged — lifting spend-per-visit and repeat visits. We recommend launching as an installable web app (PWA): works on every phone, no app-store approval, with native apps as funded future add-ons. Modules phase to manage budget.</p>
+    <div class="build-grid rise">
+      <div class="card">
+        <div class="card-head"><h3>Core Membership Platform</h3><span class="tag">Phase 1 · Now</span></div>
+        <div class="card-body">
+          <p>The foundation every other module plugs into.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>Secure, <b>age-verified member accounts</b> &amp; profiles</span></li>
+            <li><span class="mk">◆</span><span><b>Digital membership card</b> (Apple &amp; Google Wallet) for fast, private door entry</span></li>
+            <li><span class="mk">◆</span><span>"Attending tonight" signal, live anonymized count &amp; <b>incognito mode</b></span></li>
+            <li><span class="mk">◆</span><span>Double-opt-in <b>QR connections</b> &amp; discreet moderated chat</span></li>
+            <li><span class="mk">◆</span><span>Paginated "who's here tonight" directory</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Commerce &amp; Bookings</h3><span class="tag">Phase 1 · Now</span></div>
+        <div class="card-body">
+          <p>Where the app pays for itself — every module below is a revenue stream.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span><b>Payments &amp; commerce</b> — day membership, extended membership, advance tickets to sell-out nights (Stripe)</span></li>
+            <li><span class="mk">◆</span><span><b>Merchandise &amp; enhancements</b> — branded merch and add-ons with member pricing</span></li>
+            <li><span class="mk">◆</span><span><b>Reservations</b> — hourly private-room booking calendar (1 PM–2 AM)</span></li>
+            <li><span class="mk">◆</span><span><b>Private venue hire</b> — enquiries for off-hours rental (shows, content, film, corporate, parties)</span></li>
+            <li><span class="mk">◆</span><span><b>In-venue bar ordering</b> — drinks from either bar, routed to staff</span></li>
+            <li><span class="mk">◆</span><span><b>DJ song requests</b> — member requests queued to the booth</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h3>Community, Safety &amp; Admin</h3><span class="tag">Phase 1 · Now</span></div>
+        <div class="card-body">
+          <p>Engagement, member wellbeing, and the back-office to run it all.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span><b>Community &amp; perks</b> — mailing list, "231 Mutual Connections" forum, SDC.com link, partner-discount network</span></li>
+            <li><span class="mk">◆</span><span><b>Discreet safety alert</b> — an "I need help" button that quietly notifies staff to a member's location</span></li>
+            <li><span class="mk">◆</span><span><b>Staff admin console</b> — manage events, menus, reservation slots, members &amp; content</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INVESTMENT BUILDER ================= -->
+<section class="floor" id="sec-investment" data-floor="5" data-label="Your Investment">
+  <div class="wrap">
+    <div class="eyebrow rise">Your Investment</div>
+    <h2 class="title rise">Build your Launch Package</h2>
+    <p class="lead rise">Start with the Launch Package — a striking new site, a proper brand shoot, and the core members app. Toggle any line to see the totals move. All figures in CAD, before HST. <em>The Members App core is the foundation the revenue modules plug into.</em></p>
+    <div class="invest rise">
+      <div class="lines" id="invLines"></div>
+      <div class="summary">
+        <h3>Phase 1 Summary</h3>
+        <div class="srow"><span>Subtotal</span><span class="amt" id="sumSub">—</span></div>
+        <div class="srow"><span>HST (13%)</span><span class="amt" id="sumHst">—</span></div>
+        <div class="srow total"><span class="lbl2">Phase 1 Total</span><span class="amt" id="sumTotal">—</span></div>
+        <div class="hint">Figures are project estimates for scoping. Final pricing confirmed on sign-off of detailed specification. Third-party &amp; ongoing costs billed at cost.</div>
+        <div class="phase2">
+          <div><b>Care &amp; Hosting</b> — $250/mo at website launch → ~$500/mo once the app is live.</div>
+          <div style="margin-top:10px"><b>Phase 2 — Commerce &amp; Admin modules</b> — payments, reservations, ordering, DJ, safety, admin: <b>~$18–20k</b>, funded follow-on.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ROI CALCULATOR ================= -->
+<section class="floor" id="sec-roi" data-floor="6" data-label="Return on Investment">
+  <div class="wrap">
+    <div class="eyebrow rise">The Business Case</div>
+    <h2 class="title rise">Return on investment</h2>
+    <p class="lead rise">This isn't a brochure — it's revenue infrastructure. Every figure is deliberately conservative and built from public facts: Oasis's ~300 capacity, published door pricing, listed sell-out events, and reported 385% growth. <em>Drag the levers to model it yourself.</em></p>
+
+    <div class="roi rise">
+      <div class="levers" id="levers">
+        <div class="lever active" data-lever="bar">
+          <div class="toggle-lever">
+            <span class="lname">In-app &amp; poolside bar ordering</span>
+            <span class="mini-tick" data-tick>✓</span>
+          </div>
+          <div class="lever-sliders">
+            <div style="margin:6px 0 14px">
+              <div class="top"><span class="sub" style="margin:0">Avg extra drink / guest</span><span class="lval" data-out="drink">$8</span></div>
+              <input type="range" min="4" max="16" step="1" value="8" data-inp="drink">
+            </div>
+            <div style="margin:6px 0 14px">
+              <div class="top"><span class="sub" style="margin:0">Guests / night</span><span class="lval" data-out="guests">150</span></div>
+              <input type="range" min="60" max="300" step="10" value="150" data-inp="guests">
+            </div>
+            <div style="margin:6px 0 14px">
+              <div class="top"><span class="sub" style="margin:0">Nights / month</span><span class="lval" data-out="nights">12</span></div>
+              <input type="range" min="4" max="26" step="1" value="12" data-inp="nights">
+            </div>
+            <div style="margin:6px 0 4px">
+              <div class="top"><span class="sub" style="margin:0">App adoption</span><span class="lval" data-out="adopt">25%</span></div>
+              <input type="range" min="5" max="80" step="5" value="25" data-inp="adopt">
+            </div>
+          </div>
+        </div>
+        <div class="lever active" data-lever="tickets" data-value="2000">
+          <div class="toggle-lever"><span class="lname">Advance ticket sales</span><span class="mini-tick" data-tick>✓</span></div>
+          <div class="sub">~15–20 sell-out nights/year pre-paid in-app — fewer no-shows &amp; captured walk-aways · <b style="color:var(--gold-bright)">+$2,000/mo</b></div>
+        </div>
+        <div class="lever active" data-lever="merch" data-value="1500">
+          <div class="toggle-lever"><span class="lname">Merch, private-room bookings &amp; extended memberships</span><span class="mini-tick" data-tick>✓</span></div>
+          <div class="sub">New high-margin lines · <b style="color:var(--gold-bright)">+$1,500/mo</b></div>
+        </div>
+        <div class="lever active" data-lever="sponsor" data-value="1000">
+          <div class="toggle-lever"><span class="lname">Sponsor &amp; affiliate placements</span><span class="mini-tick" data-tick>✓</span></div>
+          <div class="sub">Partners pay to appear in videos &amp; the perks network · <b style="color:var(--gold-bright)">+$1,000/mo</b></div>
+        </div>
+        <div class="lever active" data-lever="hire" data-value="2500">
+          <div class="toggle-lever"><span class="lname">Private venue hire (off-hours)</span><span class="mini-tick" data-tick>✓</span></div>
+          <div class="sub">~1–2 bookings/mo · shows, content, film, parties, events · <b style="color:var(--gold-bright)">+$2,500/mo</b></div>
+        </div>
+      </div>
+
+      <div class="readout">
+        <div class="cap">Est. monthly revenue lift</div>
+        <div class="big"><span class="pfx">+</span><span id="roiTotal">10,600</span></div>
+        <div class="payback">
+          <div class="item"><div class="n" id="roiPayback">3.6</div><div class="l">months to pay back the Phase 1 build</div></div>
+          <div class="item"><div class="n" id="roiBar">$3,600</div><div class="l">from bar ordering alone, per month</div></div>
+        </div>
+        <div class="annual">That's roughly <b id="roiAnnual">$127,200</b> in new annual revenue opportunity — and it excludes the retention gains and cost savings below, which compound on top.</div>
+      </div>
+    </div>
+    <p class="disclaimer rise">Deliberately conservative, from public figures (capacity, published pricing, listed sell-out events) — real attendance and bar spend almost certainly push these higher. Payback compares the modelled monthly lift against the ≈$37,750 Phase 1 build (before HST).</p>
+
+    <div class="valcols rise">
+      <div class="valcol"><h4>New revenue</h4><ul>
+        <li>Higher spend-per-visit (in-app &amp; poolside ordering)</li>
+        <li>Locked revenue from advance ticketing</li>
+        <li>Merch, bookings &amp; extended memberships</li>
+        <li>Sponsor / affiliate income — partners pay for placement</li>
+      </ul></div>
+      <div class="valcol"><h4>Cost savings</h4><ul>
+        <li>Faster door throughput (wallet card / QR)</li>
+        <li>Fewer phone &amp; DM inquiries (live chat + FAQ)</li>
+        <li>Self-serve CMS — no dev retainer for updates</li>
+      </ul></div>
+      <div class="valcol"><h4>Owned data asset</h4><ul>
+        <li>First-party customer database from chat &amp; newsletter opt-ins</li>
+        <li>Attendance &amp; spend analytics</li>
+        <li>Consented, targeted remarketing you control</li>
+      </ul></div>
+      <div class="valcol"><h4>Retention &amp; loyalty</h4><ul>
+        <li>Attendance signals &amp; connections pull guests back</li>
+        <li>Event reminders reduce forgotten nights</li>
+        <li>Small return-rate gains compound into lifetime value</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EVENTS CALENDAR ================= -->
+<section class="floor" id="sec-events" data-floor="7" data-label="Events Calendar">
+  <div class="wrap">
+    <div class="eyebrow rise">Interactive Preview</div>
+    <h2 class="title rise">The events calendar</h2>
+    <p class="lead rise">One of the site's signature interactions: click a night to open its flyer, save it, set a reminder or invite a guest. Here's how it feels.</p>
+    <div class="events rise" id="events"></div>
+  </div>
+</section>
+
+<!-- ================= FUTURE ================= -->
+<section class="floor" id="sec-future" data-floor="8" data-label="Looking Ahead">
+  <div class="wrap">
+    <div class="eyebrow rise">Looking Ahead</div>
+    <h2 class="title rise">Future possibilities</h2>
+    <p class="lead rise">Ideas worth putting on the roadmap — funded once the core platform is live and earning. Each is scoped separately.</p>
+    <div class="build-grid rise">
+      <div class="card"><div class="card-head"><h3>Season Pass &amp; Loyalty</h3><span class="tag rec">New Revenue</span></div>
+        <div class="card-body"><p>A recurring membership tier layered on top of the pay-per-visit model.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>Optional monthly/annual pass with member pricing, priority nights &amp; perks</span></li>
+            <li><span class="mk">◆</span><span>Turns frequent guests into <b>predictable, recurring revenue</b></span></li>
+            <li><span class="mk">◆</span><span>Built on the app's existing accounts &amp; payments — a natural next step</span></li>
+          </ul></div></div>
+      <div class="card"><div class="card-head"><h3>Flagged-Entry Protection</h3><span class="tag rec">Premium · from $9,500</span></div>
+        <div class="card-body"><p>Facial-recognition screening of new sign-ups against a retained banned-member list, alerting management on a match.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>A high-value security feature for a members' venue with a genuine banned-guest problem</span></li>
+            <li><span class="mk">◆</span><span>Requires privacy/legal review first — <b>biometric data under PIPEDA</b> needs explicit consent, a retention/deletion policy and counsel sign-off</span></li>
+            <li><span class="mk">◆</span><span>We'd build only after that's in place</span></li>
+          </ul></div></div>
+      <div class="card"><div class="card-head"><h3>Native iOS &amp; Android Apps</h3><span class="tag rec">From $32,000</span></div>
+        <div class="card-body"><p>Once the web app proves engagement — the investment de-risked by real usage.</p>
+          <ul class="feats">
+            <li><span class="mk">◆</span><span>Published to the App Store &amp; Google Play</span></li>
+            <li><span class="mk">◆</span><span>Push notifications ("3 spots left tonight"), richer QR &amp; camera features, offline access</span></li>
+          </ul></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TIMELINE ================= -->
+<section class="floor" id="sec-timeline" data-floor="9" data-label="Timeline &amp; Phasing">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">04</span></span> Timeline &amp; Phasing</div>
+    <h2 class="title rise">From sign-off to sold-out nights</h2>
+    <div class="timeline rise" id="timeline"></div>
+  </div>
+</section>
+
+<!-- ================= WHY CRAFTWEB ================= -->
+<section class="floor" id="sec-why" data-floor="10" data-label="Why CraftWeb">
+  <div class="wrap">
+    <div class="eyebrow rise">Why CraftWeb</div>
+    <h2 class="title rise">Not a website. A digital destination.</h2>
+    <p class="lead rise">Most agencies stop at the website. We started by asking a different set of questions: what happens before a guest arrives, what happens when they walk in, how do they spend more, how do they come back, and what do staff and management need to run it?</p>
+    <div class="compare rise">
+      <div class="col them"><h4>Most agencies</h4><ul>
+        <li><span class="m">—</span> Generic themes &amp; templates</li>
+        <li><span class="m">—</span> Build a set of pages</li>
+        <li><span class="m">—</span> Hand off the website</li>
+        <li><span class="m">—</span> Stock or client-supplied imagery</li>
+        <li><span class="m">—</span> Job done at launch</li>
+      </ul></div>
+      <div class="col us"><h4>CraftWeb</h4><ul>
+        <li><span class="m">✓</span> Research the business first</li>
+        <li><span class="m">✓</span> Design the whole guest journey</li>
+        <li><span class="m">✓</span> Build revenue-focused digital systems</li>
+        <li><span class="m">✓</span> Custom interaction, photography &amp; app ecosystem</li>
+        <li><span class="m">✓</span> Partner on growth after launch</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TERMS ================= -->
+<section class="floor" id="sec-terms" data-floor="11" data-label="Terms">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">05</span></span> Terms &amp; What's Included</div>
+    <h2 class="title rise">Clear terms, no surprises</h2>
+    <p class="lead rise">A 50% deposit begins the work; the balance follows design approval and launch. The app phase is billed against delivery milestones.</p>
+    <div class="paystrip rise">
+      <div class="seg"><div class="pct">50%</div><div class="wh">Deposit to begin</div></div>
+      <div class="seg"><div class="pct">25%</div><div class="wh">At design approval</div></div>
+      <div class="seg"><div class="pct">25%</div><div class="wh">On launch</div></div>
+    </div>
+    <div class="terms rise">
+      <div class="tcard"><h4>Included</h4><ul>
+        <li>Two rounds of revisions per stage</li>
+        <li>Responsive design &amp; cross-device QA</li>
+        <li>Training on the CMS</li>
+        <li>30 days post-launch support</li>
+      </ul></div>
+      <div class="tcard"><h4>Client Provides</h4><ul>
+        <li>Final house-rules &amp; admission policy wording</li>
+        <li>Access for the on-site shoot</li>
+        <li>Brand assets, Stripe/merchant account &amp; partner-kitchen agreement</li>
+        <li>Legal counsel for the facial-recognition add-on</li>
+      </ul></div>
+      <div class="tcard"><h4>Out of Scope</h4><ul>
+        <li>Ad spend &amp; media buying</li>
+        <li>Payment-processor / merchant &amp; POS fees</li>
+        <li>Legal/privacy counsel for biometric features</li>
+        <li>Native apps (separate Phase 2)</li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ACCEPTANCE ================= -->
+<section class="floor" id="sec-accept" data-floor="12" data-label="Acceptance">
+  <div class="wrap">
+    <div class="eyebrow rise"><span class="secnum"><span class="n">06</span></span> Acceptance</div>
+    <h2 class="title rise">Ready to begin?</h2>
+    <div class="accept rise">
+      <div class="a-head">
+        <h3>Select your package</h3>
+        <p>Choose your preferred package and phasing. We'll follow with a detailed statement of work and the deposit invoice to lock in your start date.</p>
+      </div>
+      <div class="pkgs" id="pkgs">
+        <div class="pkg sel" data-pkg="launch">
+          <div class="pk"><span class="pname"><span class="radio"></span>Launch Package — Phase 1</span><span class="pprice">$42,657.50</span></div>
+          <div class="pdesc">Website, live chat &amp; shoot, plus the core members app. Incl. HST. Recommended entry point.</div>
+        </div>
+        <div class="pkg" data-pkg="full">
+          <div class="pk"><span class="pname"><span class="radio"></span>Phase 1 + Phase 2</span><span class="pprice">≈ $60–63k</span></div>
+          <div class="pdesc">Launch Package plus the Commerce &amp; Admin app modules as a funded follow-on. Before HST on Phase 2.</div>
+        </div>
+      </div>
+      <div class="sign">
+        <div class="frow">
+          <div class="field"><label for="sig-name">Authorized for Oasis Aqualounge</label><input id="sig-name" type="text" placeholder="Full name" autocomplete="name"></div>
+          <div class="field"><label for="sig-date">Date</label><input id="sig-date" type="text" placeholder="July 2026"></div>
+        </div>
+        <div class="accept-actions">
+          <button class="btn primary" id="signBtn">Accept &amp; request statement of work</button>
+          <span class="confirm-msg" id="confirmMsg">✓ <span>Noted — this is a demo. In the live site this books your start date.</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fbrand">Oasis Aqualounge</div>
+  <div class="fmeta">CraftWeb Studios · craftwebstudios.ca · Proposal · July 2026</div>
+</footer>
+
+</main>
+
+<!-- modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="flyer-h">
+  <div class="flyer">
+    <div class="top" id="flyerTop">
+      <button class="close-x" id="modalClose" aria-label="Close">✕</button>
+      <div class="lbl" id="flyerLbl">Signature Night</div>
+      <h3 id="flyer-h">—</h3>
+      <div class="when" id="flyerWhen">—</div>
+    </div>
+    <div class="b">
+      <p id="flyerDesc">—</p>
+      <div class="acts">
+        <button class="btn primary" data-act="remind">Set reminder</button>
+        <button class="btn ghost" data-act="save">Save night</button>
+        <button class="btn ghost" data-act="invite">Copy invite link</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var CAD = new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',maximumFractionDigits:0});
+  var CAD2 = new Intl.NumberFormat('en-CA',{style:'currency',currency:'CAD',minimumFractionDigits:2,maximumFractionDigits:2});
+  function $(s,el){return (el||document).querySelector(s);}
+  function $all(s,el){return Array.prototype.slice.call((el||document).querySelectorAll(s));}
+
+  /* ---------- toast ---------- */
+  var toastEl = $("#toast"), toastT;
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function(){toastEl.classList.remove("show");}, 2600); }
+
+  /* ---------- age gate ---------- */
+  var gate = $("#gate");
+  try{ if(sessionStorage.getItem("oasis_verified")==="1"){ gate.classList.add("hide"); } }catch(e){}
+  $("#gate-yes").addEventListener("click", function(){
+    try{ sessionStorage.setItem("oasis_verified","1"); }catch(e){}
+    gate.classList.add("hide");
+  });
+  $("#gate-no").addEventListener("click", function(){ gate.classList.add("exited"); });
+
+  /* ---------- theme toggle ---------- */
+  var root = document.documentElement;
+  $("#themeBtn").addEventListener("click", function(){
+    var cur = root.getAttribute("data-theme");
+    if(!cur){ cur = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light"; }
+    root.setAttribute("data-theme", cur==="dark" ? "light":"dark");
+  });
+
+  /* ---------- build elevator nav from sections ---------- */
+  var sections = $all("section[data-floor]");
+  var elevator = $("#elevator");
+  sections.forEach(function(sec){
+    var btn = document.createElement("button");
+    btn.className = "floor-btn";
+    btn.setAttribute("data-target", sec.id);
+    var fl = sec.getAttribute("data-floor");
+    btn.innerHTML = '<span class="dot"></span><span class="lbl">'+ sec.getAttribute("data-label") +'</span>';
+    btn.title = sec.getAttribute("data-label").replace(/&amp;/g,"&");
+    btn.addEventListener("click", function(){
+      sec.scrollIntoView({behavior: reduce ? "auto":"smooth", block:"start"});
+    });
+    elevator.appendChild(btn);
+  });
+  var floorBtns = $all(".floor-btn", elevator);
+
+  /* generic goto buttons */
+  $all("[data-goto]").forEach(function(b){
+    b.addEventListener("click", function(){
+      var t = document.getElementById(b.getAttribute("data-goto"));
+      if(t) t.scrollIntoView({behavior: reduce ? "auto":"smooth", block:"start"});
+    });
+  });
+
+  /* ---------- scroll spy + depth meter ---------- */
+  var depth = $("#depth");
+  function onScroll(){
+    var h = document.documentElement;
+    var sc = h.scrollTop || document.body.scrollTop;
+    var max = h.scrollHeight - h.clientHeight;
+    depth.style.transform = "scaleX(" + (max>0 ? sc/max : 0) + ")";
+  }
+  window.addEventListener("scroll", onScroll, {passive:true}); onScroll();
+
+  var spy = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){
+        var id = en.target.id;
+        floorBtns.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-target")===id); });
+      }
+    });
+  }, {rootMargin:"-45% 0px -50% 0px", threshold:0});
+  sections.forEach(function(s){ spy.observe(s); });
+
+  /* ---------- reveal on scroll ---------- */
+  var rev = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add("in"); rev.unobserve(en.target); } });
+  }, {rootMargin:"0px 0px -8% 0px", threshold:.05});
+  $all(".rise").forEach(function(el){ rev.observe(el); });
+
+  /* ---------- funnel ---------- */
+  var steps = ["Instagram","Website","First visit","Membership","Bar orders","Reservations","Private hire","Community","Merch","Repeat visits","Lifetime customer"];
+  var funnel = $("#funnel");
+  steps.forEach(function(s,i){
+    var n = document.createElement("div");
+    n.className = "node" + (i>=steps.length-3 ? " warm":"");
+    n.innerHTML = '<div class="step">Step '+(i+1)+'</div><div class="name">'+s+'</div>';
+    funnel.appendChild(n);
+  });
+
+  /* ---------- investment builder ---------- */
+  var items = [
+    {k:"web",  name:"Custom Website",            price:11500, req:true,  desc:"4-floor build, interactive flyer-calendar, video-upsell, owners & About, custom CTAs, age-gating, CMS"},
+    {k:"chat", name:"Live Chat & Lead Capture",  price:2000,  req:false, desc:"Support widget + offline messaging + customer database + promo-consent opt-in"},
+    {k:"photo",name:"Professional Photo Shoot",  price:2500,  req:false, desc:"Discreet on-site, all four floors, edited & owned"},
+    {k:"video",name:"Video Production",          price:4500,  req:false, desc:"Replaces the current clips — hero, social & ads"},
+    {k:"app",  name:"Members App — Core Platform",price:14000, req:true, desc:"Accounts, wallet card, attendance/incognito, QR connect, chat, directory"},
+    {k:"biz",  name:"Business Systems bundle",   price:3250,  req:false, desc:"Messaging integration, e-commerce hooks, tracking, CRM"}
+  ];
+  var state = {}; items.forEach(function(it){ state[it.k]=true; });
+  var linesEl = $("#invLines");
+  items.forEach(function(it){
+    var row = document.createElement("div");
+    row.className = "line on" + (it.req?" req":"");
+    row.setAttribute("data-k", it.k);
+    row.innerHTML =
+      '<span class="tick">✓</span>'+
+      '<span><span class="ln-name">'+it.name+'</span><span class="ln-desc">'+it.desc+'</span></span>'+
+      (it.req ? '<span class="lock">Foundation</span>' : '<span class="ln-price">'+CAD.format(it.price)+'</span>');
+    if(!it.req){
+      row.addEventListener("click", function(){
+        state[it.k] = !state[it.k];
+        row.classList.toggle("on", state[it.k]);
+        row.classList.toggle("off", !state[it.k]);
+        renderInv();
+      });
+    }
+    linesEl.appendChild(row);
+  });
+  function renderInv(){
+    var sub = 0;
+    items.forEach(function(it){ if(state[it.k]) sub += it.price; });
+    var hst = sub*0.13, total = sub+hst;
+    $("#sumSub").textContent = CAD2.format(sub);
+    $("#sumHst").textContent = CAD2.format(hst);
+    $("#sumTotal").textContent = CAD2.format(total);
+  }
+  renderInv();
+
+  /* ---------- ROI calculator ---------- */
+  var BUILD = 37750; // Phase 1 before HST
+  var barInputs = {}; ["drink","guests","nights","adopt"].forEach(function(k){ barInputs[k]=$('[data-inp="'+k+'"]'); });
+  var levers = $all(".lever[data-lever]");
+  function leverActive(el){ return el.classList.contains("active"); }
+  function computeROI(){
+    var drink=+barInputs.drink.value, guests=+barInputs.guests.value, nights=+barInputs.nights.value, adopt=+barInputs.adopt.value/100;
+    var bar = drink*guests*nights*adopt;
+    $('[data-out="drink"]').textContent = "$"+drink;
+    $('[data-out="guests"]').textContent = guests;
+    $('[data-out="nights"]').textContent = nights;
+    $('[data-out="adopt"]').textContent = Math.round(adopt*100)+"%";
+    var barLever = $('.lever[data-lever="bar"]');
+    var total = 0;
+    if(leverActive(barLever)) total += bar;
+    levers.forEach(function(l){
+      var v = l.getAttribute("data-value");
+      if(v && leverActive(l)) total += +v;
+    });
+    total = Math.round(total);
+    $("#roiTotal").textContent = new Intl.NumberFormat('en-CA').format(total);
+    $("#roiBar").textContent = leverActive(barLever) ? CAD.format(Math.round(bar)) : "$0";
+    $("#roiAnnual").textContent = CAD.format(total*12);
+    var pb = total>0 ? (BUILD/total) : Infinity;
+    $("#roiPayback").textContent = isFinite(pb) ? pb.toFixed(1) : "—";
+  }
+  $all('input[type=range]', $("#levers")).forEach(function(inp){ inp.addEventListener("input", computeROI); });
+  levers.forEach(function(l){
+    var tick = $("[data-tick]", l);
+    if(tick){ tick.addEventListener("click", function(){ l.classList.toggle("active"); computeROI(); }); }
+  });
+  computeROI();
+
+  /* ---------- events calendar ---------- */
+  var evData = [
+    {lbl:"Signature Night", title:"Aqua After Dark", date:"Fri · Jul 24", when:"Friday, July 24 · 9 PM–2 AM", desc:"The flagship Friday — all four floors open, resident DJ in the booth, poolside bar service. Historically a sell-out; advance tickets recommended.", status:"Selling fast", sold:false, g1:"#1E6B78", g2:"#0F1A20"},
+    {lbl:"Couples & Singles", title:"Waterfront Social", date:"Sat · Jul 25", when:"Saturday, July 25 · 8 PM–2 AM", desc:"A relaxed mixer across the lounge and courtyard. Couples, women, trans folks and solo guests welcome per house rules.", status:"Tickets open", sold:false, g1:"#3A2A4A", g2:"#0F1A20"},
+    {lbl:"Members Only", title:"The Descent", date:"Thu · Jul 30", when:"Thursday, July 30 · 9 PM–1 AM", desc:"A quieter members-first evening — priority private-room booking and member pricing at both bars.", status:"Sold out", sold:true, g1:"#4A3A1E", g2:"#0F1A20"},
+    {lbl:"Special Event", title:"Sauna Sessions", date:"Sun · Aug 2", when:"Sunday, August 2 · 6 PM–12 AM", desc:"Steam, sauna and pool with ambient sets. Limited capacity; incognito mode available in-app.", status:"Selling fast", sold:false, g1:"#1E4A44", g2:"#0F1A20"}
+  ];
+  var evEl = $("#events");
+  evData.forEach(function(e, i){
+    var b = document.createElement("button");
+    b.className = "ev"; b.type="button";
+    b.innerHTML =
+      '<div class="banner" style="background:linear-gradient(135deg,'+e.g1+','+e.g2+')"><span class="date">'+e.date+'</span></div>'+
+      '<div class="body"><h4>'+e.title+'</h4><div class="sm">'+e.lbl+'</div>'+
+      '<div class="status'+(e.sold?" sold":"")+'">'+e.status+'</div></div>';
+    b.addEventListener("click", function(){ openFlyer(e); });
+    evEl.appendChild(b);
+  });
+
+  /* ---------- modal / flyer ---------- */
+  var modal = $("#modal");
+  function openFlyer(e){
+    $("#flyerLbl").textContent = e.lbl;
+    $("#flyer-h").textContent = e.title;
+    $("#flyerWhen").textContent = e.when;
+    $("#flyerDesc").textContent = e.desc;
+    $("#flyerTop").style.background = "linear-gradient(160deg,"+e.g1+", var(--surface))";
+    modal.classList.add("open");
+  }
+  function closeModal(){ modal.classList.remove("open"); }
+  $("#modalClose").addEventListener("click", closeModal);
+  modal.addEventListener("click", function(ev){ if(ev.target===modal) closeModal(); });
+  document.addEventListener("keydown", function(ev){ if(ev.key==="Escape") closeModal(); });
+  $all("[data-act]", modal).forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var a = btn.getAttribute("data-act");
+      if(a==="remind") toast("Reminder set — we'll ping you before the night.");
+      else if(a==="save") toast("Night saved to your list.");
+      else if(a==="invite") toast("Invite link copied to clipboard.");
+      closeModal();
+    });
+  });
+
+  /* ---------- timeline ---------- */
+  var tl = [
+    {wk:"Weeks 1–2", h:"Discovery & Design", p:"Brand workshop, content & house-rules sign-off, high-fidelity design approval."},
+    {wk:"Weeks 2–3", h:"Photo & Video Shoot", p:"After-hours production booked around the club's schedule; edit & approvals follow."},
+    {wk:"Weeks 3–5", h:"Website Build & Launch", p:"Front-end build, CMS, real photography integrated, QA and go-live."},
+    {wk:"Weeks 5–9", h:"App — Core Membership", p:"Accounts, wallet card, attendance/incognito, QR connect, chat & directory."},
+    {wk:"Weeks 9–14", h:"App — Commerce & Bookings", p:"Payments, tickets, shop, reservations, ordering & DJ requests — the revenue modules."},
+    {wk:"Weeks 14–17", h:"App — Community, Safety & Admin", p:"Perks & forum, discreet safety alert, and the staff admin console."},
+    {wk:"Future", h:"Add-ons — Flagged-Entry & Native Apps", p:"Facial-recognition (after privacy/legal sign-off) and native iOS/Android, once engagement is proven.", future:true}
+  ];
+  var tlEl = $("#timeline");
+  tl.forEach(function(t){
+    var d = document.createElement("div");
+    d.className = "tl" + (t.future?" future":"");
+    d.innerHTML = '<div class="wk">'+t.wk+'</div><h4>'+t.h+'</h4><p>'+t.p+'</p>';
+    tlEl.appendChild(d);
+  });
+
+  /* ---------- acceptance ---------- */
+  $all(".pkg").forEach(function(p){
+    p.addEventListener("click", function(){
+      $all(".pkg").forEach(function(x){ x.classList.remove("sel"); });
+      p.classList.add("sel");
+    });
+  });
+  $("#signBtn").addEventListener("click", function(){
+    var name = $("#sig-name").value.trim();
+    var msg = $("#confirmMsg");
+    if(!name){ toast("Add an authorizing name to continue."); $("#sig-name").focus(); return; }
+    msg.classList.add("show");
+    toast("Thank you, "+name.split(" ")[0]+" — request noted (demo).");
+  });
+
+  /* ---------- ambient water canvas ---------- */
+  var cv = $("#water"), ctx = cv.getContext("2d"), W, H, dpr = Math.min(window.devicePixelRatio||1, 1.6);
+  var blobs = [];
+  function isLight(){ var t=root.getAttribute("data-theme"); if(t) return t==="light"; return !window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  function resize(){
+    W = cv.width = Math.floor(innerWidth*dpr); H = cv.height = Math.floor(innerHeight*dpr);
+    cv.style.width = innerWidth+"px"; cv.style.height = innerHeight+"px";
+  }
+  function seed(){
+    blobs = [];
+    var n = 7;
+    for(var i=0;i<n;i++){
+      blobs.push({
+        x: (i/n + 0.05)*1, y: (i%3)/3,
+        r: (0.18 + (i%4)*0.05),
+        sx: (i%2? 1:-1)*(0.00004 + (i%3)*0.00002),
+        sy: (i%2? -1:1)*(0.00003 + (i%2)*0.00002),
+        hue: i%3
+      });
+    }
+  }
+  var t0 = 0;
+  function draw(ts){
+    if(!t0) t0 = ts;
+    ctx.clearRect(0,0,W,H);
+    ctx.globalCompositeOperation = "lighter";
+    var light = isLight();
+    for(var i=0;i<blobs.length;i++){
+      var b = blobs[i];
+      if(!reduce){ b.x += b.sx; b.y += b.sy;
+        if(b.x<-0.2) b.x=1.2; if(b.x>1.2) b.x=-0.2; if(b.y<-0.2) b.y=1.2; if(b.y>1.2) b.y=-0.2; }
+      var cx = b.x*W, cy = b.y*H, rad = b.r*Math.max(W,H);
+      var g = ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+      var col = b.hue===0 ? [79,186,203] : (b.hue===1 ? [201,162,75] : [30,107,120]);
+      var a = light ? 0.05 : 0.09;
+      g.addColorStop(0,"rgba("+col[0]+","+col[1]+","+col[2]+","+a+")");
+      g.addColorStop(1,"rgba("+col[0]+","+col[1]+","+col[2]+",0)");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+    if(!reduce) requestAnimationFrame(draw);
+  }
+  resize(); seed();
+  if(reduce){ requestAnimationFrame(draw); } else { requestAnimationFrame(draw); }
+  var rT; window.addEventListener("resize", function(){ clearTimeout(rT); rT=setTimeout(function(){ resize(); seed(); if(reduce) requestAnimationFrame(draw); }, 200); });
+
+})();
+</script>
+</body>
+</html>
