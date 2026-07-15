@@ -209,7 +209,6 @@
     position: fixed;
     inset: 0;
     background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(2px);
     z-index: 40;
     opacity: 0;
     pointer-events: none;
@@ -382,7 +381,7 @@
 </style>
 
 <div class="preview-note">
-  Live preview · Checkout is a demo — real Visa &amp; debit payments turn on when you publish your own store
+  Live preview · Checkout is a demo — real Visa &amp; debit payments turn on when your dad adds the Stripe key on Cloudflare
 </div>
 
 <header class="header">
@@ -598,8 +597,8 @@
         <div class="mark">&#10003;</div>
         <h2 style="margin:0 0 8px">Thank you!</h2>
         <p class="muted">This is a <strong>demo</strong> checkout, so no real payment was taken.</p>
-        <p class="muted small">In your published store, this button sends customers to a secure
-        Stripe page to pay by Visa, debit, or credit card.</p>
+        <p class="muted small">Once your Stripe key is added on Cloudflare, this button sends
+        customers to a secure page to pay by Visa, debit, or credit card.</p>
         <button class="btn btn-ghost btn-block" style="margin-top:18px" onclick="resetCart()">Back to shop</button>
       </div>`;
     cart.clear();
