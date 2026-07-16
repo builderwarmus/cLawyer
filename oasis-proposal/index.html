@@ -549,7 +549,13 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 
 /* sticky platform summary */
 .platform{border:1px solid var(--line); border-radius:18px; padding:26px 24px;
-  background:linear-gradient(165deg,var(--surface-2),var(--surface)); position:sticky; top:24px}
+  background:linear-gradient(165deg,var(--surface-2),var(--surface)); position:sticky; top:24px;
+  max-height:calc(100vh - 48px); overflow-y:auto; overscroll-behavior:contain;
+  scrollbar-width:thin; scrollbar-color:var(--line) transparent}
+.platform::-webkit-scrollbar{width:7px}
+.platform::-webkit-scrollbar-thumb{background:var(--line); border-radius:7px}
+.platform::-webkit-scrollbar-track{background:transparent}
+@media (max-width:900px){.platform{position:static; max-height:none; overflow:visible}}
 .pf-group{margin-bottom:16px}
 .pf-label{font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:9px; display:flex; align-items:center; gap:8px}
 .pf-count{background:var(--gold); color:#231a08; border-radius:999px; font-size:10px; padding:1px 8px; font-weight:700; font-variant-numeric:tabular-nums}
