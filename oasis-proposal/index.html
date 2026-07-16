@@ -196,7 +196,7 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 /* scroll lock while the gateway is up */
 html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; overscroll-behavior:none}
 .gateway{position:fixed; inset:0; z-index:200; overflow-y:auto; overflow-x:hidden; opacity:0;
-  transition:opacity .8s ease; -webkit-overflow-scrolling:touch;
+  transition:opacity 1.6s ease; -webkit-overflow-scrolling:touch;
   background:
     radial-gradient(120% 90% at 50% 6%, rgba(79,186,203,.10), transparent 55%),
     radial-gradient(100% 80% at 50% 104%, rgba(201,162,75,.06), transparent 60%),
@@ -237,7 +237,7 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .gateway:focus{outline:none}
 /* staged entrance: subtle fade + rise, sequenced via per-element --d delay */
 .g-step{opacity:0; transform:translateY(16px);
-  transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1); transition-delay:var(--d,0s)}
+  transition:opacity 1.5s ease, transform 1.5s cubic-bezier(.2,.7,.2,1); transition-delay:var(--d,0s)}
 .gateway.gw-enter .g-step{opacity:1; transform:none}
 @media (max-width:600px){
   .gw-scroll{padding:7vh 24px 7vh; justify-content:flex-start}
@@ -673,25 +673,25 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <section class="gateway" id="gateway" role="dialog" aria-modal="true" aria-labelledby="gw-title" tabindex="-1">
   <div class="gw-scroll">
     <div class="gw-inner">
-      <div class="gw-mark g-step" style="--d:.25s">
+      <div class="gw-mark g-step" style="--d:.5s">
         <span class="o">Oasis <em>Aqualounge</em></span>
         <span class="sub">Prepared by CraftWeb Studios</span>
       </div>
-      <p class="gw-eyebrow g-step" style="--d:.5s">Welcome to Perspective</p>
-      <h1 class="gw-title g-step" id="gw-title" style="--d:.8s">A Different Way to See Your Business</h1>
+      <p class="gw-eyebrow g-step" style="--d:1s">Welcome to Perspective</p>
+      <h1 class="gw-title g-step" id="gw-title" style="--d:1.6s">A Different Way to See Your Business</h1>
       <div class="gw-body">
-        <p class="g-step" style="--d:1.15s">Many first meetings are spent gathering information that could easily have been discovered through thoughtful research.</p>
-        <p class="g-step" style="--d:1.4s">Thoughtful research prepares us for the conversation. Meaningful conversation reveals what thoughtful research never can.</p>
-        <p class="triad g-step" style="--d:1.75s">Your experience. Your insight. Your vision.</p>
-        <p class="g-step" style="--d:2.05s">Before reaching out to Oasis, we invested time researching your business, your brand, your digital presence, and the opportunities we believe exist.</p>
-        <p class="g-step" style="--d:2.3s">What follows is our initial perspective, informed by our research and intended to be validated, refined, and strengthened through meaningful conversation.</p>
-        <p class="couplet g-step" style="--d:2.65s">If we've misunderstood something, we'd like to know.<br>If we've identified opportunities worth exploring, we'd like to explore them together.</p>
+        <p class="g-step" style="--d:2.3s">Many first meetings are spent gathering information that could easily have been discovered through thoughtful research.</p>
+        <p class="g-step" style="--d:2.8s">Thoughtful research prepares us for the conversation. Meaningful conversation reveals what thoughtful research never can.</p>
+        <p class="triad g-step" style="--d:3.5s">Your experience. Your insight. Your vision.</p>
+        <p class="g-step" style="--d:4.1s">Before reaching out to Oasis, we invested time researching your business, your brand, your digital presence, and the opportunities we believe exist.</p>
+        <p class="g-step" style="--d:4.6s">What follows is our initial perspective, informed by our research and intended to be validated, refined, and strengthened through meaningful conversation.</p>
+        <p class="couplet g-step" style="--d:5.3s">If we've misunderstood something, we'd like to know.<br>If we've identified opportunities worth exploring, we'd like to explore them together.</p>
       </div>
       <div class="gw-finale">
-        <p class="no-pitch g-step" style="--d:2.95s">This isn't a sales pitch.</p>
-        <p class="invite g-step" style="--d:3.2s">It's an invitation to begin a collaboration grounded in understanding.</p>
+        <p class="no-pitch g-step" style="--d:5.9s">This isn't a sales pitch.</p>
+        <p class="invite g-step" style="--d:6.4s">It's an invitation to begin a collaboration grounded in understanding.</p>
       </div>
-      <div class="gw-cta g-step" style="--d:3.55s">
+      <div class="gw-cta g-step" style="--d:7.1s">
         <button type="button" id="beginJourney">Begin the Journey</button>
       </div>
     </div>
