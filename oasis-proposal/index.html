@@ -264,6 +264,27 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .stats .c{font-size:12px; color:var(--muted); margin-top:8px; letter-spacing:.02em}
 @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
 
+/* ================= OPENING LETTER ================= */
+.intro{padding:150px 0 120px; position:relative}
+.intro-wrap{max-width:700px}
+.letter{display:flex; flex-direction:column; gap:22px; margin-top:28px}
+.letter p{font-size:19px; line-height:1.72; color:var(--muted)}
+.letter p.triad{font-family:var(--serif); color:var(--gold-bright);
+  font-size:clamp(22px,3vw,28px); line-height:1.3; padding:6px 0; letter-spacing:.005em}
+.letter p.couplet{color:var(--text); font-family:var(--serif); font-style:italic;
+  font-size:20px; line-height:1.55; padding:4px 0 4px 22px; border-left:2px solid var(--gold)}
+.letter-finale{margin-top:44px; padding-top:32px; border-top:1px solid var(--line-soft);
+  display:flex; flex-direction:column; gap:14px}
+.letter-finale .no-pitch{font-family:var(--serif); color:var(--muted); font-size:22px; letter-spacing:.01em}
+.letter-finale .invite{font-family:var(--serif); color:var(--gold-bright);
+  font-size:clamp(25px,3.6vw,34px); line-height:1.18; text-wrap:balance}
+.intro-continue{margin-top:52px; display:inline-flex; align-items:center; gap:12px; background:none; border:0;
+  cursor:pointer; color:var(--muted); font-family:var(--sans); font-size:12px; letter-spacing:.28em;
+  text-transform:uppercase; padding:0; transition:color .25s}
+.intro-continue:hover{color:var(--gold-bright)}
+.intro-continue .ln{width:44px; height:1px; background:linear-gradient(90deg,var(--gold),transparent)}
+@media (max-width:600px){ .intro{padding:120px 0 90px} .letter p{font-size:17px} }
+
 /* ================= FUNNEL ================= */
 .funnel{display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:10px; margin-top:44px}
 .node{position:relative; border:1px solid var(--line-soft); border-radius:12px; padding:16px 14px;
@@ -658,6 +679,31 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <a class="demo-fab" id="demoFab" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener" aria-label="Open the live demo website in a new tab"><span class="pulse"></span> View the live demo <b>↗</b></a>
 
 <main>
+
+<!-- ================= OPENING LETTER ================= -->
+<section class="floor intro" id="sec-intro" data-floor="◆" data-label="Perspective">
+  <div class="wrap intro-wrap">
+    <div class="brand rise" style="margin-bottom:38px">
+      <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
+      <span class="sub">Prepared by CraftWeb Studios</span>
+    </div>
+    <div class="eyebrow rise">Welcome to Perspective</div>
+    <h2 class="title rise">A different way to see your business</h2>
+    <div class="letter rise">
+      <p>Many first meetings are spent gathering information that could easily have been discovered through thoughtful research.</p>
+      <p>Thoughtful research prepares us for the conversation. Meaningful conversation reveals what thoughtful research never can.</p>
+      <p class="triad">Your experience. Your insight. Your vision.</p>
+      <p>Before reaching out to Oasis, we invested time researching your business, your brand, your digital presence, and the opportunities we believe exist.</p>
+      <p>What follows is our initial perspective, informed by our research and intended to be validated, refined, and strengthened through meaningful conversation.</p>
+      <p class="couplet">If we've misunderstood something, we'd like to know.<br>If we've identified opportunities worth exploring, we'd like to explore them together.</p>
+    </div>
+    <div class="letter-finale rise">
+      <p class="no-pitch">This isn't a sales pitch.</p>
+      <p class="invite">It's an invitation to begin a collaboration grounded in understanding.</p>
+    </div>
+    <button class="intro-continue rise" data-goto="sec-opportunity"><span class="ln"></span>Begin</button>
+  </div>
+</section>
 
 <!-- ================= HERO / THE OPPORTUNITY ================= -->
 <section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
@@ -1276,8 +1322,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     var fab=$("#demoFab"), hero=$("#sec-opportunity");
     if(!fab || !hero) return;
     new IntersectionObserver(function(es){
-      es.forEach(function(e){ fab.classList.toggle("show", !e.isIntersecting); });
-    }, {threshold:0.15}).observe(hero);
+      es.forEach(function(e){ fab.classList.toggle("show", e.boundingClientRect.bottom <= 0); });
+    }, {threshold:0}).observe(hero);
   })();
 
   /* generic goto buttons */
