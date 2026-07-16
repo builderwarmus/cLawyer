@@ -230,16 +230,24 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .gw-finale .invite{font-family:var(--serif); color:var(--gold-bright);
   font-size:clamp(22px,3.4vw,32px); line-height:1.18; text-wrap:balance}
 .gw-cta{margin-top:46px}
-.gw-cta button{font-family:var(--sans); font-size:15px; letter-spacing:.06em; font-weight:700; cursor:pointer;
-  padding:17px 42px; border-radius:999px; border:1px solid transparent; color:#20180a;
+.gw-cta button{position:relative; overflow:hidden; font-family:var(--sans); font-size:15px; letter-spacing:.06em;
+  font-weight:700; cursor:pointer; padding:17px 42px; border-radius:999px; border:1px solid transparent; color:#20180a;
   background:linear-gradient(120deg,var(--gold),var(--gold-bright));
   box-shadow:0 16px 40px -12px rgba(201,162,75,.55), 0 0 22px 2px rgba(230,202,134,.34);
   transition:transform .18s, box-shadow .3s, opacity 1.1s ease;
   animation:gw-glow-breathe 3.4s ease-in-out infinite}
+.gw-cta button .gw-cta-label{position:relative; z-index:2}
+/* flowing water sheen across the button on hover */
+.gw-cta button::before{content:""; position:absolute; inset:0; z-index:1; border-radius:inherit; pointer-events:none;
+  background:linear-gradient(115deg, transparent 18%, rgba(255,255,255,.4) 44%, rgba(190,236,240,.5) 50%,
+    rgba(255,255,255,.4) 56%, transparent 82%);
+  background-size:260% 100%; background-position:160% 0; opacity:0; transition:opacity .4s ease}
 .gw-cta button:hover{transform:translateY(-2px); animation:gw-glow-pulse 1.4s ease-in-out infinite}
+.gw-cta button:hover::before{opacity:1; animation:gw-water-flow 2.4s linear infinite}
 .gw-cta button:focus-visible{outline:2px solid var(--gold-bright); outline-offset:4px}
-/* slow fade-away on click */
-.gw-cta button.is-fading{opacity:0; animation:none; box-shadow:none; pointer-events:none; transform:none}
+/* fade the button away first on click (page follows, sequenced in JS) */
+.gw-cta button.is-fading{opacity:0; transition:opacity .8s ease; animation:none; box-shadow:none; pointer-events:none; transform:none}
+.gw-cta button.is-fading::before{opacity:0; animation:none}
 @keyframes gw-glow-breathe{
   0%,100%{box-shadow:0 16px 40px -12px rgba(201,162,75,.5), 0 0 20px 2px rgba(230,202,134,.26)}
   50%{box-shadow:0 18px 46px -12px rgba(201,162,75,.72), 0 0 34px 5px rgba(230,202,134,.52)}
@@ -248,6 +256,7 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   0%,100%{box-shadow:0 18px 44px -12px rgba(201,162,75,.6), 0 0 26px 3px rgba(230,202,134,.45)}
   50%{box-shadow:0 24px 62px -10px rgba(201,162,75,.97), 0 0 54px 11px rgba(230,202,134,.9)}
 }
+@keyframes gw-water-flow{0%{background-position:160% 0}100%{background-position:-60% 0}}
 .gateway:focus{outline:none}
 /* staged entrance: subtle fade + rise, sequenced via per-element --d delay */
 .g-step{opacity:0; transform:translateY(16px);
@@ -266,10 +275,11 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   .gateway.leaving{transition:opacity .5s ease}
   .g-step{transform:none; transition:opacity .5s ease; transition-delay:0s}
   .gateway.gw-enter .g-step{transform:none}
-  /* static glow — no pulsing under reduced motion */
+  /* static glow — no pulsing / no water flow under reduced motion */
   .gw-cta button{animation:none}
   .gw-cta button:hover{animation:none;
     box-shadow:0 22px 52px -12px rgba(201,162,75,.85), 0 0 42px 7px rgba(230,202,134,.72)}
+  .gw-cta button::before, .gw-cta button:hover::before{display:none}
 }
 
 /* ================= HERO ================= */
@@ -329,16 +339,35 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
 
 /* ================= FUNNEL ================= */
-.funnel{display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:10px; margin-top:44px}
-.node{position:relative; border:1px solid var(--line-soft); border-radius:12px; padding:16px 14px;
-  background:var(--surface); cursor:default; transition:transform .25s, border-color .25s, background .25s; overflow:hidden}
+.funnel{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:44px}
+.node{position:relative; width:100%; text-align:left; font-family:inherit; color:inherit; display:block;
+  border:1px solid var(--line-soft); border-radius:12px; padding:16px 15px 18px; background:var(--surface);
+  cursor:pointer; transition:transform .25s, border-color .25s, background .25s, box-shadow .25s; overflow:hidden}
 .node::before{content:""; position:absolute; left:0; top:0; height:100%; width:3px;
   background:linear-gradient(var(--gold),var(--aqua)); opacity:.5; transition:opacity .25s}
-.node .step{font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase}
-.node .name{font-family:var(--serif); font-size:16px; margin-top:6px; color:var(--text)}
+.node .step{display:block; font-size:10px; letter-spacing:.2em; color:var(--faint); text-transform:uppercase}
+.node .name{display:block; font-family:var(--serif); font-size:16px; margin-top:6px; color:var(--text)}
+.node .syn{display:block; font-size:12px; color:var(--muted); margin-top:8px; line-height:1.45}
 .node:hover{transform:translateY(-4px); border-color:var(--gold); background:var(--surface-2)}
 .node:hover::before{opacity:1}
-.node.warm .name{color:var(--gold-bright)}
+.node:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.node.active{border-color:var(--gold); background:var(--surface-2); box-shadow:0 0 0 1px var(--gold) inset}
+.node.active::before{opacity:1}
+
+/* click-to-reveal detail panel (auto-height via 0fr -> 1fr) */
+.funnel-detail{display:grid; grid-template-rows:0fr; opacity:0; margin-top:16px;
+  transition:grid-template-rows .5s ease, opacity .45s ease}
+.funnel-detail.open{grid-template-rows:1fr; opacity:1}
+.funnel-detail .fd-inner{overflow:hidden; min-height:0}
+.fd-card{border:1px solid var(--line); border-radius:16px; padding:26px 28px;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface)); box-shadow:var(--shadow)}
+.fd-card .fd-num{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold); font-weight:600}
+.fd-card .fd-title{font-family:var(--serif); font-size:clamp(22px,3vw,28px); color:var(--gold-bright); margin:8px 0 6px; line-height:1.1}
+.fd-card .fd-syn{font-family:var(--serif); font-style:italic; color:var(--text); font-size:17px; margin-bottom:14px}
+.fd-card .fd-body{color:var(--muted); font-size:15.5px; line-height:1.7; max-width:64ch}
+.fd-plats{display:flex; flex-wrap:wrap; gap:9px; margin-top:20px}
+.fd-plats span{font-size:12px; letter-spacing:.03em; color:var(--text); border:1px solid var(--line-soft);
+  background:var(--surface); border-radius:999px; padding:8px 14px}
 
 /* ================= BUILD CARDS ================= */
 .build-grid{display:grid; grid-template-columns:1fr; gap:22px; margin-top:48px}
@@ -710,7 +739,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <p class="invite g-step" style="--d:15s">It's an invitation to begin a collaboration grounded in understanding.</p>
       </div>
       <div class="gw-cta g-step" style="--d:16.64s">
-        <button type="button" id="beginJourney">Begin the Journey</button>
+        <button type="button" id="beginJourney"><span class="gw-cta-label">Begin the Journey</span></button>
       </div>
     </div>
   </div>
@@ -768,8 +797,9 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   <div class="wrap">
     <div class="eyebrow rise">The Big Picture</div>
     <h2 class="title rise">How Oasis wins</h2>
-    <p class="lead rise">Every feature in this proposal exists for one reason: to move a stranger, one step at a time, into a loyal member who spends more and comes back. Nothing here is decoration — it's a system. <em>Hover a step to trace the path.</em></p>
+    <p class="lead rise">Every feature in this proposal exists for one reason: to move a stranger, one step at a time, into a loyal member who spends more and comes back. Nothing here is decoration — it's a system. <em>Hover to lift a step; tap any step to see what it does and why it matters.</em></p>
     <div class="funnel rise" id="funnel"></div>
+    <div class="funnel-detail rise" id="funnelDetail" aria-live="polite"><div class="fd-inner"></div></div>
   </div>
 </section>
 
@@ -1353,12 +1383,16 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       if(leaving) return; leaving = true;
       track("begin_journey_clicked");
       try{ window.scrollTo(0,0); }catch(e){}
-      if(beginBtn){ beginBtn.classList.add("is-fading"); } // slow fade-away of the button
-      gw.classList.add("leaving");
-      gw.addEventListener("transitionend", function(ev){
-        if(ev.target===gw && ev.propertyName==="opacity") finish();
-      });
-      setTimeout(finish, reduce ? 700 : 1900); // fallback if transitionend is missed
+      // 1) the button fades away first
+      if(beginBtn){ beginBtn.classList.add("is-fading"); }
+      // 2) then the rest of the gateway crossfades into the proposal
+      setTimeout(function(){
+        gw.classList.add("leaving");
+        gw.addEventListener("transitionend", function(ev){
+          if(ev.target===gw && ev.propertyName==="opacity") finish();
+        });
+        setTimeout(finish, reduce ? 700 : 1900); // fallback if transitionend is missed
+      }, reduce ? 250 : 850);
     }
     var beginBtn = document.getElementById("beginJourney");
     if(beginBtn){ beginBtn.addEventListener("click", beginJourney); }
@@ -1432,14 +1466,45 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   }, {rootMargin:"0px 0px -8% 0px", threshold:.05});
   $all(".rise").forEach(function(el){ rev.observe(el); });
 
-  /* ---------- funnel ---------- */
-  var steps = ["Instagram","Website","First visit","Membership","Bar orders","Reservations","Private hire","Community","Merch","Repeat visits","Lifetime customer"];
+  /* ---------- funnel: How Oasis wins ---------- */
+  var winSteps = [
+    {n:1,  title:"Website",             syn:"Your digital first impression.",      detail:"The bespoke, four-floor site is where every prospective member forms their first impression. It turns a casual browser into a booked visit — clear admission info, live event flyers, and calls-to-action that convert curiosity into someone walking through the door."},
+    {n:2,  title:"First Visit",         syn:"Turn curiosity into connection.",     detail:"The arrival experience does the selling: a fast, discreet 19+ check-in, a wallet door-card, and a warm welcome. A great first visit is the strongest predictor of whether a guest becomes a returning member."},
+    {n:3,  title:"Membership",          syn:"Join the Oasis community.",           detail:"Age-verified accounts unlock everything else — the digital door card, the directory, connections and perks. Membership turns an anonymous guest into a named, reachable relationship you own and can bring back."},
+    {n:4,  title:"Bar Orders",          syn:"Skip the line. Order ahead.",         detail:"In-app and poolside ordering from either bar, routed straight to staff. Shorter lines, fewer missed rounds, a higher average tab — the single biggest spend-per-visit lever in the whole app."},
+    {n:5,  title:"Reservations",        syn:"Reserve your perfect experience.",    detail:"Hourly private-room booking from 1 PM to 2 AM, taken in-app. Guests lock in exactly the experience they want in advance, and you fill rooms that used to sit empty — predictable, pre-paid and high-margin."},
+    {n:6,  title:"Private Hire",        syn:"Celebrate life's biggest moments.",   detail:"Off-hours venue rental — private shows, content and film shoots, corporate events, bachelor & bachelorette parties. One or two bookings a month is a meaningful new revenue line from space you already have."},
+    {n:7,  title:"Community",           syn:"Connect beyond the venue.",           detail:"The “231 Mutual Connections” forum, double-opt-in QR connections, moderated chat and the perks network keep members engaged between visits. Community turns attendance into belonging — and belonging into retention."},
+    {n:8,  title:"Merch",               syn:"Take Oasis home with you.",           detail:"Branded merchandise and member-priced add-ons: a new high-margin line and a walking advertisement for the brand. Every piece sold is both revenue and reach."},
+    {n:9,  title:"Repeat Visits",       syn:"Reward every return visit.",          detail:"Attendance signals, event reminders and connections quietly pull guests back. Small gains in return rate compound — a member who visits twice as often is worth far more than a new guest won from scratch."},
+    {n:10, title:"Lifetime Customer",   syn:"Build loyalty that lasts.",           detail:"Every step above compounds into lifetime value: a member who spends more, visits more, brings friends, and stays for years. That's the point of the system — not a transaction, a relationship."},
+    {n:11, title:"Social Media",        syn:"Stay connected every day.",           detail:"Your always-on shop window. Consistent, on-brand content — fuelled by the new photo & video library — keeps Oasis top-of-mind and feeds the top of this funnel every single day.", plats:["Instagram","Facebook","X (Twitter)","Pinterest","Yelp","TikTok"]},
+    {n:12, title:"Partners & Affiliates", syn:"Exclusive perks beyond Oasis.",     detail:"A partner-discount network and affiliate placements — SDC.com, sponsors and local partners who pay to appear in the app and videos. Members get exclusive perks beyond Oasis; you get a new income stream and deeper loyalty at once."}
+  ];
   var funnel = $("#funnel");
-  steps.forEach(function(s,i){
-    var n = document.createElement("div");
-    n.className = "node" + (i>=steps.length-3 ? " warm":"");
-    n.innerHTML = '<div class="step">Step '+(i+1)+'</div><div class="name">'+s+'</div>';
-    funnel.appendChild(n);
+  var fd = $("#funnelDetail"), fdInner = fd ? $(".fd-inner", fd) : null;
+  var activeNode = null;
+  function renderDetail(s){
+    var chips = s.plats ? '<div class="fd-plats">'+s.plats.map(function(p){return '<span>'+p+'</span>';}).join('')+'</div>' : '';
+    fdInner.innerHTML = '<div class="fd-card"><div class="fd-num">Step '+s.n+'</div>'+
+      '<div class="fd-title">'+s.title+'</div>'+
+      '<div class="fd-syn">'+s.syn+'</div>'+
+      '<div class="fd-body">'+s.detail+'</div>'+ chips +'</div>';
+  }
+  winSteps.forEach(function(s){
+    var b = document.createElement("button");
+    b.className = "node"; b.type = "button"; b.setAttribute("aria-expanded","false");
+    b.innerHTML = '<span class="step">Step '+s.n+'</span><span class="name">'+s.title+'</span><span class="syn">'+s.syn+'</span>';
+    b.addEventListener("click", function(){
+      if(activeNode===b){
+        b.classList.remove("active"); b.setAttribute("aria-expanded","false");
+        if(fd) fd.classList.remove("open"); activeNode=null; return;
+      }
+      if(activeNode){ activeNode.classList.remove("active"); activeNode.setAttribute("aria-expanded","false"); }
+      b.classList.add("active"); b.setAttribute("aria-expanded","true"); activeNode=b;
+      if(fd && fdInner){ renderDetail(s); fd.classList.add("open"); }
+    });
+    funnel.appendChild(b);
   });
 
   /* ---------- graceful images ---------- */
