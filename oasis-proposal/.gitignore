@@ -1,1 +1,5 @@
 node_modules/
+
+# Generated build outputs (derived from index.html + images/)
+artifact.html
+oasis-proposal-site.zip
