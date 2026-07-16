@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -140,13 +140,6 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .depth{position:fixed; left:0; top:0; height:3px; z-index:45; width:100%;
   background:linear-gradient(90deg,var(--aqua-deep),var(--aqua)); transform-origin:0 50%; transform:scaleX(0)}
 
-/* theme toggle */
-.tools{position:fixed; top:18px; right:20px; z-index:46; display:flex; gap:8px}
-.chip{background:rgba(20,36,44,.7); border:1px solid var(--line); color:var(--muted);
-  border-radius:999px; padding:8px 13px; font-size:12px; letter-spacing:.08em; cursor:pointer;
-  backdrop-filter:blur(8px); font-family:var(--sans); transition:color .2s,border-color .2s}
-.chip:hover{color:var(--text); border-color:var(--gold)}
-@media (max-width:760px){ .tools{top:auto; bottom:14px; right:14px} }
 
 /* persistent "view live demo" floating button */
 .demo-fab{position:fixed; left:22px; bottom:22px; z-index:47; display:inline-flex; align-items:center; gap:10px;
@@ -580,7 +573,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(
 .disclaimer{font-size:12px; color:var(--faint); margin-top:24px; max-width:70ch; line-height:1.6}
 
 /* value columns */
-.valcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; margin-top:40px}
+.valcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px; margin-top:40px}
 .valcol{border:1px solid var(--line-soft); border-radius:16px; padding:24px; background:var(--surface)}
 .valcol h4{font-family:var(--serif); font-size:18px; color:var(--gold-bright); margin-bottom:14px}
 .valcol ul{list-style:none; margin:0; padding:0; display:grid; gap:10px}
@@ -588,7 +581,7 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(
 .valcol li::before{content:"·"; position:absolute; left:2px; color:var(--gold); font-size:20px; top:-4px}
 
 /* ================= EVENTS CALENDAR ================= */
-.events{display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:16px; margin-top:44px}
+.events{display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-top:44px}
 .ev{border:1px solid var(--line-soft); border-radius:16px; overflow:hidden; background:var(--surface);
   cursor:pointer; transition:transform .25s, border-color .25s; text-align:left; padding:0; color:inherit; font-family:inherit}
 .ev:hover{transform:translateY(-5px); border-color:var(--gold)}
@@ -745,11 +738,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   </div>
 </section>
 
-<!-- depth meter + tools + elevator -->
+<!-- depth meter + elevator -->
 <div class="depth" id="depth" aria-hidden="true"></div>
-<div class="tools">
-  <button class="chip" id="themeBtn" aria-label="Toggle light or dark theme">◐ Theme</button>
-</div>
 
 <nav class="elevator" id="elevator" aria-label="Floor navigation">
   <div class="cap">Descend</div>
@@ -786,7 +776,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       <div class="cell"><div class="n">385%</div><div class="c">5-year growth · No. 193 on the 2018 Growth 500</div></div>
       <div class="cell"><div class="n">~300</div><div class="c">Venue capacity across four floors</div></div>
       <div class="cell"><div class="n">≈ $10.6k</div><div class="c">Est. monthly revenue lift (conservative)</div></div>
-      <div class="cell"><div class="n">3–4 mo</div><div class="c">Estimated payback on Phase 1</div></div>
+      <div class="cell"><div class="n">~4 mo</div><div class="c">Estimated payback on Phase 1</div></div>
     </div>
   </div>
   <div class="scroll-hint" aria-hidden="true"><span>Descend</span><span class="arrow"></span></div>
@@ -980,7 +970,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
           <p>The foundation every other module plugs into.</p>
           <ul class="feats">
             <li><span class="mk">◆</span><span>Secure, <b>age-verified member accounts</b> &amp; profiles</span></li>
-            <li><span class="mk">◆</span><span><b>Digital membership card</b> (Apple &amp; Google Wallet) for fast, private door entry</span></li>
+            <li><span class="mk">◆</span><span><b>Digital membership card</b> (Apple &amp; Google Wallet) for fast, private door entry — plus an optional <b>physical membership card</b> designed to match</span></li>
             <li><span class="mk">◆</span><span>"Attending tonight" signal, live anonymized count &amp; <b>incognito mode</b></span></li>
             <li><span class="mk">◆</span><span>Double-opt-in <b>QR connections</b> &amp; discreet moderated chat</span></li>
             <li><span class="mk">◆</span><span>Paginated "who's here tonight" directory</span></li>
@@ -1051,7 +1041,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <div class="hint">Figures are project estimates for scoping. Final pricing confirmed on sign-off of detailed specification. Third-party &amp; ongoing costs billed at cost.</div>
         <div class="phase2">
           <div><b>Care &amp; Hosting</b> — $250/mo at website launch → ~$500/mo once the app is live.</div>
-          <div style="margin-top:10px"><b>Phase 2 — Commerce &amp; Admin modules</b> — payments, reservations, ordering, DJ, safety, admin: <b>~$18–20k</b>, funded follow-on.</div>
+          <div style="margin-top:10px"><b>Phase 2 — Commerce &amp; Admin modules</b> — payments, reservations, ordering, DJ, safety, admin: <b>~$18–25k</b>, funded follow-on.</div>
+          <div style="margin-top:10px"><b>Phase 3 — Native iOS &amp; Android apps</b> — published to the App Store &amp; Google Play, once the web app proves engagement: <b>~$40–60k</b>, funded follow-on.</div>
         </div>
       </div>
     </div>
@@ -1119,7 +1110,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <div class="annual">That's roughly <b id="roiAnnual">$127,200</b> in new annual revenue opportunity — and it excludes the retention gains and cost savings below, which compound on top.</div>
       </div>
     </div>
-    <p class="disclaimer rise">Deliberately conservative, from public figures (capacity, published pricing, listed sell-out events) — real attendance and bar spend almost certainly push these higher. Payback compares the modelled monthly lift against the ≈$37,750 Phase 1 build (before HST).</p>
+    <p class="disclaimer rise">Deliberately conservative, from public figures (capacity, published pricing, listed sell-out events) — real attendance and bar spend almost certainly push these higher. Payback compares the modelled monthly lift against the ≈$43,750 Phase 1 build (before HST).</p>
 
     <div class="valcols rise">
       <div class="valcol"><h4>New revenue</h4><ul>
@@ -1142,6 +1133,16 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <li>Attendance signals &amp; connections pull guests back</li>
         <li>Event reminders reduce forgotten nights</li>
         <li>Small return-rate gains compound into lifetime value</li>
+      </ul></div>
+      <div class="valcol"><h4>Customer experience</h4><ul>
+        <li>Frictionless guest experiences from first visit to every return</li>
+        <li>Greater convenience — wallet entry, in-app ordering &amp; booking</li>
+        <li>Higher satisfaction and engagement at every touchpoint</li>
+      </ul></div>
+      <div class="valcol"><h4>Brand growth</h4><ul>
+        <li>A stronger brand through community &amp; referrals</li>
+        <li>Social sharing that feeds the top of the funnel</li>
+        <li>Memorable digital experiences that set Oasis apart</li>
       </ul></div>
     </div>
   </div>
@@ -1178,7 +1179,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
             <li><span class="mk">◆</span><span>Requires privacy/legal review first — <b>biometric data under PIPEDA</b> needs explicit consent, a retention/deletion policy and counsel sign-off</span></li>
             <li><span class="mk">◆</span><span>We'd build only after that's in place</span></li>
           </ul></div></div>
-      <div class="card"><div class="card-head"><h3>Native iOS &amp; Android Apps</h3><span class="tag rec">From $32,000</span></div>
+      <div class="card"><div class="card-head"><h3>Native iOS &amp; Android Apps</h3><span class="tag rec">Phase 3 · ~$40–60k</span></div>
         <div class="card-body"><p>Once the web app proves engagement — the investment de-risked by real usage.</p>
           <ul class="feats">
             <li><span class="mk">◆</span><span>Published to the App Store &amp; Google Play</span></li>
@@ -1250,7 +1251,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <li>Ad spend &amp; media buying</li>
         <li>Payment-processor / merchant &amp; POS fees</li>
         <li>Legal/privacy counsel for biometric features</li>
-        <li>Native apps (separate Phase 2)</li>
+        <li>Native apps (separate Phase 3)</li>
       </ul></div>
     </div>
   </div>
@@ -1268,11 +1269,11 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       </div>
       <div class="pkgs" id="pkgs">
         <div class="pkg sel" data-pkg="launch">
-          <div class="pk"><span class="pname"><span class="radio"></span>Launch Package — Phase 1</span><span class="pprice">$42,657.50</span></div>
-          <div class="pdesc">Website, live chat &amp; shoot, plus the core members app. Incl. HST. Recommended entry point.</div>
+          <div class="pk"><span class="pname"><span class="radio"></span>Launch Package — Phase 1</span><span class="pprice">$49,437.50</span></div>
+          <div class="pdesc">Website, live chat &amp; shoot, the core members app, plus membership-card design &amp; implementation. Incl. HST. Recommended entry point.</div>
         </div>
         <div class="pkg" data-pkg="full">
-          <div class="pk"><span class="pname"><span class="radio"></span>Phase 1 + Phase 2</span><span class="pprice">≈ $60–63k</span></div>
+          <div class="pk"><span class="pname"><span class="radio"></span>Phase 1 + Phase 2</span><span class="pprice">≈ $67–74k</span></div>
           <div class="pdesc">Launch Package plus the Commerce &amp; Admin app modules as a funded follow-on. Before HST on Phase 2.</div>
         </div>
       </div>
@@ -1398,13 +1399,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     if(beginBtn){ beginBtn.addEventListener("click", beginJourney); }
   })();
 
-  /* ---------- theme toggle ---------- */
+  /* ---------- theme: committed to dark (no user toggle) ---------- */
   var root = document.documentElement;
-  $("#themeBtn").addEventListener("click", function(){
-    var cur = root.getAttribute("data-theme");
-    if(!cur){ cur = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark":"light"; }
-    root.setAttribute("data-theme", cur==="dark" ? "light":"dark");
-  });
 
   /* ---------- build elevator nav from sections ---------- */
   var sections = $all("section[data-floor]");
@@ -1550,11 +1546,11 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   /* ---------- investment builder ---------- */
   var items = [
     {k:"web",  name:"Custom Website",            price:11500, req:true,  desc:"4-floor build, interactive flyer-calendar, video-upsell, owners & About, custom CTAs, age-gating, CMS"},
-    {k:"chat", name:"Live Chat & Lead Capture",  price:2000,  req:false, desc:"Support widget + offline messaging + customer database + promo-consent opt-in"},
+    {k:"chat", name:"Live Chat & Lead Capture",  price:4500,  req:false, desc:"Support widget + offline messaging + customer database + promo-consent opt-in"},
     {k:"photo",name:"Professional Photo Shoot",  price:2500,  req:false, desc:"Discreet on-site, all four floors, edited & owned"},
     {k:"video",name:"Video Production",          price:4500,  req:false, desc:"Replaces the current clips — hero, social & ads"},
     {k:"app",  name:"Members App — Core Platform",price:14000, req:true, desc:"Accounts, wallet card, attendance/incognito, QR connect, chat, directory"},
-    {k:"biz",  name:"Business Systems bundle",   price:3250,  req:false, desc:"Messaging integration, e-commerce hooks, tracking, CRM"}
+    {k:"biz",  name:"Business Systems bundle",   price:6750,  req:false, desc:"Messaging integration, e-commerce hooks, tracking, CRM, and membership-card (digital & physical) design & implementation"}
   ];
   var state = {}; items.forEach(function(it){ state[it.k]=true; });
   var linesEl = $("#invLines");
@@ -1587,7 +1583,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   renderInv();
 
   /* ---------- ROI calculator ---------- */
-  var BUILD = 37750; // Phase 1 before HST
+  var BUILD = 43750; // Phase 1 before HST
   var barInputs = {}; ["drink","guests","nights","adopt"].forEach(function(k){ barInputs[k]=$('[data-inp="'+k+'"]'); });
   var levers = $all(".lever[data-lever]");
   function leverActive(el){ return el.classList.contains("active"); }
@@ -1624,7 +1620,9 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     {lbl:"Signature Night", title:"Aqua After Dark", date:"Fri · Jul 24", when:"Friday, July 24 · 9 PM–2 AM", desc:"The flagship Friday — all four floors open, resident DJ in the booth, poolside bar service. Historically a sell-out; advance tickets recommended.", status:"Selling fast", sold:false, g1:"#1E6B78", g2:"#0F1A20"},
     {lbl:"Couples & Singles", title:"Waterfront Social", date:"Sat · Jul 25", when:"Saturday, July 25 · 8 PM–2 AM", desc:"A relaxed mixer across the lounge and courtyard. Couples, women, trans folks and solo guests welcome per house rules.", status:"Tickets open", sold:false, g1:"#3A2A4A", g2:"#0F1A20"},
     {lbl:"Members Only", title:"The Descent", date:"Thu · Jul 30", when:"Thursday, July 30 · 9 PM–1 AM", desc:"A quieter members-first evening — priority private-room booking and member pricing at both bars.", status:"Sold out", sold:true, g1:"#4A3A1E", g2:"#0F1A20"},
-    {lbl:"Special Event", title:"Sauna Sessions", date:"Sun · Aug 2", when:"Sunday, August 2 · 6 PM–12 AM", desc:"Steam, sauna and pool with ambient sets. Limited capacity; incognito mode available in-app.", status:"Selling fast", sold:false, g1:"#1E4A44", g2:"#0F1A20"}
+    {lbl:"Special Event", title:"Sauna Sessions", date:"Sun · Aug 2", when:"Sunday, August 2 · 6 PM–12 AM", desc:"Steam, sauna and pool with ambient sets. Limited capacity; incognito mode available in-app.", status:"Selling fast", sold:false, g1:"#1E4A44", g2:"#0F1A20"},
+    {lbl:"Ladies & Couples", title:"Velvet Room", date:"Fri · Aug 7", when:"Friday, August 7 · 9 PM–2 AM", desc:"An intimate, low-lit evening in the private quarters — curated music, candlelight, and priority room booking for members.", status:"Tickets open", sold:false, g1:"#2A1E44", g2:"#0F1A20"},
+    {lbl:"Signature Night", title:"Midnight Masquerade", date:"Sat · Aug 15", when:"Saturday, August 15 · 9 PM–3 AM", desc:"A themed masked night across all four floors — masks provided, dress to impress. One of the season's biggest; advance tickets recommended.", status:"Selling fast", sold:false, g1:"#3A2436", g2:"#0F1A20"}
   ];
   var evEl = $("#events");
   evData.forEach(function(e, i){
