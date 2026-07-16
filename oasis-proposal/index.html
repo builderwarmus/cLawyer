@@ -578,6 +578,36 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .mod-toggle:hover{border-color:var(--acc)}
 .mod-toggle:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
 .mod.on .mod-toggle{background:linear-gradient(120deg,var(--acc),var(--acc-bright)); color:#12151b; border-color:transparent; font-weight:700}
+/* ===== Phase 3 — solution intelligence UI ===== */
+.mod-cw{display:inline-flex; align-items:center; gap:6px; margin-top:8px; font-family:var(--sans); font-size:9px; font-weight:600;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--acc); border:1px solid var(--acc); border-radius:999px; padding:3px 10px}
+.mod.on .mod-cw{color:var(--acc-bright); border-color:var(--acc-bright)}
+.mod-cwr{margin-top:16px; padding:14px 16px; border-radius:12px; border:1px solid var(--line-soft); background:rgba(255,255,255,.015); font-size:12.5px; color:var(--muted); line-height:1.5}
+.mod-cwr .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--acc); margin-bottom:5px}
+.mod-bf{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+.mod-bf .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:9px}
+.mod-bf ul{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px}
+.mod-bf li{font-size:12px; color:var(--muted); border:1px solid var(--line-soft); border-radius:999px; padding:5px 12px}
+.mod-pairs{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between; gap:12px}
+.mod-pairs .ml{font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint)}
+.mod-pairs .pairs-name{font-family:var(--serif); color:var(--acc); font-size:14px; text-align:right}
+/* panel — platform focus */
+.focus-chips{display:flex; flex-wrap:wrap; gap:8px; min-height:28px}
+.focus-chip{font-family:var(--sans); font-size:11px; letter-spacing:.02em; color:var(--gold-bright); border:1px solid rgba(201,162,75,.4);
+  background:rgba(201,162,75,.08); border-radius:999px; padding:5px 12px; opacity:0; transform:translateY(4px); transition:opacity .45s ease, transform .45s ease}
+.focus-chip.in{opacity:1; transform:none}
+/* panel — recommended next enhancement */
+.pf-rec{margin-top:16px; border:1px solid var(--line); border-radius:14px; padding:16px 17px; background:linear-gradient(160deg,var(--surface-2),var(--surface))}
+.pf-rec-h{font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--aqua); margin-bottom:10px}
+.pf-rec-because{font-size:13.5px; color:var(--text); line-height:1.5}
+.pf-rec-name{color:var(--gold-bright)}
+.pf-rec-reason{font-size:12.5px; color:var(--muted); line-height:1.55; margin-top:8px}
+/* panel — solution summary */
+.pf-summary{margin-top:16px; margin-bottom:0}
+.pf-sum-text{font-size:13.5px; color:var(--text); line-height:1.6; font-style:italic}
+/* enhancement section footer */
+.enh-footer{margin:36px auto 0; max-width:70ch; text-align:center; font-size:14px; color:var(--muted); line-height:1.65}
+@media (prefers-reduced-motion: reduce){ .focus-chip{transition:none} }
 
 /* sticky platform summary */
 .platform{border:1px solid var(--line); border-radius:18px; padding:26px 24px;
@@ -1174,10 +1204,24 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
             <div class="pf-label">Platform Profile</div>
             <div class="pf-caps" id="pfCaps" aria-label="Platform capability indicators"></div>
           </div>
+          <div class="pf-group pf-focus">
+            <div class="pf-label">Platform Focus</div>
+            <div class="focus-chips" id="pfFocus"></div>
+          </div>
+          <div class="pf-rec" id="pfRec" hidden>
+            <div class="pf-rec-h">Recommended Next Enhancement</div>
+            <p class="pf-rec-because">Because you selected <b id="pfRecTrigger"></b>, we recommend <b id="pfRecName" class="pf-rec-name"></b>.</p>
+            <p class="pf-rec-reason" id="pfRecReason"></p>
+          </div>
+          <div class="pf-group pf-summary">
+            <div class="pf-label">Solution Summary</div>
+            <p class="pf-sum-text" id="pfSummary">Your platform currently reflects the Launch Package foundation — add enhancements to shape where it focuses.</p>
+          </div>
           <div class="pf-note">Launch Package (from $43,750, before HST) is the base platform. Enhancement ranges are estimates confirmed on detailed spec. Care &amp; Hosting from $250/mo → ~$500/mo once the app is live.</div>
         </div>
       </aside>
     </div>
+    <p class="enh-footer rise">Not sure which enhancements best fit your business? During Discovery, we'll work with you to recommend the combination of enhancements that delivers the greatest value for your goals, operations, and budget.</p>
   </div>
 </section>
 
@@ -1751,6 +1795,65 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     // working aliases into the single config object
     var CAPS = ENGINE.caps, CAP_BASE = ENGINE.capBase, BASE_INVEST = ENGINE.base.investment, SEG = ENGINE.seg, MODULES = ENGINE.enhancements;
 
+    /* ===== Phase 3 — Solution Intelligence: relationships & positioning ===== */
+    var BEST_FOR = {
+      guest:["Businesses focused on customer convenience","High-volume venues","Faster ordering"],
+      membership:["Membership organizations","VIP programs","Brand loyalty"],
+      live:["Entertainment venues","Live music","Nightlife","Resorts"],
+      community:["Repeat visitation","Event-driven businesses","Customer loyalty"],
+      marketing:["Growing attendance","Promotions","Seasonal campaigns"],
+      bisuite:["Multi-department management","Data-driven businesses","Performance monitoring"],
+      biassist:["Executive teams","Revenue optimization","Long-term strategic planning"]
+    };
+    // one recommended pairing per enhancement (Live has none per spec)
+    var PAIRS_WITH = { guest:"membership", membership:"community", community:"marketing", marketing:"bisuite", bisuite:"biassist", biassist:"bisuite" };
+    var CRAFTWEB_PICK = "community";
+    var CRAFTWEB_REASON = "Community engagement provides one of the strongest long-term returns for hospitality businesses — encouraging repeat visits, stronger customer relationships, and increased member participation.";
+    // merge Phase 3 data onto each enhancement so every record carries its own positioning
+    MODULES.forEach(function(m){ m.bestFor = BEST_FOR[m.id]||[]; m.pairsWith = PAIRS_WITH[m.id]||null; m.craftweb = (m.id===CRAFTWEB_PICK); });
+    function nameOf(id){ for(var i=0;i<MODULES.length;i++){ if(MODULES[i].id===id) return MODULES[i].name; } return ""; }
+
+    // recommendation rules — evaluated in priority order; first whose target is unselected wins
+    var RECS = [
+      { on:"community",  rec:"marketing", reason:"Community engagement is most effective when paired with automated communication that encourages repeat visits and ongoing participation." },
+      { on:"bisuite",    rec:"biassist",  reason:"The Strategic Intelligence Advisor turns reporting into action, letting management move from understanding data to acting on it." },
+      { on:"membership", rec:"community", reason:"Membership becomes significantly more valuable when members have meaningful reasons to return and interact." },
+      { on:"marketing",  rec:"bisuite",   reason:"Understanding campaign performance allows future marketing decisions to become increasingly effective." }
+    ];
+    // consultant phrasing per capability for the dynamic Solution Summary
+    var CAPMETA = {
+      rev: {lead:"revenue growth",         benefit:"long-term profitability"},
+      gx:  {lead:"the guest experience",   benefit:"customer satisfaction"},
+      eng: {lead:"guest engagement",       benefit:"lasting customer relationships"},
+      ops: {lead:"operational efficiency", benefit:"smoother day-to-day operations"},
+      mkt: {lead:"marketing reach",        benefit:"more consistent guest communication"},
+      bi:  {lead:"business intelligence",  benefit:"better-informed decisions"}
+    };
+    function capLabel(k){ for(var i=0;i<CAPS.length;i++){ if(CAPS[i].k===k) return CAPS[i].label; } return k; }
+
+    // rank capabilities by the value the CURRENT selection contributes (base excluded)
+    function rankCaps(sel){
+      return CAPS.map(function(c){ var v=0; sel.forEach(function(m){ v += m.cap[c.k]||0; }); return {k:c.k, v:v}; })
+                 .sort(function(a,b){ return b.v - a.v; });
+    }
+    function solutionSummary(sel){
+      if(sel.length===0) return "Your platform currently reflects the Launch Package foundation — add enhancements to shape where it focuses.";
+      var r = rankCaps(sel), k1=r[0].k, k2=r[1].k, v1=r[0].v, v2=r[1].v;
+      var a=CAPMETA[k1], b=CAPMETA[k2];
+      if(v2===0) return "Our current solution is focused squarely on "+a.lead+".";
+      var ratio = v1 / v2;
+      if(ratio >= 1.5)  return "Our current solution leans toward "+a.lead+", complemented by "+b.lead+".";
+      if(ratio >= 1.18) return "Our current solution is focused on "+a.lead+" and "+b.lead+".";
+      return "Our current solution balances "+a.lead+" with "+b.lead+", creating a platform designed to improve both "+a.benefit+" and "+b.benefit+".";
+    }
+    function nextRecommendation(){
+      for(var i=0;i<RECS.length;i++){
+        var r = RECS[i], on = MODULES.filter(function(m){return m.id===r.on;})[0], rec = MODULES.filter(function(m){return m.id===r.rec;})[0];
+        if(on && on.sel && rec && !rec.sel) return {trigger:on.name, name:rec.name, reason:r.reason};
+      }
+      return null;
+    }
+
     function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
     function fmtWeeks(n){ return (n % 1 === 0) ? String(n) : n.toFixed(1); }
     // premium animated CAD counter (ease-out cubic)
@@ -1789,22 +1892,28 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       var card = document.createElement("div"); card.className="mod"; card.setAttribute("data-id",mod.id);
       var incLis = mod.inc.map(function(x){ return "<li>"+x+"</li>"; }).join("");
       var strLis = mod.str.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+      var bfLis = mod.bestFor.map(function(x){ return "<li>"+x+"</li>"; }).join("");
       var ai = mod.ai ? ' <span class="mod-ai">Powered by AI</span>' : "";
       var purpose = mod.purpose ? '<div class="mod-purpose"><span class="ml">Purpose</span>'+mod.purpose+'</div>' : "";
-      card.className = "mod "+mod.material;
+      var cwBadge = mod.craftweb ? '<span class="mod-cw">✦ CraftWeb Recommendation</span>' : "";
+      var cwReason = mod.craftweb ? '<div class="mod-cwr"><span class="ml">Why CraftWeb recommends this</span>'+CRAFTWEB_REASON+'</div>' : "";
+      var pairs = mod.pairsWith ? '<div class="mod-pairs"><span class="ml">Pairs well with</span><span class="pairs-name">'+nameOf(mod.pairsWith)+'</span></div>' : "";
+      card.className = "mod "+mod.material + (mod.craftweb?" is-cw":"");
       card.innerHTML =
         '<div class="mod-head">'+
           '<span class="mod-ic" aria-hidden="true">'+mod.icon+'</span>'+
-          '<div class="mod-hd-txt"><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p></div>'+
+          '<div class="mod-hd-txt"><h4>'+mod.name+ai+'</h4>'+cwBadge+'<p class="mod-desc">'+mod.desc+'</p></div>'+
           '<span class="mod-badge2">✓ Added</span>'+
         '</div>'+
         '<div class="mod-meta">'+
           '<div><span class="ml">Estimated investment</span><span class="mv">'+CAD.format(mod.min)+"–"+CAD.format(mod.max)+'</span></div>'+
         '</div>'+
         '<div class="mod-details"><div class="mod-details-inner">'+
-          purpose+
+          purpose+ cwReason+
           '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
-          '<div class="mod-str"><span class="ml">How this enhancement strengthens your business</span><ul>'+strLis+'</ul></div>'+
+          '<div class="mod-str"><span class="ml">Expected business impact</span><ul>'+strLis+'</ul></div>'+
+          '<div class="mod-bf"><span class="ml">Best for</span><ul>'+bfLis+'</ul></div>'+
+          pairs+
           '<div class="mod-dtime"><span class="ml">Estimated timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
         '</div></div>'+
         '<div class="mod-actions">'+
@@ -1913,6 +2022,26 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         refs.segs.forEach(function(s,i){ s.classList.toggle("f", i<filled); });
         refs.wrap.setAttribute("aria-label", c.label+": "+filled+" of "+SEG);
       });
+      // ----- Phase 3: Platform Focus (strongest categories, animated chips) -----
+      var focusEl = $("#pfFocus");
+      if(focusEl){
+        var totals = CAPS.map(function(c){ var v=CAP_BASE[c.k]; sel.forEach(function(m){ v+=m.cap[c.k]||0; }); return {k:c.k, v:v}; })
+                         .sort(function(a,b){ return b.v-a.v; });
+        focusEl.innerHTML = totals.slice(0,3).map(function(t){ return '<span class="focus-chip">'+capLabel(t.k)+'</span>'; }).join("");
+        requestAnimationFrame(function(){ $all(".focus-chip", focusEl).forEach(function(ch){ ch.classList.add("in"); }); });
+      }
+      // ----- Phase 3: Solution Summary (consultant-style, selection-driven) -----
+      var sumEl = $("#pfSummary"); if(sumEl) sumEl.textContent = solutionSummary(sel);
+      // ----- Phase 3: Recommended Next Enhancement (one, never already-selected) -----
+      var rec = nextRecommendation(), recEl = $("#pfRec");
+      if(recEl){
+        if(rec){
+          $("#pfRecTrigger").textContent = rec.trigger;
+          $("#pfRecName").textContent = rec.name;
+          $("#pfRecReason").textContent = rec.reason;
+          recEl.hidden = false;
+        } else { recEl.hidden = true; }
+      }
     }
     render();
   })();
