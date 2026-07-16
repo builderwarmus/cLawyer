@@ -75,6 +75,7 @@
     padding: 0;
   }
   .brand-mark { color: var(--accent); font-size: 1.4rem; }
+  .brand-logo { width: 32px; height: 32px; display: block; }
   .cart-btn {
     display: inline-flex;
     align-items: center;
@@ -387,7 +388,7 @@
 <header class="header">
   <div class="header-inner">
     <button class="brand" onclick="scrollTo({top:0,behavior:'smooth'})">
-      <span class="brand-mark" aria-hidden="true">&#10045;</span>
+      <svg class="brand-logo" viewBox="0 0 120 120" width="32" height="32" aria-hidden="true"><defs><linearGradient id="wm-pal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6a862"/><stop offset="1" stop-color="#e8843f"/></linearGradient><mask id="wm-hole"><rect x="0" y="0" width="120" height="120" fill="#fff"/><circle cx="43" cy="80" r="10.5" fill="#000"/></mask></defs><ellipse cx="60" cy="58" rx="46" ry="40" fill="url(#wm-pal)" mask="url(#wm-hole)"/><circle cx="47" cy="37" r="7.5" fill="#5aa89b"/><circle cx="67" cy="31" r="7.5" fill="#4fa3c7"/><circle cx="86" cy="41" r="7.5" fill="#e8739a"/><circle cx="93" cy="62" r="6.5" fill="#f4c34e"/></svg>
       <span>Wally marts</span>
     </button>
     <button class="cart-btn" onclick="openCart()" aria-label="Open cart">

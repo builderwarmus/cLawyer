@@ -60,6 +60,7 @@ button { font-family: inherit; }
   padding: 0;
 }
 .brand-mark { color: var(--accent); font-size: 1.4rem; }
+.brand-logo { width: 32px; height: 32px; display: block; }
 .cart-btn {
   display: inline-flex;
   align-items: center;
