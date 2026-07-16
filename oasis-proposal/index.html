@@ -1615,7 +1615,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
        min:1500, max:2500, wMin:1, wMax:2,
        inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
        cap:{rev:2,gx:3,ops:1,eng:1,bi:0,mkt:0}},
-      {id:"membership", name:"Membership Enhancements", badge:"recommended",
+      {id:"membership", name:"Membership Enhancements", badge:"recommended", def:true,
        desc:"Physical, scannable membership cards with full lifecycle management.",
        min:2000, max:3500, wMin:1, wMax:2,
        inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Card Management","Print-Ready Templates"],
@@ -1625,12 +1625,12 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
        min:2500, max:4000, wMin:2, wMax:3,
        inc:["Current DJ","Current Song","Song Requests","Live Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
        cap:{rev:2,gx:3,ops:1,eng:2,bi:0,mkt:1}},
-      {id:"community", name:"Community Suite", badge:"optional",
+      {id:"community", name:"Community Suite", badge:"recommended", def:true,
        desc:"The connective tissue that turns members into a returning community.",
        min:2500, max:4000, wMin:2, wMax:4,
        inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
        cap:{rev:1,gx:2,ops:0,eng:3,bi:0,mkt:1}},
-      {id:"marketing", name:"Marketing Automation Suite", badge:"recommended",
+      {id:"marketing", name:"Marketing Automation Suite", badge:"recommended", def:true,
        desc:"Always-on campaigns that bring guests back without lifting a finger.",
        min:3000, max:5000, wMin:2, wMax:4,
        inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Rewards","Review Requests","Promotional Campaigns"],
@@ -1686,6 +1686,12 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tk">✓</span><span class="tl">Add module</span></button>';
       var btn = card.querySelector(".mod-toggle");
       btn.setAttribute("aria-label","Add "+mod.name+" module");
+      if(mod.def){
+        selected[mod.id]=true; card.classList.add("on");
+        btn.setAttribute("aria-pressed","true");
+        btn.setAttribute("aria-label","Remove "+mod.name+" module");
+        card.querySelector(".tl").textContent="Added";
+      }
       btn.addEventListener("click", function(){
         var on = !selected[mod.id]; selected[mod.id]=on;
         card.classList.toggle("on", on);
