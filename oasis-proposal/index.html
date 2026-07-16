@@ -509,7 +509,10 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 
 /* ================= MODULE SELECTOR ================= */
 .modsel{display:grid; grid-template-columns:1.4fr .9fr; gap:26px; margin-top:44px; align-items:start}
-@media (max-width:900px){.modsel{grid-template-columns:1fr}}
+/* right column stretches to the full list height so the sticky panel has room to
+   travel — it pins with the top module and releases with the bottom one */
+.modsel-right{align-self:stretch}
+@media (max-width:900px){.modsel{grid-template-columns:1fr} .modsel-right{align-self:start}}
 .modsel-heading, .platform-title{font-family:var(--sans); font-size:13px; letter-spacing:.22em;
   text-transform:uppercase; color:var(--gold); margin:0 0 18px}
 .mods{display:flex; flex-direction:column; gap:16px}
