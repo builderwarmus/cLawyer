@@ -181,19 +181,7 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
   box-shadow:0 12px 30px -10px rgba(201,162,75,.7)}
 @media (max-width:640px){ .demo-cta{flex-direction:column; align-items:flex-start; gap:18px} .demo-cta .dc-arrow{align-self:stretch; text-align:center} }
 
-/* ================= AGE GATE ================= */
-.gate{position:fixed; inset:0; z-index:100; display:grid; place-items:center; padding:24px;
-  background:radial-gradient(120% 120% at 50% 20%, rgba(9,17,21,.86), rgba(4,7,9,.97));
-  backdrop-filter:blur(14px); transition:opacity .6s}
-.gate.hide{opacity:0; pointer-events:none}
-.gate-card{max-width:440px; text-align:center; border:1px solid var(--line); border-radius:22px;
-  padding:46px 40px; background:linear-gradient(165deg, rgba(18,32,39,.9), rgba(9,16,20,.95));
-  box-shadow:var(--shadow)}
-.gate-card .mark{font-family:var(--serif); font-size:15px; letter-spacing:.5em; color:var(--gold);
-  text-transform:uppercase; margin-bottom:26px}
-.gate-card h1{font-size:34px; margin-bottom:14px}
-.gate-card p{color:var(--muted); font-size:15px; margin-bottom:30px}
-.gate-actions{display:flex; flex-direction:column; gap:12px}
+/* shared button */
 .btn{font-family:var(--sans); font-size:14.5px; letter-spacing:.05em; border-radius:12px; cursor:pointer;
   padding:15px 24px; border:1px solid var(--line); background:transparent; color:var(--text);
   transition:transform .15s, background .25s, border-color .25s, box-shadow .25s}
@@ -203,10 +191,68 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .btn.primary:hover{box-shadow:0 16px 40px -12px rgba(201,162,75,.75)}
 .btn.ghost{color:var(--muted)}
 .btn.ghost:hover{color:var(--text); border-color:var(--gold)}
-.gate-note{font-size:11.5px; color:var(--faint); margin-top:22px; letter-spacing:.04em}
-.gate-exit{display:none}
-.gate.exited .gate-enterview{display:none}
-.gate.exited .gate-exit{display:block}
+
+/* ============ OPENING GATEWAY — "Welcome to Perspective" ============ */
+/* scroll lock while the gateway is up */
+html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; overscroll-behavior:none}
+.gateway{position:fixed; inset:0; z-index:200; overflow-y:auto; overflow-x:hidden; opacity:0;
+  transition:opacity .8s ease; -webkit-overflow-scrolling:touch;
+  background:
+    radial-gradient(120% 90% at 50% 6%, rgba(79,186,203,.10), transparent 55%),
+    radial-gradient(100% 80% at 50% 104%, rgba(201,162,75,.06), transparent 60%),
+    linear-gradient(180deg, #08131A 0%, #060C10 58%, #04080B 100%)}
+.gateway.gw-enter{opacity:1}
+.gateway.leaving{opacity:0; transition:opacity 1.5s ease; pointer-events:none}
+.gw-scroll{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
+  align-items:flex-start; padding:9vh 7vw 8vh; box-sizing:border-box}
+.gw-inner{max-width:720px; width:100%; margin:0 auto}
+.gw-mark{font-family:var(--serif); letter-spacing:.02em; margin-bottom:42px; display:flex;
+  align-items:baseline; gap:14px; flex-wrap:wrap}
+.gw-mark .o{font-size:24px; color:var(--gold-bright)}
+.gw-mark .o em{font-style:italic}
+.gw-mark .sub{font-size:11px; letter-spacing:.34em; text-transform:uppercase; color:var(--faint); font-family:var(--sans)}
+.gw-eyebrow{font-family:var(--sans); font-size:12px; letter-spacing:.42em; text-transform:uppercase;
+  color:var(--gold); font-weight:600; display:flex; align-items:center; gap:14px; margin-bottom:22px}
+.gw-eyebrow::before{content:""; width:34px; height:1px; background:linear-gradient(90deg,var(--gold),transparent)}
+.gw-title{font-family:var(--serif); font-weight:500; line-height:1.06; text-wrap:balance;
+  font-size:clamp(30px,5.2vw,52px); letter-spacing:-.01em; color:var(--text); margin:0}
+.gw-body{display:flex; flex-direction:column; gap:20px; margin-top:28px}
+.gw-body p{font-size:clamp(16px,1.7vw,19px); line-height:1.7; color:var(--muted); margin:0}
+.gw-body p.triad{font-family:var(--serif); color:var(--gold-bright); font-size:clamp(21px,2.9vw,28px);
+  line-height:1.3; letter-spacing:.005em}
+.gw-body p.couplet{color:var(--text); font-family:var(--serif); font-style:italic;
+  font-size:clamp(17px,2vw,20px); line-height:1.55; padding:4px 0 4px 22px; border-left:2px solid var(--gold)}
+.gw-finale{margin-top:42px; padding-top:32px; border-top:1px solid var(--line-soft);
+  display:flex; flex-direction:column; gap:13px}
+.gw-finale .no-pitch{font-family:var(--serif); color:var(--muted); font-size:clamp(19px,2.4vw,22px)}
+.gw-finale .invite{font-family:var(--serif); color:var(--gold-bright);
+  font-size:clamp(22px,3.4vw,32px); line-height:1.18; text-wrap:balance}
+.gw-cta{margin-top:46px}
+.gw-cta button{font-family:var(--sans); font-size:15px; letter-spacing:.06em; font-weight:700; cursor:pointer;
+  padding:17px 42px; border-radius:999px; border:1px solid transparent; color:#20180a;
+  background:linear-gradient(120deg,var(--gold),var(--gold-bright));
+  box-shadow:0 16px 40px -12px rgba(201,162,75,.6); transition:transform .18s, box-shadow .25s}
+.gw-cta button:hover{transform:translateY(-2px); box-shadow:0 22px 52px -12px rgba(201,162,75,.82)}
+.gw-cta button:focus-visible{outline:2px solid var(--gold-bright); outline-offset:4px}
+.gateway:focus{outline:none}
+/* staged entrance: subtle fade + rise, sequenced via per-element --d delay */
+.g-step{opacity:0; transform:translateY(16px);
+  transition:opacity .75s ease, transform .75s cubic-bezier(.2,.7,.2,1); transition-delay:var(--d,0s)}
+.gateway.gw-enter .g-step{opacity:1; transform:none}
+@media (max-width:600px){
+  .gw-scroll{padding:7vh 24px 7vh; justify-content:flex-start}
+  .gw-mark{margin-bottom:26px}
+  .gw-body{gap:15px; margin-top:22px}
+  .gw-finale{margin-top:32px; padding-top:24px}
+  .gw-cta{margin-top:34px}
+  .gw-cta button{width:100%; padding:16px 24px}
+}
+@media (prefers-reduced-motion: reduce){
+  .gateway{transition:opacity .4s ease}
+  .gateway.leaving{transition:opacity .5s ease}
+  .g-step{transform:none; transition:opacity .5s ease; transition-delay:0s}
+  .gateway.gw-enter .g-step{transform:none}
+}
 
 /* ================= HERO ================= */
 .hero{min-height:100svh; display:flex; align-items:center; position:relative; padding:120px 0 80px}
@@ -263,27 +309,6 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 .stats .n{font-family:var(--serif); font-size:clamp(26px,4vw,40px); color:var(--gold-bright); letter-spacing:-.01em; font-variant-numeric:tabular-nums}
 .stats .c{font-size:12px; color:var(--muted); margin-top:8px; letter-spacing:.02em}
 @media (max-width:720px){.stats{grid-template-columns:repeat(2,1fr)}}
-
-/* ================= OPENING LETTER ================= */
-.intro{padding:150px 0 120px; position:relative}
-.intro-wrap{max-width:700px}
-.letter{display:flex; flex-direction:column; gap:22px; margin-top:28px}
-.letter p{font-size:19px; line-height:1.72; color:var(--muted)}
-.letter p.triad{font-family:var(--serif); color:var(--gold-bright);
-  font-size:clamp(22px,3vw,28px); line-height:1.3; padding:6px 0; letter-spacing:.005em}
-.letter p.couplet{color:var(--text); font-family:var(--serif); font-style:italic;
-  font-size:20px; line-height:1.55; padding:4px 0 4px 22px; border-left:2px solid var(--gold)}
-.letter-finale{margin-top:44px; padding-top:32px; border-top:1px solid var(--line-soft);
-  display:flex; flex-direction:column; gap:14px}
-.letter-finale .no-pitch{font-family:var(--serif); color:var(--muted); font-size:22px; letter-spacing:.01em}
-.letter-finale .invite{font-family:var(--serif); color:var(--gold-bright);
-  font-size:clamp(25px,3.6vw,34px); line-height:1.18; text-wrap:balance}
-.intro-continue{margin-top:52px; display:inline-flex; align-items:center; gap:12px; background:none; border:0;
-  cursor:pointer; color:var(--muted); font-family:var(--sans); font-size:12px; letter-spacing:.28em;
-  text-transform:uppercase; padding:0; transition:color .25s}
-.intro-continue:hover{color:var(--gold-bright)}
-.intro-continue .ln{width:44px; height:1px; background:linear-gradient(90deg,var(--gold),transparent)}
-@media (max-width:600px){ .intro{padding:120px 0 90px} .letter p{font-size:17px} }
 
 /* ================= FUNNEL ================= */
 .funnel{display:grid; grid-template-columns:repeat(auto-fit,minmax(128px,1fr)); gap:10px; margin-top:44px}
@@ -644,26 +669,34 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <canvas id="water" aria-hidden="true"></canvas>
 <div class="veil" aria-hidden="true"></div>
 
-<!-- ================= AGE GATE ================= -->
-<div class="gate" id="gate" role="dialog" aria-modal="true" aria-labelledby="gate-h">
-  <div class="gate-card">
-    <div class="gate-enterview">
-      <div class="mark">Oasis · Aqualounge</div>
-      <h1 id="gate-h">Are you 19 or older?</h1>
-      <p>Oasis Aqualounge is a 19+ members' venue. This proposal contains material intended for adults. Please confirm your age to continue.</p>
-      <div class="gate-actions">
-        <button class="btn primary" id="gate-yes">I am 19 or older — enter</button>
-        <button class="btn ghost" id="gate-no">I am under 19</button>
+<!-- ================= OPENING GATEWAY — "Welcome to Perspective" ================= -->
+<section class="gateway" id="gateway" role="dialog" aria-modal="true" aria-labelledby="gw-title" tabindex="-1">
+  <div class="gw-scroll">
+    <div class="gw-inner">
+      <div class="gw-mark g-step" style="--d:.25s">
+        <span class="o">Oasis <em>Aqualounge</em></span>
+        <span class="sub">Prepared by CraftWeb Studios</span>
       </div>
-      <div class="gate-note">231 Mutual St, Toronto · Est. 2010 · A CraftWeb Studios proposal</div>
-    </div>
-    <div class="gate-exit">
-      <div class="mark">Oasis · Aqualounge</div>
-      <h1>Come back when you're 19.</h1>
-      <p>You must be of legal age to view this venue's material. Thanks for stopping by.</p>
+      <p class="gw-eyebrow g-step" style="--d:.5s">Welcome to Perspective</p>
+      <h1 class="gw-title g-step" id="gw-title" style="--d:.8s">A Different Way to See Your Business</h1>
+      <div class="gw-body">
+        <p class="g-step" style="--d:1.15s">Many first meetings are spent gathering information that could easily have been discovered through thoughtful research.</p>
+        <p class="g-step" style="--d:1.4s">Thoughtful research prepares us for the conversation. Meaningful conversation reveals what thoughtful research never can.</p>
+        <p class="triad g-step" style="--d:1.75s">Your experience. Your insight. Your vision.</p>
+        <p class="g-step" style="--d:2.05s">Before reaching out to Oasis, we invested time researching your business, your brand, your digital presence, and the opportunities we believe exist.</p>
+        <p class="g-step" style="--d:2.3s">What follows is our initial perspective, informed by our research and intended to be validated, refined, and strengthened through meaningful conversation.</p>
+        <p class="couplet g-step" style="--d:2.65s">If we've misunderstood something, we'd like to know.<br>If we've identified opportunities worth exploring, we'd like to explore them together.</p>
+      </div>
+      <div class="gw-finale">
+        <p class="no-pitch g-step" style="--d:2.95s">This isn't a sales pitch.</p>
+        <p class="invite g-step" style="--d:3.2s">It's an invitation to begin a collaboration grounded in understanding.</p>
+      </div>
+      <div class="gw-cta g-step" style="--d:3.55s">
+        <button type="button" id="beginJourney">Begin the Journey</button>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- depth meter + tools + elevator -->
 <div class="depth" id="depth" aria-hidden="true"></div>
@@ -679,31 +712,6 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <a class="demo-fab" id="demoFab" href="https://oasis.craftwebstudios.ca" target="_blank" rel="noopener" aria-label="Open the live demo website in a new tab"><span class="pulse"></span> View the live demo <b>↗</b></a>
 
 <main>
-
-<!-- ================= OPENING LETTER ================= -->
-<section class="floor intro" id="sec-intro" data-floor="◆" data-label="Perspective">
-  <div class="wrap intro-wrap">
-    <div class="brand rise" style="margin-bottom:38px">
-      <span class="o">Oasis <em style="font-style:italic">Aqualounge</em></span>
-      <span class="sub">Prepared by CraftWeb Studios</span>
-    </div>
-    <div class="eyebrow rise">Welcome to Perspective</div>
-    <h2 class="title rise">A different way to see your business</h2>
-    <div class="letter rise">
-      <p>Many first meetings are spent gathering information that could easily have been discovered through thoughtful research.</p>
-      <p>Thoughtful research prepares us for the conversation. Meaningful conversation reveals what thoughtful research never can.</p>
-      <p class="triad">Your experience. Your insight. Your vision.</p>
-      <p>Before reaching out to Oasis, we invested time researching your business, your brand, your digital presence, and the opportunities we believe exist.</p>
-      <p>What follows is our initial perspective, informed by our research and intended to be validated, refined, and strengthened through meaningful conversation.</p>
-      <p class="couplet">If we've misunderstood something, we'd like to know.<br>If we've identified opportunities worth exploring, we'd like to explore them together.</p>
-    </div>
-    <div class="letter-finale rise">
-      <p class="no-pitch">This isn't a sales pitch.</p>
-      <p class="invite">It's an invitation to begin a collaboration grounded in understanding.</p>
-    </div>
-    <button class="intro-continue rise" data-goto="sec-opportunity"><span class="ln"></span>Begin</button>
-  </div>
-</section>
 
 <!-- ================= HERO / THE OPPORTUNITY ================= -->
 <section class="hero" id="sec-opportunity" data-floor="Entrance" data-label="The Opportunity">
@@ -1283,14 +1291,59 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show");
     clearTimeout(toastT); toastT = setTimeout(function(){toastEl.classList.remove("show");}, 2600); }
 
-  /* ---------- age gate ---------- */
-  var gate = $("#gate");
-  try{ if(sessionStorage.getItem("oasis_verified")==="1"){ gate.classList.add("hide"); } }catch(e){}
-  $("#gate-yes").addEventListener("click", function(){
-    try{ sessionStorage.setItem("oasis_verified","1"); }catch(e){}
-    gate.classList.add("hide");
-  });
-  $("#gate-no").addEventListener("click", function(){ gate.classList.add("exited"); });
+  /* ---------- opening gateway ("Welcome to Perspective") ---------- */
+  (function(){
+    var gw = document.getElementById("gateway"); if(!gw) return;
+    var htmlEl = document.documentElement;
+
+    // Lightweight analytics: works with GA4/GTM (dataLayer + gtag) when present,
+    // and always emits a DOM CustomEvent. No dependency added; no-ops if nothing listens.
+    function track(name, params){
+      try{
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({event:name}, params||{}));
+        if(typeof window.gtag === "function"){ window.gtag("event", name, params||{}); }
+        document.dispatchEvent(new CustomEvent("oasis:"+name, {detail:params||{}}));
+      }catch(e){}
+    }
+
+    // Lock the proposal behind the gateway (no scroll, not visible).
+    htmlEl.classList.add("gw-locked");
+
+    // Fire gateway_viewed exactly once per page load.
+    var viewed = false;
+    function fireViewed(){ if(viewed) return; viewed = true; track("gateway_viewed"); }
+
+    // Staged entrance (fades/timing are CSS; just flip the class next frame).
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      gw.classList.add("gw-enter");
+      fireViewed();
+      try{ gw.focus({preventScroll:true}); }catch(e){ try{ gw.focus(); }catch(_){} }
+    }); });
+
+    // Enter the proposal: slow crossfade out, then restore scroll at the top.
+    var leaving = false, done = false;
+    function finish(){
+      if(done) return; done = true;
+      gw.style.display = "none";
+      htmlEl.classList.remove("gw-locked");
+      track("gateway_completed");
+      var first = document.getElementById("sec-opportunity");
+      if(first){ first.setAttribute("tabindex","-1"); try{ first.focus({preventScroll:true}); }catch(e){} }
+    }
+    function beginJourney(){
+      if(leaving) return; leaving = true;
+      track("begin_journey_clicked");
+      try{ window.scrollTo(0,0); }catch(e){}
+      gw.classList.add("leaving");
+      gw.addEventListener("transitionend", function(ev){
+        if(ev.target===gw && ev.propertyName==="opacity") finish();
+      });
+      setTimeout(finish, reduce ? 700 : 1900); // fallback if transitionend is missed
+    }
+    var beginBtn = document.getElementById("beginJourney");
+    if(beginBtn){ beginBtn.addEventListener("click", beginJourney); }
+  })();
 
   /* ---------- theme toggle ---------- */
   var root = document.documentElement;
