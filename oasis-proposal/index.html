@@ -546,6 +546,20 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   display:grid; place-items:center; font-size:12px; color:transparent; transition:all .25s}
 .mod.on .mod-toggle{background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#231a08; border-color:transparent; font-weight:700}
 .mod.on .mod-toggle .tk{background:#231a08; border-color:#231a08; color:var(--gold-bright)}
+.mod-purpose{margin-top:12px; font-size:13px; color:var(--muted); line-height:1.5; max-width:54ch}
+.mod-purpose .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:4px}
+/* how this enhancement strengthens your business */
+.mod-strength{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+.mod-strength > .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:13px}
+.str-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 28px}
+@media (max-width:520px){.str-grid{grid-template-columns:1fr}}
+.str-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.str-name{font-size:12.5px; color:var(--text)}
+.stars{display:inline-flex; gap:2px; font-size:12px; line-height:1; white-space:nowrap; flex:none}
+.stars .s{color:var(--line); transition:color .5s ease, text-shadow .5s ease}
+.stars .s.on{color:var(--gold-bright)}
+.mod.on .stars .s.on{text-shadow:0 0 8px rgba(230,202,134,.4)}
+.str-note{font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.45}
 
 /* sticky platform summary */
 .platform{border:1px solid var(--line); border-radius:18px; padding:26px 24px;
@@ -567,6 +581,9 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .pf-selected li .pf-p{color:var(--muted); font-family:var(--serif); font-variant-numeric:tabular-nums; white-space:nowrap; font-size:12.5px}
 .pf-empty{color:var(--faint); font-style:italic}
 .pf-empty::before{display:none!important}
+.pf-base{display:flex; justify-content:space-between; align-items:baseline; gap:10px; font-size:13.5px; color:var(--text)}
+.pf-base .pf-p{color:var(--gold-bright); font-family:var(--serif); font-variant-numeric:tabular-nums}
+.pf-profile{margin-top:4px; margin-bottom:0}
 .pf-figs{border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); padding:15px 0; margin:16px 0; display:grid; gap:12px}
 .pf-fig{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
 .pf-fl{font-size:12.5px; color:var(--muted)}
@@ -1072,30 +1089,33 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <section class="floor" id="sec-investment" data-floor="5" data-label="Your Investment">
   <div class="wrap">
     <div class="eyebrow rise">Your Investment</div>
-    <h2 class="title rise">Assemble your platform</h2>
-    <p class="lead rise">Your Launch Package is the foundation. From there, expand your digital ecosystem module by module — add what fits now, phase in the rest later. Select a module to watch your investment, timeline and platform capabilities update in real time. <em>All figures in CAD, before HST.</em></p>
+    <h2 class="title rise">Platform Enhancement Options</h2>
+    <p class="lead rise">See how each enhancement strengthens your business. Select an option to watch your solution, investment, timeline and platform profile update in real time. <em>All figures in CAD, before HST.</em></p>
     <div class="modsel rise">
       <div class="modsel-left">
-        <h3 class="modsel-heading">Platform Expansion Modules</h3>
         <div class="mods" id="mods"></div>
       </div>
       <aside class="modsel-right">
         <div class="platform">
-          <h3 class="platform-title">Your Platform</h3>
+          <h3 class="platform-title">Your Solution</h3>
           <div class="pf-group">
-            <div class="pf-label">Included · Launch Package</div>
-            <ul class="pf-included" id="pfIncluded"></ul>
+            <div class="pf-label">Base Platform</div>
+            <div class="pf-base"><span class="pf-base-n">Launch Package</span><span class="pf-p">$43,750</span></div>
           </div>
           <div class="pf-group">
-            <div class="pf-label">Selected modules <span class="pf-count" id="pfSelCount">0</span></div>
+            <div class="pf-label">Selected Enhancements <span class="pf-count" id="pfSelCount">0</span></div>
             <ul class="pf-selected" id="pfSelected"><li class="pf-empty">None selected yet</li></ul>
           </div>
           <div class="pf-figs">
-            <div class="pf-fig"><span class="pf-fl">Estimated investment</span><span class="pf-fv" id="pfInvest">$43,750</span></div>
-            <div class="pf-fig"><span class="pf-fl">Estimated added timeline</span><span class="pf-fv" id="pfTime">—</span></div>
+            <div class="pf-fig"><span class="pf-fl">Estimated Additional Investment</span><span class="pf-fv" id="pfAdd">$0</span></div>
+            <div class="pf-fig"><span class="pf-fl">Updated Project Investment</span><span class="pf-fv" id="pfInvest">$43,750</span></div>
+            <div class="pf-fig"><span class="pf-fl">Estimated Timeline</span><span class="pf-fv" id="pfTime">—</span></div>
           </div>
-          <div class="pf-caps" id="pfCaps" aria-label="Platform capability indicators"></div>
-          <div class="pf-note">Launch Package (from $43,750, before HST) is included. Module ranges are estimates confirmed on detailed spec. Care &amp; Hosting from $250/mo → ~$500/mo once the app is live.</div>
+          <div class="pf-group pf-profile">
+            <div class="pf-label">Platform Profile</div>
+            <div class="pf-caps" id="pfCaps" aria-label="Platform capability indicators"></div>
+          </div>
+          <div class="pf-note">Launch Package (from $43,750, before HST) is the base platform. Enhancement ranges are estimates confirmed on detailed spec. Care &amp; Hosting from $250/mo → ~$500/mo once the app is live.</div>
         </div>
       </aside>
     </div>
@@ -1601,69 +1621,66 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     var modsEl = $("#mods"); if(!modsEl) return;
 
     var CAPS = [
-      {k:"rev", label:"Revenue potential"},
-      {k:"gx",  label:"Guest experience"},
-      {k:"ops", label:"Operational efficiency"},
-      {k:"eng", label:"Customer engagement"},
-      {k:"bi",  label:"Business intelligence"},
-      {k:"mkt", label:"Marketing capability"}
+      {k:"rev", label:"Revenue Growth"},
+      {k:"gx",  label:"Guest Experience"},
+      {k:"eng", label:"Customer Engagement"},
+      {k:"ops", label:"Operational Efficiency"},
+      {k:"mkt", label:"Marketing Capability"},
+      {k:"bi",  label:"Business Intelligence"}
     ];
-    // baseline capability from the included Launch Package
-    var CAP_BASE = {rev:2, gx:2, ops:1, eng:2, bi:0, mkt:1};
+    // baseline platform profile from the included Launch Package
+    var CAP_BASE = {rev:2, gx:2, eng:2, ops:1, mkt:1, bi:1};
     var BASE_INVEST = 43750; // Launch Package, before HST
-    var INCLUDED = ["Signature four-floor website","Core members app","Brand photography & video","Live chat & lead capture","Business systems + membership card"];
-    var BADGE_LABEL = {included:"Included", recommended:"Recommended", optional:"Optional", future:"Future"};
     var SEG = 14;
 
     var MODULES = [
-      {id:"guest", name:"Guest Convenience Suite", badge:"recommended",
+      {id:"guest", name:"Guest Convenience Suite",
        desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend.",
        min:1500, max:2500, wMin:1, wMax:2,
        inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
-       cap:{rev:2,gx:3,ops:1,eng:1,bi:0,mkt:0}},
-      {id:"membership", name:"Membership Enhancements", badge:"recommended", def:true,
+       cap:{rev:4,gx:5,eng:3,ops:2,mkt:1,bi:1},
+       note:{rev:"Encourages repeat purchases.",gx:"Makes ordering faster and more convenient.",eng:"Encourages guests to use the app more frequently.",ops:"Reduces ordering friction."}},
+      {id:"membership", name:"Membership Enhancements", def:true,
        desc:"Physical, scannable membership cards with full lifecycle management.",
        min:2000, max:3500, wMin:1, wMax:2,
-       inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Card Management","Print-Ready Templates"],
-       cap:{rev:1,gx:2,ops:2,eng:2,bi:0,mkt:0}},
-      {id:"live", name:"Live Venue Experience", badge:"optional",
+       inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Membership Card Management","Print Ready Card Templates"],
+       cap:{rev:3,gx:4,eng:4,ops:3,mkt:5,bi:2}},
+      {id:"live", name:"Live Venue Experience",
        desc:"A living, real-time picture of the venue that pulls guests in tonight.",
        min:2500, max:4000, wMin:2, wMax:3,
-       inc:["Current DJ","Current Song","Song Requests","Live Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
-       cap:{rev:2,gx:3,ops:1,eng:2,bi:0,mkt:1}},
-      {id:"community", name:"Community Suite", badge:"recommended", def:true,
+       inc:["Current DJ","Current Song","Song Requests","Live Occupancy","Pool Occupancy","Bar Occupancy","Wait Times","Featured Drinks","Daily Specials","Live Promotions"],
+       cap:{rev:4,gx:5,eng:5,ops:2,mkt:3,bi:2}},
+      {id:"community", name:"Community Suite", def:true,
        desc:"The connective tissue that turns members into a returning community.",
        min:2500, max:4000, wMin:2, wMax:4,
        inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
-       cap:{rev:1,gx:2,ops:0,eng:3,bi:0,mkt:1}},
-      {id:"marketing", name:"Marketing Automation Suite", badge:"recommended", def:true,
+       cap:{rev:4,gx:5,eng:5,ops:1,mkt:4,bi:2}},
+      {id:"marketing", name:"Marketing Automation Suite", def:true,
        desc:"Always-on campaigns that bring guests back without lifting a finger.",
        min:3000, max:5000, wMin:2, wMax:4,
-       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Rewards","Review Requests","Promotional Campaigns"],
-       cap:{rev:2,gx:0,ops:0,eng:2,bi:1,mkt:3}},
-      {id:"bisuite", name:"Business Intelligence Suite", badge:"optional",
+       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Rewards","Promotional Campaigns","Review Requests","Sponsor Promotions","Affiliate Promotions"],
+       cap:{rev:5,gx:3,eng:4,ops:3,mkt:5,bi:2}},
+      {id:"bisuite", name:"Business Intelligence Suite",
        desc:"The dashboards and back-office to run the whole operation on data.",
        min:4000, max:7000, wMin:3, wMax:5,
-       inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Reporting Dashboard","Waitlist Management","Staff Portal"],
-       cap:{rev:1,gx:0,ops:2,eng:0,bi:3,mkt:1}},
-      {id:"biassist", name:"Business Intelligence Assistant", badge:"future", ai:true,
+       inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Behaviour Analytics","Reporting Dashboard","Waitlist Management","Staff Portal","Executive Reporting"],
+       cap:{rev:4,gx:2,eng:2,ops:5,mkt:3,bi:5}},
+      {id:"biassist", name:"Business Intelligence Assistant", ai:true,
        desc:"Analyzes your operational data and surfaces intelligent recommendations for management.",
+       purpose:"Analyze business performance and provide intelligent recommendations to management.",
        min:7500, max:12000, wMin:4, wMax:6,
-       inc:["Revenue Analysis","Attendance Analysis","Marketing Suggestions","Theme-Night Recommendations","Executive Reports","Operational Insights","Business Trend Analysis"],
-       cap:{rev:2,gx:0,ops:2,eng:0,bi:3,mkt:1}}
+       inc:["Revenue Analysis","Attendance Trends","Theme Night Recommendations","Promotion Suggestions","Executive Reports","Operational Insights","Product Performance Analysis","Trend Identification"],
+       cap:{rev:5,gx:1,eng:1,ops:5,mkt:4,bi:5}}
     ];
 
     function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
+    function starHtml(n){ var h=""; for(var i=1;i<=5;i++){ h+='<span class="s'+(i<=n?" on":"")+'">★</span>'; } return '<span class="stars" role="img" aria-label="'+n+' out of 5">'+h+'</span>'; }
 
     // per-capability maximum (base + every module) so a full bar = everything selected
     var capMax = {};
     CAPS.forEach(function(c){ var m=CAP_BASE[c.k]; MODULES.forEach(function(mod){ m += mod.cap[c.k]||0; }); capMax[c.k]=m; });
 
     var selected = {};
-
-    // included list
-    var incUl = $("#pfIncluded");
-    INCLUDED.forEach(function(n){ var li=document.createElement("li"); li.textContent=n; incUl.appendChild(li); });
 
     // capability bars (built once)
     var capsEl = $("#pfCaps"); var segRefs = {};
@@ -1680,30 +1697,36 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     MODULES.forEach(function(mod){
       var card = document.createElement("div"); card.className="mod"; card.setAttribute("data-id",mod.id);
       var incLis = mod.inc.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+      var strRows = CAPS.map(function(c){
+        var n = mod.cap[c.k]||0;
+        var note = (mod.note && mod.note[c.k]) ? '<div class="str-note">'+mod.note[c.k]+'</div>' : "";
+        return '<div class="str"><div class="str-top"><span class="str-name">'+c.label+'</span>'+starHtml(n)+'</div>'+note+'</div>';
+      }).join("");
       var ai = mod.ai ? ' <span class="mod-ai">Powered by AI</span>' : "";
+      var purpose = mod.purpose ? '<p class="mod-purpose"><span class="ml">Purpose</span>'+mod.purpose+'</p>' : "";
       card.innerHTML =
-        '<div class="mod-head"><div><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p></div>'+
-          '<span class="mod-badge '+mod.badge+'" aria-label="Status: '+BADGE_LABEL[mod.badge]+'">'+BADGE_LABEL[mod.badge]+'</span></div>'+
+        '<div class="mod-head"><div><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p>'+purpose+'</div></div>'+
+        '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
+        '<div class="mod-strength"><span class="ml">How this enhancement strengthens your business</span><div class="str-grid">'+strRows+'</div></div>'+
         '<div class="mod-meta">'+
           '<div><span class="ml">Estimated investment</span><span class="mv">'+CAD.format(mod.min)+"–"+CAD.format(mod.max)+'</span></div>'+
-          '<div><span class="ml">Timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
+          '<div><span class="ml">Estimated timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
         '</div>'+
-        '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
-        '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tk">✓</span><span class="tl">Add module</span></button>';
+        '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tl">✨ Enhance My Platform</span></button>';
       var btn = card.querySelector(".mod-toggle");
-      btn.setAttribute("aria-label","Add "+mod.name+" module");
+      btn.setAttribute("aria-label","Add "+mod.name+" enhancement");
       if(mod.def){
         selected[mod.id]=true; card.classList.add("on");
         btn.setAttribute("aria-pressed","true");
-        btn.setAttribute("aria-label","Remove "+mod.name+" module");
-        card.querySelector(".tl").textContent="Added";
+        btn.setAttribute("aria-label","Remove "+mod.name+" enhancement");
+        card.querySelector(".tl").textContent="✓ Added to My Platform";
       }
       btn.addEventListener("click", function(){
         var on = !selected[mod.id]; selected[mod.id]=on;
         card.classList.toggle("on", on);
         btn.setAttribute("aria-pressed", on?"true":"false");
-        btn.setAttribute("aria-label", (on?"Remove ":"Add ")+mod.name+" module");
-        card.querySelector(".tl").textContent = on ? "Added" : "Add module";
+        btn.setAttribute("aria-label", (on?"Remove ":"Add ")+mod.name+" enhancement");
+        card.querySelector(".tl").textContent = on ? "✓ Added to My Platform" : "✨ Enhance My Platform";
         render();
       });
       modsEl.appendChild(card);
@@ -1711,22 +1734,25 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 
     function render(){
       var sel = MODULES.filter(function(m){ return selected[m.id]; });
-      // selected list
+      // selected enhancements
       var selUl = $("#pfSelected");
       selUl.innerHTML = sel.length===0
         ? '<li class="pf-empty">None selected yet</li>'
         : sel.map(function(m){ return '<li>'+m.name+'<span class="pf-p">'+CAD.format(m.min)+"–"+CAD.format(m.max)+'</span></li>'; }).join("");
       $("#pfSelCount").textContent = sel.length;
-      // investment + timeline
+      // additional investment, updated total, timeline
       var minSum=0,maxSum=0,wMin=0,wMax=0;
       sel.forEach(function(m){ minSum+=m.min; maxSum+=m.max; wMin+=m.wMin; wMax+=m.wMax; });
+      $("#pfAdd").textContent = sel.length===0 ? CAD.format(0)
+        : CAD.format(minSum)+"–"+CAD.format(maxSum);
       $("#pfInvest").textContent = sel.length===0 ? CAD.format(BASE_INVEST)
         : CAD.format(BASE_INVEST+minSum)+"–"+CAD.format(BASE_INVEST+maxSum);
       $("#pfTime").textContent = sel.length===0 ? "—" : wk(wMin,wMax);
-      // capability bars
+      // platform profile bars
       CAPS.forEach(function(c){
         var val = CAP_BASE[c.k]; sel.forEach(function(m){ val += m.cap[c.k]||0; });
         var filled = Math.round(val / capMax[c.k] * SEG);
+        if(filled < 1) filled = 1;
         var refs = segRefs[c.k];
         refs.segs.forEach(function(s,i){ s.classList.toggle("f", i<filled); });
         refs.wrap.setAttribute("aria-label", c.label+": "+filled+" of "+SEG);
