@@ -507,34 +507,71 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .installrow .ip{font-size:11px; color:var(--muted); border:1px solid var(--line-soft); border-radius:20px; padding:7px 13px}
 .installrow .ip b{color:var(--gold-bright)}
 
-/* ================= INVESTMENT BUILDER ================= */
-.invest{display:grid; grid-template-columns:1.35fr .9fr; gap:26px; margin-top:48px; align-items:start}
-@media (max-width:880px){.invest{grid-template-columns:1fr}}
-.lines{border:1px solid var(--line-soft); border-radius:18px; overflow:hidden; background:var(--surface)}
-.line{display:grid; grid-template-columns:auto 1fr auto; gap:16px; align-items:center;
-  padding:18px 22px; border-bottom:1px solid var(--line-soft); cursor:pointer; transition:background .2s}
-.line:last-child{border-bottom:0}
-.line:hover{background:var(--surface-2)}
-.line.req{cursor:default; opacity:1}
-.tick{width:22px; height:22px; border-radius:7px; border:1.5px solid var(--faint); flex:none;
-  display:grid; place-items:center; transition:all .2s; color:#231a08; font-size:13px}
-.line.on .tick{background:var(--gold); border-color:var(--gold)}
-.line.off .tick{background:transparent}
-.line.off{opacity:.5}
-.line .ln-name{display:block; font-family:var(--serif); font-size:16.5px}
-.line .ln-desc{display:block; font-size:12.5px; color:var(--muted); margin-top:4px; line-height:1.45}
-.line .ln-price{font-family:var(--serif); font-size:17px; color:var(--gold-bright); font-variant-numeric:tabular-nums; white-space:nowrap}
-.line .lock{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
-.summary{border:1px solid var(--line); border-radius:18px; padding:28px 26px; background:linear-gradient(165deg,var(--surface-2),var(--surface)); position:sticky; top:24px}
-.summary h3{font-size:14px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-family:var(--sans); margin-bottom:20px}
-.srow{display:flex; justify-content:space-between; align-items:baseline; padding:11px 0; font-size:14.5px; color:var(--muted); border-bottom:1px dashed var(--line-soft)}
-.srow .amt{font-family:var(--serif); color:var(--text); font-variant-numeric:tabular-nums}
-.srow.total{border-bottom:0; margin-top:10px; padding-top:18px; border-top:1px solid var(--line)}
-.srow.total .lbl2{color:var(--text); font-size:15px; font-weight:600}
-.srow.total .amt{font-size:26px; color:var(--gold-bright)}
-.summary .hint{font-size:11.5px; color:var(--faint); margin-top:16px; line-height:1.5}
-.phase2{margin-top:20px; padding:16px 18px; border:1px dashed var(--line); border-radius:12px; color:var(--muted); font-size:13px}
-.phase2 b{color:var(--gold-bright)}
+/* ================= MODULE SELECTOR ================= */
+.modsel{display:grid; grid-template-columns:1.4fr .9fr; gap:26px; margin-top:44px; align-items:start}
+@media (max-width:900px){.modsel{grid-template-columns:1fr}}
+.modsel-heading, .platform-title{font-family:var(--sans); font-size:13px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--gold); margin:0 0 18px}
+.mods{display:flex; flex-direction:column; gap:16px}
+.mod{border:1px solid var(--line-soft); border-radius:16px; background:var(--surface); padding:22px 24px;
+  transition:border-color .3s ease, box-shadow .3s ease, background .3s ease}
+.mod.on{border-color:var(--gold); background:var(--surface-2);
+  box-shadow:0 0 0 1px var(--gold) inset, 0 18px 44px -24px rgba(201,162,75,.45)}
+.mod-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px}
+.mod-head h4{font-family:var(--serif); font-size:21px; color:var(--text); line-height:1.15}
+.mod-ai{font-family:var(--sans); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--aqua);
+  border:1px solid rgba(79,186,203,.4); padding:3px 8px; border-radius:999px; vertical-align:middle; margin-left:9px; white-space:nowrap}
+.mod-desc{color:var(--muted); font-size:14px; margin-top:8px; max-width:54ch; line-height:1.5}
+.mod-badge{flex:none; display:inline-flex; align-items:center; gap:7px; font-family:var(--sans); font-weight:600;
+  font-size:9.5px; letter-spacing:.15em; text-transform:uppercase; padding:6px 11px; border-radius:999px; border:1px solid; white-space:nowrap}
+.mod-badge::before{content:""; width:7px; height:7px; border-radius:50%}
+.mod-badge.included{color:var(--good); border-color:rgba(95,185,138,.45)} .mod-badge.included::before{background:var(--good)}
+.mod-badge.recommended{color:var(--aqua); border-color:rgba(79,186,203,.45)} .mod-badge.recommended::before{background:var(--aqua)}
+.mod-badge.optional{color:var(--gold-bright); border-color:rgba(201,162,75,.5)} .mod-badge.optional::before{background:var(--gold)}
+.mod-badge.future{color:#bcaee8; border-color:rgba(160,140,205,.5)} .mod-badge.future::before{background:#9d86c9}
+.mod-meta{display:flex; gap:30px; flex-wrap:wrap; margin-top:16px}
+.mod-meta .ml, .mod-inc .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:4px}
+.mod-meta .mv{font-family:var(--serif); color:var(--gold-bright); font-size:16px; font-variant-numeric:tabular-nums}
+.mod-inc{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+.mod-inc ul{list-style:none; margin:9px 0 0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px 20px}
+@media (max-width:520px){.mod-inc ul{grid-template-columns:1fr}}
+.mod-inc li{font-size:13px; color:var(--muted); padding-left:16px; position:relative; line-height:1.4}
+.mod-inc li::before{content:"◆"; position:absolute; left:0; top:2px; color:var(--gold); font-size:9px}
+.mod-toggle{margin-top:18px; width:100%; justify-content:center; border:1px solid var(--line); background:transparent;
+  color:var(--text); border-radius:12px; padding:13px 18px; cursor:pointer; font-family:var(--sans); font-size:13.5px;
+  letter-spacing:.04em; display:inline-flex; align-items:center; gap:10px; transition:background .25s, border-color .25s, color .25s}
+.mod-toggle:hover{border-color:var(--gold)}
+.mod-toggle:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
+.mod-toggle .tk{width:18px; height:18px; border-radius:5px; border:1.5px solid var(--faint); flex:none;
+  display:grid; place-items:center; font-size:12px; color:transparent; transition:all .25s}
+.mod.on .mod-toggle{background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#231a08; border-color:transparent; font-weight:700}
+.mod.on .mod-toggle .tk{background:#231a08; border-color:#231a08; color:var(--gold-bright)}
+
+/* sticky platform summary */
+.platform{border:1px solid var(--line); border-radius:18px; padding:26px 24px;
+  background:linear-gradient(165deg,var(--surface-2),var(--surface)); position:sticky; top:24px}
+.pf-group{margin-bottom:16px}
+.pf-label{font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:9px; display:flex; align-items:center; gap:8px}
+.pf-count{background:var(--gold); color:#231a08; border-radius:999px; font-size:10px; padding:1px 8px; font-weight:700; font-variant-numeric:tabular-nums}
+.pf-included, .pf-selected{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px}
+.pf-included li{font-size:13px; color:var(--muted); padding-left:20px; position:relative}
+.pf-included li::before{content:"✓"; position:absolute; left:0; top:0; color:var(--good); font-size:12px}
+.pf-selected li{font-size:13.5px; color:var(--text); padding-left:20px; position:relative; display:flex; justify-content:space-between; gap:10px}
+.pf-selected li::before{content:"◆"; position:absolute; left:2px; top:3px; color:var(--gold); font-size:10px}
+.pf-selected li .pf-p{color:var(--muted); font-family:var(--serif); font-variant-numeric:tabular-nums; white-space:nowrap; font-size:12.5px}
+.pf-empty{color:var(--faint); font-style:italic}
+.pf-empty::before{display:none!important}
+.pf-figs{border-top:1px solid var(--line-soft); border-bottom:1px solid var(--line-soft); padding:15px 0; margin:16px 0; display:grid; gap:12px}
+.pf-fig{display:flex; justify-content:space-between; align-items:baseline; gap:12px}
+.pf-fl{font-size:12.5px; color:var(--muted)}
+.pf-fv{font-family:var(--serif); color:var(--gold-bright); font-size:15.5px; font-variant-numeric:tabular-nums; text-align:right}
+.pf-caps{display:grid; gap:11px; margin-top:4px}
+.pf-cap .cl{font-size:11.5px; color:var(--muted); margin-bottom:6px; letter-spacing:.02em}
+.pf-segs{display:flex; gap:3px}
+.pf-seg{height:6px; flex:1; border-radius:2px; background:var(--line-soft); transition:background .4s ease; transition-delay:calc(var(--i,0)*22ms)}
+.pf-seg.f{background:linear-gradient(90deg,var(--gold),var(--gold-bright))}
+.pf-note{font-size:11px; color:var(--faint); margin-top:18px; line-height:1.55}
+@media (prefers-reduced-motion: reduce){ .pf-seg{transition-delay:0s} }
 
 /* ================= ROI CALCULATOR ================= */
 .roi{display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:48px; align-items:stretch}
@@ -1029,22 +1066,32 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 <section class="floor" id="sec-investment" data-floor="5" data-label="Your Investment">
   <div class="wrap">
     <div class="eyebrow rise">Your Investment</div>
-    <h2 class="title rise">Build your Launch Package</h2>
-    <p class="lead rise">Start with the Launch Package — a striking new site, a proper brand shoot, and the core members app. Toggle any line to see the totals move. All figures in CAD, before HST. <em>The Members App core is the foundation the revenue modules plug into.</em></p>
-    <div class="invest rise">
-      <div class="lines" id="invLines"></div>
-      <div class="summary">
-        <h3>Phase 1 Summary</h3>
-        <div class="srow"><span>Subtotal</span><span class="amt" id="sumSub">—</span></div>
-        <div class="srow"><span>HST (13%)</span><span class="amt" id="sumHst">—</span></div>
-        <div class="srow total"><span class="lbl2">Phase 1 Total</span><span class="amt" id="sumTotal">—</span></div>
-        <div class="hint">Figures are project estimates for scoping. Final pricing confirmed on sign-off of detailed specification. Third-party &amp; ongoing costs billed at cost.</div>
-        <div class="phase2">
-          <div><b>Care &amp; Hosting</b> — $250/mo at website launch → ~$500/mo once the app is live.</div>
-          <div style="margin-top:10px"><b>Phase 2 — Commerce &amp; Admin modules</b> — payments, reservations, ordering, DJ, safety, admin: <b>~$18–25k</b>, funded follow-on.</div>
-          <div style="margin-top:10px"><b>Phase 3 — Native iOS &amp; Android apps</b> — published to the App Store &amp; Google Play, once the web app proves engagement: <b>from $32,000</b>, funded follow-on.</div>
-        </div>
+    <h2 class="title rise">Assemble your platform</h2>
+    <p class="lead rise">Your Launch Package is the foundation. From there, expand your digital ecosystem module by module — add what fits now, phase in the rest later. Select a module to watch your investment, timeline and platform capabilities update in real time. <em>All figures in CAD, before HST.</em></p>
+    <div class="modsel rise">
+      <div class="modsel-left">
+        <h3 class="modsel-heading">Platform Expansion Modules</h3>
+        <div class="mods" id="mods"></div>
       </div>
+      <aside class="modsel-right">
+        <div class="platform">
+          <h3 class="platform-title">Your Platform</h3>
+          <div class="pf-group">
+            <div class="pf-label">Included · Launch Package</div>
+            <ul class="pf-included" id="pfIncluded"></ul>
+          </div>
+          <div class="pf-group">
+            <div class="pf-label">Selected modules <span class="pf-count" id="pfSelCount">0</span></div>
+            <ul class="pf-selected" id="pfSelected"><li class="pf-empty">None selected yet</li></ul>
+          </div>
+          <div class="pf-figs">
+            <div class="pf-fig"><span class="pf-fl">Estimated investment</span><span class="pf-fv" id="pfInvest">$43,750</span></div>
+            <div class="pf-fig"><span class="pf-fl">Estimated added timeline</span><span class="pf-fv" id="pfTime">—</span></div>
+          </div>
+          <div class="pf-caps" id="pfCaps" aria-label="Platform capability indicators"></div>
+          <div class="pf-note">Launch Package (from $43,750, before HST) is included. Module ranges are estimates confirmed on detailed spec. Care &amp; Hosting from $250/mo → ~$500/mo once the app is live.</div>
+        </div>
+      </aside>
     </div>
   </div>
 </section>
@@ -1543,44 +1590,138 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     ftEl.appendChild(tile);
   });
 
-  /* ---------- investment builder ---------- */
-  var items = [
-    {k:"web",  name:"Custom Website",            price:11500, req:true,  desc:"4-floor build, interactive flyer-calendar, video-upsell, owners & About, custom CTAs, age-gating, CMS"},
-    {k:"chat", name:"Live Chat & Lead Capture",  price:4500,  req:false, desc:"Support widget + offline messaging + customer database + promo-consent opt-in"},
-    {k:"photo",name:"Professional Photo Shoot",  price:2500,  req:false, desc:"Discreet on-site, all four floors, edited & owned"},
-    {k:"video",name:"Video Production",          price:4500,  req:false, desc:"Replaces the current clips — hero, social & ads"},
-    {k:"app",  name:"Members App — Core Platform",price:14000, req:true, desc:"Accounts, wallet card, attendance/incognito, QR connect, chat, directory"},
-    {k:"biz",  name:"Business Systems bundle",   price:6750,  req:false, desc:"Messaging integration, e-commerce hooks, tracking, CRM, and membership-card (digital & physical) design & implementation"}
-  ];
-  var state = {}; items.forEach(function(it){ state[it.k]=true; });
-  var linesEl = $("#invLines");
-  items.forEach(function(it){
-    var row = document.createElement("div");
-    row.className = "line on" + (it.req?" req":"");
-    row.setAttribute("data-k", it.k);
-    row.innerHTML =
-      '<span class="tick">✓</span>'+
-      '<span><span class="ln-name">'+it.name+'</span><span class="ln-desc">'+it.desc+'</span></span>'+
-      (it.req ? '<span class="lock">Foundation</span>' : '<span class="ln-price">'+CAD.format(it.price)+'</span>');
-    if(!it.req){
-      row.addEventListener("click", function(){
-        state[it.k] = !state[it.k];
-        row.classList.toggle("on", state[it.k]);
-        row.classList.toggle("off", !state[it.k]);
-        renderInv();
+  /* ---------- platform module selector ---------- */
+  (function(){
+    var modsEl = $("#mods"); if(!modsEl) return;
+
+    var CAPS = [
+      {k:"rev", label:"Revenue potential"},
+      {k:"gx",  label:"Guest experience"},
+      {k:"ops", label:"Operational efficiency"},
+      {k:"eng", label:"Customer engagement"},
+      {k:"bi",  label:"Business intelligence"},
+      {k:"mkt", label:"Marketing capability"}
+    ];
+    // baseline capability from the included Launch Package
+    var CAP_BASE = {rev:2, gx:2, ops:1, eng:2, bi:0, mkt:1};
+    var BASE_INVEST = 43750; // Launch Package, before HST
+    var INCLUDED = ["Signature four-floor website","Core members app","Brand photography & video","Live chat & lead capture","Business systems + membership card"];
+    var BADGE_LABEL = {included:"Included", recommended:"Recommended", optional:"Optional", future:"Future"};
+    var SEG = 14;
+
+    var MODULES = [
+      {id:"guest", name:"Guest Convenience Suite", badge:"recommended",
+       desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend.",
+       min:1500, max:2500, wMin:1, wMax:2,
+       inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
+       cap:{rev:2,gx:3,ops:1,eng:1,bi:0,mkt:0}},
+      {id:"membership", name:"Membership Enhancements", badge:"recommended",
+       desc:"Physical, scannable membership cards with full lifecycle management.",
+       min:2000, max:3500, wMin:1, wMax:2,
+       inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Card Management","Print-Ready Templates"],
+       cap:{rev:1,gx:2,ops:2,eng:2,bi:0,mkt:0}},
+      {id:"live", name:"Live Venue Experience", badge:"optional",
+       desc:"A living, real-time picture of the venue that pulls guests in tonight.",
+       min:2500, max:4000, wMin:2, wMax:3,
+       inc:["Current DJ","Current Song","Song Requests","Live Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
+       cap:{rev:2,gx:3,ops:1,eng:2,bi:0,mkt:1}},
+      {id:"community", name:"Community Suite", badge:"optional",
+       desc:"The connective tissue that turns members into a returning community.",
+       min:2500, max:4000, wMin:2, wMax:4,
+       inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
+       cap:{rev:1,gx:2,ops:0,eng:3,bi:0,mkt:1}},
+      {id:"marketing", name:"Marketing Automation Suite", badge:"recommended",
+       desc:"Always-on campaigns that bring guests back without lifting a finger.",
+       min:3000, max:5000, wMin:2, wMax:4,
+       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Rewards","Review Requests","Promotional Campaigns"],
+       cap:{rev:2,gx:0,ops:0,eng:2,bi:1,mkt:3}},
+      {id:"bisuite", name:"Business Intelligence Suite", badge:"optional",
+       desc:"The dashboards and back-office to run the whole operation on data.",
+       min:4000, max:7000, wMin:3, wMax:5,
+       inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Reporting Dashboard","Waitlist Management","Staff Portal"],
+       cap:{rev:1,gx:0,ops:2,eng:0,bi:3,mkt:1}},
+      {id:"biassist", name:"Business Intelligence Assistant", badge:"future", ai:true,
+       desc:"Analyzes your operational data and surfaces intelligent recommendations for management.",
+       min:7500, max:12000, wMin:4, wMax:6,
+       inc:["Revenue Analysis","Attendance Analysis","Marketing Suggestions","Theme-Night Recommendations","Executive Reports","Operational Insights","Business Trend Analysis"],
+       cap:{rev:2,gx:0,ops:2,eng:0,bi:3,mkt:1}}
+    ];
+
+    function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
+
+    // per-capability maximum (base + every module) so a full bar = everything selected
+    var capMax = {};
+    CAPS.forEach(function(c){ var m=CAP_BASE[c.k]; MODULES.forEach(function(mod){ m += mod.cap[c.k]||0; }); capMax[c.k]=m; });
+
+    var selected = {};
+
+    // included list
+    var incUl = $("#pfIncluded");
+    INCLUDED.forEach(function(n){ var li=document.createElement("li"); li.textContent=n; incUl.appendChild(li); });
+
+    // capability bars (built once)
+    var capsEl = $("#pfCaps"); var segRefs = {};
+    CAPS.forEach(function(c){
+      var row = document.createElement("div"); row.className="pf-cap";
+      var segHtml=""; for(var i=0;i<SEG;i++){ segHtml+='<span class="pf-seg" style="--i:'+i+'"></span>'; }
+      row.innerHTML = '<div class="cl">'+c.label+'</div><div class="pf-segs" role="img" aria-label="'+c.label+'">'+segHtml+'</div>';
+      capsEl.appendChild(row);
+      var wrap=row.querySelector(".pf-segs");
+      segRefs[c.k] = { wrap:wrap, segs:Array.prototype.slice.call(wrap.children) };
+    });
+
+    // module cards
+    MODULES.forEach(function(mod){
+      var card = document.createElement("div"); card.className="mod"; card.setAttribute("data-id",mod.id);
+      var incLis = mod.inc.map(function(x){ return "<li>"+x+"</li>"; }).join("");
+      var ai = mod.ai ? ' <span class="mod-ai">Powered by AI</span>' : "";
+      card.innerHTML =
+        '<div class="mod-head"><div><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p></div>'+
+          '<span class="mod-badge '+mod.badge+'" aria-label="Status: '+BADGE_LABEL[mod.badge]+'">'+BADGE_LABEL[mod.badge]+'</span></div>'+
+        '<div class="mod-meta">'+
+          '<div><span class="ml">Estimated investment</span><span class="mv">'+CAD.format(mod.min)+"–"+CAD.format(mod.max)+'</span></div>'+
+          '<div><span class="ml">Timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
+        '</div>'+
+        '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
+        '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tk">✓</span><span class="tl">Add module</span></button>';
+      var btn = card.querySelector(".mod-toggle");
+      btn.setAttribute("aria-label","Add "+mod.name+" module");
+      btn.addEventListener("click", function(){
+        var on = !selected[mod.id]; selected[mod.id]=on;
+        card.classList.toggle("on", on);
+        btn.setAttribute("aria-pressed", on?"true":"false");
+        btn.setAttribute("aria-label", (on?"Remove ":"Add ")+mod.name+" module");
+        card.querySelector(".tl").textContent = on ? "Added" : "Add module";
+        render();
+      });
+      modsEl.appendChild(card);
+    });
+
+    function render(){
+      var sel = MODULES.filter(function(m){ return selected[m.id]; });
+      // selected list
+      var selUl = $("#pfSelected");
+      selUl.innerHTML = sel.length===0
+        ? '<li class="pf-empty">None selected yet</li>'
+        : sel.map(function(m){ return '<li>'+m.name+'<span class="pf-p">'+CAD.format(m.min)+"–"+CAD.format(m.max)+'</span></li>'; }).join("");
+      $("#pfSelCount").textContent = sel.length;
+      // investment + timeline
+      var minSum=0,maxSum=0,wMin=0,wMax=0;
+      sel.forEach(function(m){ minSum+=m.min; maxSum+=m.max; wMin+=m.wMin; wMax+=m.wMax; });
+      $("#pfInvest").textContent = sel.length===0 ? CAD.format(BASE_INVEST)
+        : CAD.format(BASE_INVEST+minSum)+"–"+CAD.format(BASE_INVEST+maxSum);
+      $("#pfTime").textContent = sel.length===0 ? "—" : wk(wMin,wMax);
+      // capability bars
+      CAPS.forEach(function(c){
+        var val = CAP_BASE[c.k]; sel.forEach(function(m){ val += m.cap[c.k]||0; });
+        var filled = Math.round(val / capMax[c.k] * SEG);
+        var refs = segRefs[c.k];
+        refs.segs.forEach(function(s,i){ s.classList.toggle("f", i<filled); });
+        refs.wrap.setAttribute("aria-label", c.label+": "+filled+" of "+SEG);
       });
     }
-    linesEl.appendChild(row);
-  });
-  function renderInv(){
-    var sub = 0;
-    items.forEach(function(it){ if(state[it.k]) sub += it.price; });
-    var hst = sub*0.13, total = sub+hst;
-    $("#sumSub").textContent = CAD2.format(sub);
-    $("#sumHst").textContent = CAD2.format(hst);
-    $("#sumTotal").textContent = CAD2.format(total);
-  }
-  renderInv();
+    render();
+  })();
 
   /* ---------- ROI calculator ---------- */
   var BUILD = 43750; // Phase 1 before HST
