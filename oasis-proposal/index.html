@@ -527,25 +527,31 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .m-titanium{--acc:#8FA0AE; --acc-bright:#BCC8D2; --acc-glow:rgba(143,160,174,.4)}
 .m-platinum{--acc:#CBD3DB; --acc-bright:#EFF3F7; --acc-glow:rgba(203,211,219,.42)}
 .m-obsidian{--acc:#9488B8; --acc-bright:#BEB4DC; --acc-glow:rgba(148,136,184,.46)}
-.mod{position:relative; border:1px solid var(--line-soft); border-radius:16px; background:var(--surface); padding:24px 24px 22px;
-  transition:border-color .3s ease, box-shadow .3s ease, background .3s ease}
+.mod{position:relative; --acc-grad:linear-gradient(115deg,var(--acc) 0%,var(--acc-bright) 45%,var(--acc) 100%);
+  border:1px solid var(--line-soft); border-radius:16px; background:var(--surface); padding:24px 24px 22px;
+  transition:border-color .3s ease, box-shadow .35s ease, background .3s ease, transform .35s cubic-bezier(.2,.7,.2,1)}
 .mod::before{content:""; position:absolute; top:0; left:0; right:0; height:3px; border-radius:16px 16px 0 0;
-  background:linear-gradient(90deg,var(--acc),var(--acc-bright)); opacity:.7; transition:opacity .3s}
+  background:linear-gradient(90deg,var(--acc),var(--acc-bright),var(--acc)); opacity:.7; transition:opacity .3s}
+.mod:hover{transform:translateY(-3px); box-shadow:0 22px 52px -30px rgba(0,0,0,.7)}
+.mod:hover::before{opacity:1}
 .mod.on{border-color:var(--acc); background:var(--surface-2); box-shadow:0 0 0 1px var(--acc) inset, 0 18px 46px -24px var(--acc-glow)}
+.mod.on:hover{transform:translateY(-3px); box-shadow:0 0 0 1px var(--acc) inset, 0 26px 58px -28px var(--acc-glow)}
 .mod.on::before{opacity:1}
 .mod-head{display:flex; align-items:flex-start; gap:15px}
 .mod-ic{flex:none; width:42px; height:42px; border-radius:11px; display:grid; place-items:center; font-size:19px;
-  color:var(--acc); border:1px solid var(--line); background:rgba(255,255,255,.02); transition:.3s}
-.mod.on .mod-ic{border-color:var(--acc); color:var(--acc-bright)}
+  border:1px solid var(--line); background:var(--acc-grad); -webkit-background-clip:text; background-clip:text;
+  color:transparent; -webkit-text-fill-color:transparent; transition:border-color .3s ease}
+.mod.on .mod-ic{border-color:var(--acc)}
 .mod-hd-txt{flex:1; min-width:0}
-.mod-head h4{font-family:var(--serif); font-size:20px; color:var(--acc); line-height:1.16}
-.mod.on .mod-head h4{color:var(--acc-bright)}
+.mod-head h4{font-family:var(--serif); font-size:20px; line-height:1.16;
+  background:var(--acc-grad); -webkit-background-clip:text; background-clip:text; color:transparent; -webkit-text-fill-color:transparent}
+.mod.on .mod-head h4{filter:brightness(1.1)}
 .mod-ai{font-family:var(--sans); font-size:8px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc);
   border:1px solid var(--line); padding:3px 7px; border-radius:999px; vertical-align:middle; margin-left:8px; white-space:nowrap}
 .mod-desc{color:var(--muted); font-size:13.5px; margin-top:7px; line-height:1.5}
 .mod-badge2{flex:none; align-self:flex-start; display:none; align-items:center; gap:6px; font-family:var(--sans); font-weight:700;
   font-size:9px; letter-spacing:.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px;
-  color:#12151b; background:linear-gradient(120deg,var(--acc),var(--acc-bright)); white-space:nowrap}
+  color:#12151b; background:linear-gradient(120deg,var(--acc),var(--acc-bright),var(--acc)); white-space:nowrap}
 .mod.on .mod-badge2{display:inline-flex}
 .mod-meta{display:flex; gap:30px; flex-wrap:wrap; margin-top:16px}
 .mod-meta .ml, .mod-inc .ml, .mod-str .ml, .mod-purpose .ml, .mod-dtime .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:5px}
@@ -574,10 +580,22 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .mod.expanded .mod-expand .chev{transform:rotate(180deg)}
 .mod-toggle{flex:1; min-width:200px; justify-content:center; border:1px solid var(--line); background:transparent;
   color:var(--text); border-radius:12px; padding:12px 18px; cursor:pointer; font-family:var(--sans); font-size:13.5px;
-  letter-spacing:.04em; display:inline-flex; align-items:center; gap:9px; transition:background .25s, border-color .25s, color .25s}
+  letter-spacing:.04em; display:inline-flex; align-items:center; gap:9px;
+  transition:background .25s, border-color .25s, color .25s, transform .12s ease, box-shadow .25s}
 .mod-toggle:hover{border-color:var(--acc)}
+.mod-toggle:active{transform:translateY(1px) scale(.994)}
 .mod-toggle:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
-.mod.on .mod-toggle{background:linear-gradient(120deg,var(--acc),var(--acc-bright)); color:#12151b; border-color:transparent; font-weight:700}
+.mod-expand:focus-visible{outline:2px solid var(--acc); outline-offset:3px; border-radius:4px}
+.mod.on .mod-toggle{background:linear-gradient(120deg,var(--acc),var(--acc-bright),var(--acc)); color:#12151b; border-color:transparent; font-weight:700}
+.mod.on .mod-toggle:hover{box-shadow:0 10px 26px -12px var(--acc-glow)}
+/* Why add this? — consultant rationale */
+.mod-why{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft); font-size:13px; color:var(--muted); line-height:1.6}
+.mod-why .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:6px}
+@media (prefers-reduced-motion: reduce){
+  .mod, .mod-toggle, .rm-phase{transition:none}
+  .mod:hover, .mod.on:hover{transform:none}
+  .mod-toggle:active{transform:none}
+}
 /* ===== Phase 3 — solution intelligence UI ===== */
 .mod-cw{display:inline-flex; align-items:center; gap:6px; margin-top:8px; font-family:var(--sans); font-size:9px; font-weight:600;
   letter-spacing:.14em; text-transform:uppercase; color:var(--acc); border:1px solid var(--acc); border-radius:999px; padding:3px 10px}
@@ -592,6 +610,10 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .mod-pairs .ml{font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint)}
 .mod-pairs .pairs-name{font-family:var(--serif); color:var(--acc); font-size:14px; text-align:right}
 /* panel — platform focus */
+.pf-focus{margin-top:8px}
+@keyframes softIn{from{opacity:.35} to{opacity:1}}
+.softin{animation:softIn .4s ease}
+@media (prefers-reduced-motion: reduce){ .softin{animation:none} }
 .focus-chips{display:flex; flex-wrap:wrap; gap:8px; min-height:28px}
 .focus-chip{font-family:var(--sans); font-size:11px; letter-spacing:.02em; color:var(--gold-bright); border:1px solid rgba(201,162,75,.4);
   background:rgba(201,162,75,.08); border-radius:999px; padding:5px 12px; opacity:0; transform:translateY(4px); transition:opacity .45s ease, transform .45s ease}
@@ -736,13 +758,13 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(
 .rm-sl{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint)}
 .rm-sv{font-family:var(--serif); font-size:22px; color:var(--gold-bright); font-variant-numeric:tabular-nums; transition:color .35s}
 .rm-flow{display:flex; align-items:stretch; flex-wrap:nowrap}
-@media (max-width:820px){.rm-flow{flex-direction:column}}
+@media (max-width:900px){.rm-flow{flex-direction:column}}
 .rm-phase{flex:1 1 0; min-width:142px; border:1px solid var(--line-soft); border-radius:16px; background:var(--surface);
   padding:20px 18px; position:relative;
   transition:flex-grow .6s cubic-bezier(.4,0,.2,1), border-color .4s ease, box-shadow .4s ease, background .4s ease}
 .rm-phase.active{border-color:var(--gold); background:var(--surface-2); box-shadow:0 14px 40px -26px rgba(201,162,75,.6)}
 .rm-conn{flex:0 0 30px; display:flex; align-items:center; justify-content:center; color:var(--gold); font-size:15px; user-select:none}
-@media (max-width:820px){.rm-conn{flex-basis:24px; transform:rotate(90deg)}}
+@media (max-width:900px){.rm-conn{flex-basis:24px; transform:rotate(90deg)}}
 .rm-ph-num{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); font-family:var(--sans); display:block; margin-bottom:7px}
 .rm-ph-name{font-family:var(--serif); font-size:16.5px; color:var(--text); margin-bottom:13px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; min-height:22px}
 .rm-ph-add{font-family:var(--sans); font-size:9px; font-weight:700; letter-spacing:.06em; color:#231a08;
@@ -1809,8 +1831,30 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     var PAIRS_WITH = { guest:"membership", membership:"community", community:"marketing", marketing:"bisuite", bisuite:"biassist", biassist:"bisuite" };
     var CRAFTWEB_PICK = "community";
     var CRAFTWEB_REASON = "Community engagement provides one of the strongest long-term returns for hospitality businesses — encouraging repeat visits, stronger customer relationships, and increased member participation.";
-    // merge Phase 3 data onto each enhancement so every record carries its own positioning
-    MODULES.forEach(function(m){ m.bestFor = BEST_FOR[m.id]||[]; m.pairsWith = PAIRS_WITH[m.id]||null; m.craftweb = (m.id===CRAFTWEB_PICK); });
+    // Phase 4 — one-sentence value propositions + consultant "Why add this?" copy
+    var VALUE_PROP = {
+      guest:"Turn everyday ordering into effortless, repeat spend with a single tap.",
+      membership:"Give members a tangible mark of belonging they carry with them.",
+      live:"Bring the energy of the room into the app, in real time.",
+      community:"Build stronger customer relationships through meaningful engagement beyond every visit.",
+      marketing:"Keep guests coming back with communication that runs itself.",
+      bisuite:"Run the whole operation on clear, current numbers.",
+      biassist:"Turn your operational data into decisions — continuously."
+    };
+    var WHY_ADD = {
+      guest:"Regulars spend more when ordering gets out of their way. Saved favourites and one-tap reordering remove the small frictions that slow a busy night, while digital receipts keep the experience clean. It's a modest investment that compounds across every visit.",
+      membership:"A physical card turns a membership into something members feel part of. It speeds up the door, reinforces the brand each time it's used, and gives staff a fast, reliable way to recognise members. The lifecycle tools keep the program manageable as it grows.",
+      live:"Guests engage more when the venue feels alive inside the app. Showing what's happening now — the DJ, occupancy, wait times and specials — draws people toward quieter areas and promotes what you want to move. It turns the app into something guests open during their visit, not just before it.",
+      community:"Membership becomes far more valuable when members have reasons to return between visits. A feed, connections and events keep the community active off-site, which is where long-term loyalty is actually built. For a hospitality brand, this is one of the strongest levers for repeat visitation.",
+      marketing:"Retention is won in the quiet weeks, not the busy ones. Automated birthday, referral and win-back campaigns keep guests engaged without adding to anyone's workload. Once configured, the system pays for itself through visits that would otherwise not have happened.",
+      bisuite:"You can't improve what you can't see clearly. Consolidated analytics give management one reliable view of revenue, attendance and behaviour, replacing guesswork with evidence. The staff portal and waitlist tools turn that insight into smoother day-to-day operations.",
+      biassist:"Reporting tells you what happened; this tells you what to do about it. The advisor reviews your operational data continuously and surfaces specific, prioritised recommendations for management. It delivers the most value once the Business Intelligence Suite is feeding it complete data."
+    };
+    // merge Phase 3/4 data onto each enhancement so every record carries its own positioning
+    MODULES.forEach(function(m){
+      m.bestFor = BEST_FOR[m.id]||[]; m.pairsWith = PAIRS_WITH[m.id]||null; m.craftweb = (m.id===CRAFTWEB_PICK);
+      m.value = VALUE_PROP[m.id]||m.desc; m.why = WHY_ADD[m.id]||"";
+    });
     function nameOf(id){ for(var i=0;i<MODULES.length;i++){ if(MODULES[i].id===id) return MODULES[i].name; } return ""; }
 
     // recommendation rules — evaluated in priority order; first whose target is unselected wins
@@ -1856,12 +1900,13 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 
     function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
     function fmtWeeks(n){ return (n % 1 === 0) ? String(n) : n.toFixed(1); }
-    // premium animated CAD counter (ease-out cubic)
+    var REDUCE = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    // premium animated CAD counter (ease-out cubic); honours reduced-motion
     var moneyState = {};
     function animateMoney(id, target){
       var el = document.getElementById(id); if(!el) return;
       var from = moneyState[id] || 0; moneyState[id] = target;
-      if(from === target){ el.textContent = CAD.format(target); return; }
+      if(REDUCE || from === target){ el.textContent = CAD.format(target); return; }
       var start = null, dur = 480;
       function step(now){
         if(start === null) start = now;
@@ -1870,6 +1915,13 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         if(t < 1) requestAnimationFrame(step); else el.textContent = CAD.format(target);
       }
       requestAnimationFrame(step);
+    }
+    // subtle fade on text change; skips no-op updates and reduced-motion
+    function softText(el, text){
+      if(!el || el.textContent === text) return;
+      if(REDUCE){ el.textContent = text; return; }
+      el.classList.remove("softin"); void el.offsetWidth; el.classList.add("softin");
+      el.textContent = text;
     }
 
     // per-capability maximum (base + every enhancement) so a full bar = everything selected
@@ -1902,7 +1954,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       card.innerHTML =
         '<div class="mod-head">'+
           '<span class="mod-ic" aria-hidden="true">'+mod.icon+'</span>'+
-          '<div class="mod-hd-txt"><h4>'+mod.name+ai+'</h4>'+cwBadge+'<p class="mod-desc">'+mod.desc+'</p></div>'+
+          '<div class="mod-hd-txt"><h4>'+mod.name+ai+'</h4>'+cwBadge+'<p class="mod-desc">'+mod.value+'</p></div>'+
           '<span class="mod-badge2">✓ Added</span>'+
         '</div>'+
         '<div class="mod-meta">'+
@@ -1910,6 +1962,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         '</div>'+
         '<div class="mod-details"><div class="mod-details-inner">'+
           purpose+ cwReason+
+          (mod.why ? '<div class="mod-why"><span class="ml">Why add this?</span>'+mod.why+'</div>' : "")+
           '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
           '<div class="mod-str"><span class="ml">Expected business impact</span><ul>'+strLis+'</ul></div>'+
           '<div class="mod-bf"><span class="ml">Best for</span><ul>'+bfLis+'</ul></div>'+
@@ -1997,7 +2050,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       var addWeeks = 0;
       sel.forEach(function(m){ addWeeks += m.timeAdd; });
       var tMin = ENGINE.base.weeksMin + addWeeks, tMax = ENGINE.base.weeksMax + addWeeks;
-      $("#pfTime").textContent = fmtWeeks(tMin)+"–"+fmtWeeks(tMax)+" wks";
+      softText($("#pfTime"), fmtWeeks(tMin)+"–"+fmtWeeks(tMax)+" wks");
       $("#rmEnh").textContent = addWeeks===0 ? "+0 weeks" : "+"+fmtWeeks(addWeeks)+" weeks";
       $("#rmTotal").textContent = fmtWeeks(tMin)+"–"+fmtWeeks(tMax)+" weeks";
       // list the enhancements adding/removing time from the schedule
@@ -2027,11 +2080,15 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       if(focusEl){
         var totals = CAPS.map(function(c){ var v=CAP_BASE[c.k]; sel.forEach(function(m){ v+=m.cap[c.k]||0; }); return {k:c.k, v:v}; })
                          .sort(function(a,b){ return b.v-a.v; });
-        focusEl.innerHTML = totals.slice(0,3).map(function(t){ return '<span class="focus-chip">'+capLabel(t.k)+'</span>'; }).join("");
-        requestAnimationFrame(function(){ $all(".focus-chip", focusEl).forEach(function(ch){ ch.classList.add("in"); }); });
+        var focusKey = totals.slice(0,3).map(function(t){ return t.k; }).join(",");
+        if(focusEl.getAttribute("data-fk") !== focusKey){        // only re-animate when the focus actually changes
+          focusEl.setAttribute("data-fk", focusKey);
+          focusEl.innerHTML = totals.slice(0,3).map(function(t){ return '<span class="focus-chip">'+capLabel(t.k)+'</span>'; }).join("");
+          requestAnimationFrame(function(){ $all(".focus-chip", focusEl).forEach(function(ch){ ch.classList.add("in"); }); });
+        }
       }
       // ----- Phase 3: Solution Summary (consultant-style, selection-driven) -----
-      var sumEl = $("#pfSummary"); if(sumEl) sumEl.textContent = solutionSummary(sel);
+      var sumEl = $("#pfSummary"); if(sumEl) softText(sumEl, solutionSummary(sel));
       // ----- Phase 3: Recommended Next Enhancement (one, never already-selected) -----
       var rec = nextRecommendation(), recEl = $("#pfRec");
       if(recEl){
