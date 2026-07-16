@@ -1685,73 +1685,93 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   (function(){
     var modsEl = $("#mods"); if(!modsEl) return;
 
-    var CAPS = [
-      {k:"rev", label:"Revenue Growth"},
-      {k:"gx",  label:"Guest Experience"},
-      {k:"eng", label:"Customer Engagement"},
-      {k:"ops", label:"Operational Efficiency"},
-      {k:"mkt", label:"Marketing Capability"},
-      {k:"bi",  label:"Business Intelligence"}
-    ];
-    // baseline platform profile from the included Launch Package
-    var CAP_BASE = {rev:2, gx:2, eng:2, ops:1, mkt:1, bi:1};
-    var BASE_INVEST = 43750; // Launch Package, before HST
-    var SEG = 14;
-
-    // cap{} weights still drive the live Platform Profile; str[] are the display bullets
-    var MODULES = [
-      {id:"guest", name:"Guest Convenience Suite", material:"m-silver", icon:"◑",
-       desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend.",
-       min:1500, max:2500, wMin:1, wMax:2,
-       inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
-       str:["Encourages repeat purchases","Improves ordering convenience","Reduces ordering friction","Creates a smoother guest experience"],
-       cap:{rev:4,gx:5,eng:3,ops:2,mkt:1,bi:1}},
-      {id:"membership", name:"Membership Enhancements", material:"m-gold", icon:"❖", def:true,
-       desc:"Physical, scannable membership cards with full lifecycle management.",
-       min:2000, max:3500, wMin:1, wMax:2,
-       inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Membership Card Management","Print Ready Card Templates"],
-       str:["Strengthens brand identity","Creates a premium membership experience","Improves guest recognition","Faster member check-in"],
-       cap:{rev:3,gx:4,eng:4,ops:3,mkt:5,bi:2}},
-      {id:"live", name:"Live Venue Experience", material:"m-copper", icon:"♪",
-       desc:"A living, real-time picture of the venue that pulls guests in tonight.",
-       min:2500, max:4000, wMin:2, wMax:3,
-       inc:["Current DJ","Current Song","Song Requests","Live Venue Occupancy","Pool Occupancy","Bar Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
-       str:["Creates a more interactive venue","Encourages guests to engage with the app","Promotes featured products","Enhances the live experience"],
-       cap:{rev:4,gx:5,eng:5,ops:2,mkt:3,bi:2}},
-      {id:"community", name:"Community Suite", material:"m-bronze", icon:"❋", def:true,
-       desc:"The connective tissue that turns members into a returning community.",
-       min:2500, max:4000, wMin:2, wMax:4,
-       inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
-       str:["Encourages repeat visits","Builds stronger customer loyalty","Extends engagement beyond the venue","Creates long-term community"],
-       cap:{rev:4,gx:5,eng:5,ops:1,mkt:4,bi:2}},
-      {id:"marketing", name:"Marketing Automation Suite", material:"m-titanium", icon:"✦", def:true,
-       desc:"Always-on campaigns that bring guests back without lifting a finger.",
-       min:3000, max:5000, wMin:2, wMax:4,
-       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Campaigns","Promotional Campaigns","Review Requests","Sponsor Promotions","Affiliate Promotions"],
-       str:["Improves customer retention","Automates communication","Increases campaign effectiveness","Generates repeat business"],
-       cap:{rev:5,gx:3,eng:4,ops:3,mkt:5,bi:2}},
-      {id:"bisuite", name:"Business Intelligence Suite", material:"m-platinum", icon:"▦",
-       desc:"The dashboards and back-office to run the whole operation on data.",
-       min:4000, max:7000, wMin:3, wMax:5,
-       inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Behaviour Analytics","Reporting Dashboard","Waitlist Management","Staff Portal","Executive Reporting"],
-       str:["Better operational visibility","Improved reporting","Better decision-making","Deeper understanding of customer behaviour"],
-       cap:{rev:4,gx:2,eng:2,ops:5,mkt:3,bi:5}},
-      {id:"biassist", name:"Strategic Intelligence Advisor", material:"m-obsidian", icon:"◎", ai:true,
-       desc:"An always-on strategic advisor that turns your operational data into executive decisions.",
-       purpose:"Continuously analyzes operational data and provides strategic recommendations to management.",
-       min:7500, max:12000, wMin:4, wMax:6,
-       inc:["Revenue Analysis","Attendance Trends","Product Performance","Promotion Performance","Theme Night Recommendations","Marketing Suggestions","Executive Reports","Operational Insights","Business Trend Analysis"],
-       str:["Identifies new revenue opportunities","Recommends marketing initiatives","Detects operational trends","Provides executive-level insights","Supports strategic decision making"],
-       cap:{rev:5,gx:1,eng:1,ops:5,mkt:4,bi:5}}
-    ];
+    /* ===== Phase 2 — one centralized enhancement-engine config =====
+       Every enhancement carries: title/description, display range (min/max, wMin/wMax),
+       engine values (investMid = investment midpoint, timeAdd = timeline midpoint),
+       capability weights (cap) and its selected state (sel). All calculations read
+       from this object — no values are hardcoded elsewhere. Phase 3 will extend it. */
+    var ENGINE = {
+      base: { name:"Launch Package", investment:43750, weeksMin:8, weeksMax:10 },
+      seg: 14,
+      capBase: {rev:2, gx:2, eng:2, ops:1, mkt:1, bi:1},
+      caps: [
+        {k:"rev", label:"Revenue Growth"},
+        {k:"gx",  label:"Guest Experience"},
+        {k:"eng", label:"Customer Engagement"},
+        {k:"ops", label:"Operational Efficiency"},
+        {k:"mkt", label:"Marketing Capability"},
+        {k:"bi",  label:"Business Intelligence"}
+      ],
+      enhancements: [
+        {id:"guest", name:"Guest Convenience Suite", material:"m-silver", icon:"◑", sel:false,
+         desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend.",
+         min:1500, max:2500, wMin:1, wMax:2, investMid:2000, timeAdd:1.5,
+         inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
+         str:["Encourages repeat purchases","Improves ordering convenience","Reduces ordering friction","Creates a smoother guest experience"],
+         cap:{rev:1,gx:5,eng:3,ops:2,mkt:1,bi:1}},
+        {id:"membership", name:"Membership Enhancements", material:"m-gold", icon:"❖", sel:true,
+         desc:"Physical, scannable membership cards with full lifecycle management.",
+         min:2000, max:3500, wMin:1, wMax:2, investMid:2750, timeAdd:1.5,
+         inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Membership Card Management","Print Ready Card Templates"],
+         str:["Strengthens brand identity","Creates a premium membership experience","Improves guest recognition","Faster member check-in"],
+         cap:{rev:2,gx:4,eng:4,ops:3,mkt:5,bi:2}},
+        {id:"live", name:"Live Venue Experience", material:"m-copper", icon:"♪", sel:false,
+         desc:"A living, real-time picture of the venue that pulls guests in tonight.",
+         min:2500, max:4000, wMin:2, wMax:3, investMid:3250, timeAdd:2.5,
+         inc:["Current DJ","Current Song","Song Requests","Live Venue Occupancy","Pool Occupancy","Bar Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
+         str:["Creates a more interactive venue","Encourages guests to engage with the app","Promotes featured products","Enhances the live experience"],
+         cap:{rev:4,gx:5,eng:5,ops:2,mkt:3,bi:2}},
+        {id:"community", name:"Community Suite", material:"m-bronze", icon:"❋", sel:true,
+         desc:"The connective tissue that turns members into a returning community.",
+         min:2500, max:4000, wMin:2, wMax:4, investMid:3250, timeAdd:3,
+         inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
+         str:["Encourages repeat visits","Builds stronger customer loyalty","Extends engagement beyond the venue","Creates long-term community"],
+         cap:{rev:4,gx:5,eng:5,ops:1,mkt:4,bi:2}},
+        {id:"marketing", name:"Marketing Automation Suite", material:"m-titanium", icon:"✦", sel:true,
+         desc:"Always-on campaigns that bring guests back without lifting a finger.",
+         min:3000, max:5000, wMin:2, wMax:4, investMid:4000, timeAdd:3,
+         inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Campaigns","Promotional Campaigns","Review Requests","Sponsor Promotions","Affiliate Promotions"],
+         str:["Improves customer retention","Automates communication","Increases campaign effectiveness","Generates repeat business"],
+         cap:{rev:5,gx:3,eng:4,ops:3,mkt:5,bi:2}},
+        {id:"bisuite", name:"Business Intelligence Suite", material:"m-platinum", icon:"▦", sel:false,
+         desc:"The dashboards and back-office to run the whole operation on data.",
+         min:4000, max:7000, wMin:3, wMax:5, investMid:5500, timeAdd:4,
+         inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Behaviour Analytics","Reporting Dashboard","Waitlist Management","Staff Portal","Executive Reporting"],
+         str:["Better operational visibility","Improved reporting","Better decision-making","Deeper understanding of customer behaviour"],
+         cap:{rev:4,gx:2,eng:2,ops:5,mkt:3,bi:5}},
+        {id:"biassist", name:"Strategic Intelligence Advisor", material:"m-obsidian", icon:"◎", ai:true, sel:false,
+         desc:"An always-on strategic advisor that turns your operational data into executive decisions.",
+         purpose:"Continuously analyzes operational data and provides strategic recommendations to management.",
+         min:7500, max:12000, wMin:4, wMax:6, investMid:9750, timeAdd:5,
+         inc:["Revenue Analysis","Attendance Trends","Product Performance","Promotion Performance","Theme Night Recommendations","Marketing Suggestions","Executive Reports","Operational Insights","Business Trend Analysis"],
+         str:["Identifies new revenue opportunities","Recommends marketing initiatives","Detects operational trends","Provides executive-level insights","Supports strategic decision making"],
+         cap:{rev:5,gx:1,eng:1,ops:5,mkt:4,bi:5}}
+      ]
+    };
+    // working aliases into the single config object
+    var CAPS = ENGINE.caps, CAP_BASE = ENGINE.capBase, BASE_INVEST = ENGINE.base.investment, SEG = ENGINE.seg, MODULES = ENGINE.enhancements;
 
     function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
+    function fmtWeeks(n){ return (n % 1 === 0) ? String(n) : n.toFixed(1); }
+    // premium animated CAD counter (ease-out cubic)
+    var moneyState = {};
+    function animateMoney(id, target){
+      var el = document.getElementById(id); if(!el) return;
+      var from = moneyState[id] || 0; moneyState[id] = target;
+      if(from === target){ el.textContent = CAD.format(target); return; }
+      var start = null, dur = 480;
+      function step(now){
+        if(start === null) start = now;
+        var t = Math.min(1, (now - start) / dur), e = 1 - Math.pow(1 - t, 3);
+        el.textContent = CAD.format(Math.round(from + (target - from) * e));
+        if(t < 1) requestAnimationFrame(step); else el.textContent = CAD.format(target);
+      }
+      requestAnimationFrame(step);
+    }
 
-    // per-capability maximum (base + every module) so a full bar = everything selected
+    // per-capability maximum (base + every enhancement) so a full bar = everything selected
     var capMax = {};
     CAPS.forEach(function(c){ var m=CAP_BASE[c.k]; MODULES.forEach(function(mod){ m += mod.cap[c.k]||0; }); capMax[c.k]=m; });
-
-    var selected = {};
 
     // capability bars (built once)
     var capsEl = $("#pfCaps"); var segRefs = {};
@@ -1799,14 +1819,14 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         exp.setAttribute("aria-expanded", open?"true":"false");
         exp.firstChild.textContent = open ? "Collapse " : "View details ";
       });
-      if(mod.def){
-        selected[mod.id]=true; card.classList.add("on");
+      if(mod.sel){
+        card.classList.add("on");
         btn.setAttribute("aria-pressed","true");
         btn.setAttribute("aria-label","Remove "+mod.name+" enhancement");
         card.querySelector(".tl").textContent="✓ Added to My Platform";
       }
       btn.addEventListener("click", function(){
-        var on = !selected[mod.id]; selected[mod.id]=on;
+        mod.sel = !mod.sel; var on = mod.sel;
         card.classList.toggle("on", on);
         btn.setAttribute("aria-pressed", on?"true":"false");
         btn.setAttribute("aria-label", (on?"Remove ":"Add ")+mod.name+" enhancement");
@@ -1852,41 +1872,39 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     }
 
     function render(){
-      var sel = MODULES.filter(function(m){ return selected[m.id]; });
-      // selected enhancements
+      var sel = MODULES.filter(function(m){ return m.sel; });
+      // ----- Selected Enhancements list (card display range preserved) -----
       var selUl = $("#pfSelected");
       selUl.innerHTML = sel.length===0
         ? '<li class="pf-empty">None selected yet</li>'
         : sel.map(function(m){ return '<li>'+m.name+'<span class="pf-p">'+CAD.format(m.min)+"–"+CAD.format(m.max)+'</span></li>'; }).join("");
       $("#pfSelCount").textContent = sel.length;
-      // additional investment, updated total, timeline
-      var minSum=0,maxSum=0,wMin=0,wMax=0;
-      sel.forEach(function(m){ minSum+=m.min; maxSum+=m.max; wMin+=m.wMin; wMax+=m.wMax; });
-      $("#pfAdd").textContent = sel.length===0 ? CAD.format(0)
-        : CAD.format(minSum)+"–"+CAD.format(maxSum);
-      $("#pfInvest").textContent = sel.length===0 ? CAD.format(BASE_INVEST)
-        : CAD.format(BASE_INVEST+minSum)+"–"+CAD.format(BASE_INVEST+maxSum);
-      // implementation schedule: base 8–10 wks, enhancements extend Development + Testing
-      var enh = sel.length===0 ? "+0 weeks" : "+"+wMin+"–"+wMax+" weeks";
-      var total = (8+wMin)+"–"+(10+wMax)+" weeks";
-      $("#pfTime").textContent = (8+wMin)+"–"+(10+wMax)+" wks";
-      $("#rmEnh").textContent = enh;
-      $("#rmTotal").textContent = total;
+      // ----- Investment engine (midpoints, single values, animated counters) -----
+      var enhInvest = 0;
+      sel.forEach(function(m){ enhInvest += m.investMid; });
+      animateMoney("pfAdd", enhInvest);                       // Platform Enhancement Investment
+      animateMoney("pfInvest", BASE_INVEST + enhInvest);      // Updated Project Investment (Base + Enhancements)
+      // ----- Timeline engine (base 8–10 + fixed additions → min/max) -----
+      var addWeeks = 0;
+      sel.forEach(function(m){ addWeeks += m.timeAdd; });
+      var tMin = ENGINE.base.weeksMin + addWeeks, tMax = ENGINE.base.weeksMax + addWeeks;
+      $("#pfTime").textContent = fmtWeeks(tMin)+"–"+fmtWeeks(tMax)+" wks";
+      $("#rmEnh").textContent = addWeeks===0 ? "+0 weeks" : "+"+fmtWeeks(addWeeks)+" weeks";
+      $("#rmTotal").textContent = fmtWeeks(tMin)+"–"+fmtWeeks(tMax)+" weeks";
       // list the enhancements adding/removing time from the schedule
       var rmList = $("#rmList");
       if(rmList){
         rmList.innerHTML = sel.length===0
           ? '<li class="rm-empty">No enhancements added yet — the foundation timeline stands at 8–10 weeks.</li>'
-          : sel.map(function(m){ return '<li><span class="rm-li-n">'+m.name+'</span><span class="rm-li-w">+'+wk(m.wMin,m.wMax)+'</span></li>'; }).join("");
+          : sel.map(function(m){ return '<li><span class="rm-li-n">'+m.name+'</span><span class="rm-li-w">+'+fmtWeeks(m.timeAdd)+' weeks</span></li>'; }).join("");
       }
-      // phase growth — visual expansion is dampened; pill numbers are the true split
-      var addMid = (wMin+wMax)/2;
-      var devVis = 3.5 + Math.min(addMid*0.20, 3.6);
-      var testVis = 1.5 + Math.min(addMid*0.11, 2.0);
+      // ----- Roadmap: Development & Testing expand as enhancement weeks accrue -----
+      var devVis = 3.5 + Math.min(addWeeks*0.30, 3.6);
+      var testVis = 1.5 + Math.min(addWeeks*0.16, 2.0);
       var hasEnh = sel.length>0;
-      setPhase("development", devVis, hasEnh, "+"+Math.round(wMin*0.6)+"–"+Math.round(wMax*0.6)+" wks");
-      setPhase("testing", testVis, hasEnh, "+"+Math.round(wMin*0.4)+"–"+Math.round(wMax*0.4)+" wks");
-      // platform profile bars
+      setPhase("development", devVis, hasEnh, "+"+fmtWeeks(addWeeks*0.6)+" wks");
+      setPhase("testing", testVis, hasEnh, "+"+fmtWeeks(addWeeks*0.4)+" wks");
+      // ----- Platform Profile: segmented bars, base + Σ weights, scaled to max -----
       CAPS.forEach(function(c){
         var val = CAP_BASE[c.k]; sel.forEach(function(m){ val += m.cap[c.k]||0; });
         var filled = Math.round(val / capMax[c.k] * SEG);
