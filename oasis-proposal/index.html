@@ -195,13 +195,15 @@ h2.title{font-size:clamp(30px,5vw,52px); letter-spacing:-.01em}
 /* ============ OPENING GATEWAY — "Welcome to Perspective" ============ */
 /* scroll lock while the gateway is up */
 html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; overscroll-behavior:none}
-.gateway{position:fixed; inset:0; z-index:200; overflow-y:auto; overflow-x:hidden; opacity:0;
-  transition:opacity 3.75s ease; -webkit-overflow-scrolling:touch;
+/* Background is solid from the first frame so the proposal is never visible
+   behind it; only the text (.g-step) fades in. */
+.gateway{position:fixed; inset:0; z-index:200; overflow-y:auto; overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
   background:
     radial-gradient(120% 90% at 50% 6%, rgba(79,186,203,.10), transparent 55%),
     radial-gradient(100% 80% at 50% 104%, rgba(201,162,75,.06), transparent 60%),
-    linear-gradient(180deg, #08131A 0%, #060C10 58%, #04080B 100%)}
-.gateway.gw-enter{opacity:1}
+    linear-gradient(180deg, #08131A 0%, #060C10 58%, #04080B 100%),
+    #060C10}
 .gateway.leaving{opacity:0; transition:opacity 1.5s ease; pointer-events:none}
 .gw-scroll{min-height:100svh; display:flex; flex-direction:column; justify-content:center;
   align-items:flex-start; padding:9vh 7vw 8vh; box-sizing:border-box}
