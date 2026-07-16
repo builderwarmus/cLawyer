@@ -519,53 +519,65 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .modsel-heading, .platform-title{font-family:var(--sans); font-size:13px; letter-spacing:.22em;
   text-transform:uppercase; color:var(--gold); margin:0 0 18px}
 .mods{display:flex; flex-direction:column; gap:16px}
-.mod{border:1px solid var(--line-soft); border-radius:16px; background:var(--surface); padding:22px 24px;
+/* material accents — one premium metal per enhancement */
+.m-gold{--acc:#C9A24B; --acc-bright:#E6CA86; --acc-glow:rgba(201,162,75,.5)}
+.m-silver{--acc:#AEB7C2; --acc-bright:#DCE2EA; --acc-glow:rgba(174,183,194,.42)}
+.m-bronze{--acc:#B67338; --acc-bright:#D89A5E; --acc-glow:rgba(182,115,56,.45)}
+.m-copper{--acc:#C56A45; --acc-bright:#E28B63; --acc-glow:rgba(197,106,69,.45)}
+.m-titanium{--acc:#8FA0AE; --acc-bright:#BCC8D2; --acc-glow:rgba(143,160,174,.4)}
+.m-platinum{--acc:#CBD3DB; --acc-bright:#EFF3F7; --acc-glow:rgba(203,211,219,.42)}
+.m-obsidian{--acc:#9488B8; --acc-bright:#BEB4DC; --acc-glow:rgba(148,136,184,.46)}
+.mod{position:relative; border:1px solid var(--line-soft); border-radius:16px; background:var(--surface); padding:24px 24px 22px;
   transition:border-color .3s ease, box-shadow .3s ease, background .3s ease}
-.mod.on{border-color:var(--gold); background:var(--surface-2);
-  box-shadow:0 0 0 1px var(--gold) inset, 0 18px 44px -24px rgba(201,162,75,.45)}
-.mod-head{display:flex; justify-content:space-between; align-items:flex-start; gap:16px}
-.mod-head h4{font-family:var(--serif); font-size:21px; color:var(--text); line-height:1.15}
-.mod-ai{font-family:var(--sans); font-size:8.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--aqua);
-  border:1px solid rgba(79,186,203,.4); padding:3px 8px; border-radius:999px; vertical-align:middle; margin-left:9px; white-space:nowrap}
-.mod-desc{color:var(--muted); font-size:14px; margin-top:8px; max-width:54ch; line-height:1.5}
-.mod-badge{flex:none; display:inline-flex; align-items:center; gap:7px; font-family:var(--sans); font-weight:600;
-  font-size:9.5px; letter-spacing:.15em; text-transform:uppercase; padding:6px 11px; border-radius:999px; border:1px solid; white-space:nowrap}
-.mod-badge::before{content:""; width:7px; height:7px; border-radius:50%}
-.mod-badge.included{color:var(--good); border-color:rgba(95,185,138,.45)} .mod-badge.included::before{background:var(--good)}
-.mod-badge.recommended{color:var(--aqua); border-color:rgba(79,186,203,.45)} .mod-badge.recommended::before{background:var(--aqua)}
-.mod-badge.optional{color:var(--gold-bright); border-color:rgba(201,162,75,.5)} .mod-badge.optional::before{background:var(--gold)}
-.mod-badge.future{color:#bcaee8; border-color:rgba(160,140,205,.5)} .mod-badge.future::before{background:#9d86c9}
+.mod::before{content:""; position:absolute; top:0; left:0; right:0; height:3px; border-radius:16px 16px 0 0;
+  background:linear-gradient(90deg,var(--acc),var(--acc-bright)); opacity:.7; transition:opacity .3s}
+.mod.on{border-color:var(--acc); background:var(--surface-2); box-shadow:0 0 0 1px var(--acc) inset, 0 18px 46px -24px var(--acc-glow)}
+.mod.on::before{opacity:1}
+.mod-head{display:flex; align-items:flex-start; gap:15px}
+.mod-ic{flex:none; width:42px; height:42px; border-radius:11px; display:grid; place-items:center; font-size:19px;
+  color:var(--acc); border:1px solid var(--line); background:rgba(255,255,255,.02); transition:.3s}
+.mod.on .mod-ic{border-color:var(--acc); color:var(--acc-bright)}
+.mod-hd-txt{flex:1; min-width:0}
+.mod-head h4{font-family:var(--serif); font-size:20px; color:var(--acc); line-height:1.16}
+.mod.on .mod-head h4{color:var(--acc-bright)}
+.mod-ai{font-family:var(--sans); font-size:8px; letter-spacing:.16em; text-transform:uppercase; color:var(--acc);
+  border:1px solid var(--line); padding:3px 7px; border-radius:999px; vertical-align:middle; margin-left:8px; white-space:nowrap}
+.mod-desc{color:var(--muted); font-size:13.5px; margin-top:7px; line-height:1.5}
+.mod-badge2{flex:none; align-self:flex-start; display:none; align-items:center; gap:6px; font-family:var(--sans); font-weight:700;
+  font-size:9px; letter-spacing:.1em; text-transform:uppercase; padding:5px 10px; border-radius:999px;
+  color:#12151b; background:linear-gradient(120deg,var(--acc),var(--acc-bright)); white-space:nowrap}
+.mod.on .mod-badge2{display:inline-flex}
 .mod-meta{display:flex; gap:30px; flex-wrap:wrap; margin-top:16px}
-.mod-meta .ml, .mod-inc .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:4px}
-.mod-meta .mv{font-family:var(--serif); color:var(--gold-bright); font-size:16px; font-variant-numeric:tabular-nums}
+.mod-meta .ml, .mod-inc .ml, .mod-str .ml, .mod-purpose .ml, .mod-dtime .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:5px}
+.mod-meta .mv, .mod-dtime .mv{font-family:var(--serif); color:var(--gold-bright); font-size:16px; font-variant-numeric:tabular-nums}
+/* collapsible details */
+.mod-details{display:grid; grid-template-rows:0fr; transition:grid-template-rows .45s cubic-bezier(.4,0,.2,1)}
+.mod.expanded .mod-details{grid-template-rows:1fr}
+.mod-details-inner{overflow:hidden; min-height:0}
+.mod-purpose{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft); font-size:13px; color:var(--muted); line-height:1.5}
 .mod-inc{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
 .mod-inc ul{list-style:none; margin:9px 0 0; padding:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:7px 20px}
 @media (max-width:520px){.mod-inc ul{grid-template-columns:1fr}}
 .mod-inc li{font-size:13px; color:var(--muted); padding-left:16px; position:relative; line-height:1.4}
-.mod-inc li::before{content:"◆"; position:absolute; left:0; top:2px; color:var(--gold); font-size:9px}
-.mod-toggle{margin-top:18px; width:100%; justify-content:center; border:1px solid var(--line); background:transparent;
-  color:var(--text); border-radius:12px; padding:13px 18px; cursor:pointer; font-family:var(--sans); font-size:13.5px;
-  letter-spacing:.04em; display:inline-flex; align-items:center; gap:10px; transition:background .25s, border-color .25s, color .25s}
-.mod-toggle:hover{border-color:var(--gold)}
-.mod-toggle:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
-.mod-toggle .tk{width:18px; height:18px; border-radius:5px; border:1.5px solid var(--faint); flex:none;
-  display:grid; place-items:center; font-size:12px; color:transparent; transition:all .25s}
-.mod.on .mod-toggle{background:linear-gradient(120deg,var(--gold),var(--gold-bright)); color:#231a08; border-color:transparent; font-weight:700}
-.mod.on .mod-toggle .tk{background:#231a08; border-color:#231a08; color:var(--gold-bright)}
-.mod-purpose{margin-top:12px; font-size:13px; color:var(--muted); line-height:1.5; max-width:54ch}
-.mod-purpose .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:4px}
-/* how this enhancement strengthens your business */
-.mod-strength{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
-.mod-strength > .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:13px}
-.str-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px 28px}
-@media (max-width:520px){.str-grid{grid-template-columns:1fr}}
-.str-top{display:flex; align-items:center; justify-content:space-between; gap:10px}
-.str-name{font-size:12.5px; color:var(--text)}
-.stars{display:inline-flex; gap:2px; font-size:12px; line-height:1; white-space:nowrap; flex:none}
-.stars .s{color:var(--line); transition:color .5s ease, text-shadow .5s ease}
-.stars .s.on{color:var(--gold-bright)}
-.mod.on .stars .s.on{text-shadow:0 0 8px rgba(230,202,134,.4)}
-.str-note{font-size:11.5px; color:var(--muted); margin-top:5px; line-height:1.45}
+.mod-inc li::before{content:"◆"; position:absolute; left:0; top:2px; color:var(--acc); font-size:9px}
+.mod-str{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+.mod-str ul{list-style:none; margin:9px 0 0; padding:0; display:flex; flex-direction:column; gap:9px}
+.mod-str li{font-size:13px; color:var(--muted); padding-left:18px; position:relative; line-height:1.45}
+.mod-str li::before{content:""; position:absolute; left:2px; top:7px; width:5px; height:5px; border-radius:50%; background:var(--acc)}
+.mod-dtime{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+/* actions row: expand + select */
+.mod-actions{display:flex; align-items:center; gap:14px; margin-top:18px; flex-wrap:wrap}
+.mod-expand{flex:none; background:none; border:0; color:var(--muted); font-family:var(--sans); font-size:12px; letter-spacing:.06em;
+  text-transform:uppercase; cursor:pointer; display:inline-flex; align-items:center; gap:7px; padding:8px 2px; transition:color .25s}
+.mod-expand:hover{color:var(--acc-bright)}
+.mod-expand .chev{transition:transform .35s ease; font-size:12px; display:inline-block}
+.mod.expanded .mod-expand .chev{transform:rotate(180deg)}
+.mod-toggle{flex:1; min-width:200px; justify-content:center; border:1px solid var(--line); background:transparent;
+  color:var(--text); border-radius:12px; padding:12px 18px; cursor:pointer; font-family:var(--sans); font-size:13.5px;
+  letter-spacing:.04em; display:inline-flex; align-items:center; gap:9px; transition:background .25s, border-color .25s, color .25s}
+.mod-toggle:hover{border-color:var(--acc)}
+.mod-toggle:focus-visible{outline:2px solid var(--acc); outline-offset:2px}
+.mod.on .mod-toggle{background:linear-gradient(120deg,var(--acc),var(--acc-bright)); color:#12151b; border-color:transparent; font-weight:700}
 
 /* sticky platform summary */
 .platform{border:1px solid var(--line); border-radius:18px; padding:26px 24px;
@@ -712,6 +724,14 @@ input[type=range]:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(
 .rm-ph-items li::before{content:""; position:absolute; left:0; top:7px; width:5px; height:5px; border-radius:50%; background:var(--gold); opacity:.8}
 .inline-link{color:var(--gold-bright); border-bottom:1px solid rgba(201,162,75,.4); cursor:pointer; text-decoration:none}
 .inline-link:hover{border-color:var(--gold-bright)}
+/* enhancements affecting the schedule */
+.rm-list-wrap{margin-top:26px; border:1px solid var(--line-soft); border-radius:14px; background:var(--surface); padding:18px 22px}
+.rm-list-h{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--faint); margin-bottom:13px}
+.rm-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px}
+.rm-list li{display:flex; justify-content:space-between; align-items:baseline; gap:12px; font-size:13.5px; color:var(--text); padding-bottom:11px; border-bottom:1px solid var(--line-soft)}
+.rm-list li:last-child{border-bottom:0; padding-bottom:0}
+.rm-list .rm-li-w{font-family:var(--serif); color:var(--gold-bright); font-variant-numeric:tabular-nums; white-space:nowrap; font-size:13px}
+.rm-list .rm-empty{color:var(--faint); font-style:italic; border-bottom:0}
 
 /* ================= WHY / COMPARISON ================= */
 .compare{display:grid; grid-template-columns:1fr 1fr; gap:0; margin-top:44px; border:1px solid var(--line-soft);
@@ -1119,7 +1139,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
   <div class="wrap">
     <div class="eyebrow rise">Your Investment</div>
     <h2 class="title rise">Platform Enhancement Options</h2>
-    <p class="lead rise">See how each enhancement strengthens your business. Select an option to watch your solution, investment, timeline and platform profile update in real time. <em>All figures in CAD, before HST.</em></p>
+    <p class="lead rise">See how each enhancement strengthens your business. Build a solution tailored to Oasis — each option you add updates your investment, implementation schedule and platform profile in real time. <em>All figures in CAD, before HST.</em></p>
     <div class="modsel rise">
       <div class="modsel-left">
         <div class="mods" id="mods"></div>
@@ -1138,12 +1158,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
           <div class="pf-figs">
             <div class="pf-fig"><span class="pf-fl">Estimated Additional Investment</span><span class="pf-fv" id="pfAdd">$0</span></div>
             <div class="pf-fig"><span class="pf-fl">Updated Project Investment</span><span class="pf-fv" id="pfInvest">$43,750</span></div>
-          </div>
-          <div class="pf-group pf-roadmap">
-            <div class="pf-label">Implementation Roadmap</div>
-            <div class="pf-rm-line"><span class="pf-fl">Base Platform</span><span class="pf-p2">8–10 wks</span></div>
-            <div class="pf-rm-line"><span class="pf-fl">Platform Enhancements</span><span class="pf-p2" id="pfEnh">+0 wks</span></div>
-            <div class="pf-rm-line total"><span class="pf-fl">Estimated Total Timeline</span><span class="pf-p2" id="pfTotal">8–10 wks</span></div>
+            <div class="pf-fig"><span class="pf-fl">Estimated Timeline</span><span class="pf-fv" id="pfTime">8–10 wks</span></div>
           </div>
           <div class="pf-group pf-profile">
             <div class="pf-label">Platform Profile</div>
@@ -1309,6 +1324,10 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         <div class="rm-sum-item rm-total"><span class="rm-sl">Estimated Total Timeline</span><span class="rm-sv" id="rmTotal">8–10 weeks</span></div>
       </div>
       <div class="rm-flow" id="rmFlow"></div>
+      <div class="rm-list-wrap">
+        <div class="rm-list-h">Enhancements affecting your schedule</div>
+        <ul class="rm-list" id="rmList"><li class="rm-empty">No enhancements added yet — the foundation timeline stands at 8–10 weeks.</li></ul>
+      </div>
     </div>
   </div>
 </section>
@@ -1679,48 +1698,54 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     var BASE_INVEST = 43750; // Launch Package, before HST
     var SEG = 14;
 
+    // cap{} weights still drive the live Platform Profile; str[] are the display bullets
     var MODULES = [
-      {id:"guest", name:"Guest Convenience Suite",
+      {id:"guest", name:"Guest Convenience Suite", material:"m-silver", icon:"◑",
        desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend.",
        min:1500, max:2500, wMin:1, wMax:2,
        inc:["Favourite Drinks","Favourite Meals","Reorder Last Order","One-Tap Ordering","Digital Receipts"],
-       cap:{rev:4,gx:5,eng:3,ops:2,mkt:1,bi:1},
-       note:{rev:"Encourages repeat purchases.",gx:"Makes ordering faster and more convenient.",eng:"Encourages guests to use the app more frequently.",ops:"Reduces ordering friction."}},
-      {id:"membership", name:"Membership Enhancements", def:true,
+       str:["Encourages repeat purchases","Improves ordering convenience","Reduces ordering friction","Creates a smoother guest experience"],
+       cap:{rev:4,gx:5,eng:3,ops:2,mkt:1,bi:1}},
+      {id:"membership", name:"Membership Enhancements", material:"m-gold", icon:"❖", def:true,
        desc:"Physical, scannable membership cards with full lifecycle management.",
        min:2000, max:3500, wMin:1, wMax:2,
        inc:["Physical Membership Cards","QR / Barcode Integration","Card Activation","Card Replacement","Membership Card Management","Print Ready Card Templates"],
+       str:["Strengthens brand identity","Creates a premium membership experience","Improves guest recognition","Faster member check-in"],
        cap:{rev:3,gx:4,eng:4,ops:3,mkt:5,bi:2}},
-      {id:"live", name:"Live Venue Experience",
+      {id:"live", name:"Live Venue Experience", material:"m-copper", icon:"♪",
        desc:"A living, real-time picture of the venue that pulls guests in tonight.",
        min:2500, max:4000, wMin:2, wMax:3,
-       inc:["Current DJ","Current Song","Song Requests","Live Occupancy","Pool Occupancy","Bar Occupancy","Wait Times","Featured Drinks","Daily Specials","Live Promotions"],
+       inc:["Current DJ","Current Song","Song Requests","Live Venue Occupancy","Pool Occupancy","Bar Occupancy","Featured Drinks","Daily Specials","Live Promotions","Wait Times"],
+       str:["Creates a more interactive venue","Encourages guests to engage with the app","Promotes featured products","Enhances the live experience"],
        cap:{rev:4,gx:5,eng:5,ops:2,mkt:3,bi:2}},
-      {id:"community", name:"Community Suite", def:true,
+      {id:"community", name:"Community Suite", material:"m-bronze", icon:"❋", def:true,
        desc:"The connective tissue that turns members into a returning community.",
        min:2500, max:4000, wMin:2, wMax:4,
        inc:["Community Feed","Friends & Connections","Photo Sharing","Event RSVP","Member Achievements","Exclusive Member Content"],
+       str:["Encourages repeat visits","Builds stronger customer loyalty","Extends engagement beyond the venue","Creates long-term community"],
        cap:{rev:4,gx:5,eng:5,ops:1,mkt:4,bi:2}},
-      {id:"marketing", name:"Marketing Automation Suite", def:true,
+      {id:"marketing", name:"Marketing Automation Suite", material:"m-titanium", icon:"✦", def:true,
        desc:"Always-on campaigns that bring guests back without lifting a finger.",
        min:3000, max:5000, wMin:2, wMax:4,
-       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Rewards","Promotional Campaigns","Review Requests","Sponsor Promotions","Affiliate Promotions"],
+       inc:["Email Campaigns","Push Notifications","Referral Program","Birthday Campaigns","Anniversary Campaigns","Promotional Campaigns","Review Requests","Sponsor Promotions","Affiliate Promotions"],
+       str:["Improves customer retention","Automates communication","Increases campaign effectiveness","Generates repeat business"],
        cap:{rev:5,gx:3,eng:4,ops:3,mkt:5,bi:2}},
-      {id:"bisuite", name:"Business Intelligence Suite",
+      {id:"bisuite", name:"Business Intelligence Suite", material:"m-platinum", icon:"▦",
        desc:"The dashboards and back-office to run the whole operation on data.",
        min:4000, max:7000, wMin:3, wMax:5,
        inc:["Revenue Analytics","Attendance Analytics","Customer Segmentation","Behaviour Analytics","Reporting Dashboard","Waitlist Management","Staff Portal","Executive Reporting"],
+       str:["Better operational visibility","Improved reporting","Better decision-making","Deeper understanding of customer behaviour"],
        cap:{rev:4,gx:2,eng:2,ops:5,mkt:3,bi:5}},
-      {id:"biassist", name:"Business Intelligence Assistant", ai:true,
-       desc:"Analyzes your operational data and surfaces intelligent recommendations for management.",
-       purpose:"Analyze business performance and provide intelligent recommendations to management.",
+      {id:"biassist", name:"Strategic Intelligence Advisor", material:"m-obsidian", icon:"◎", ai:true,
+       desc:"An always-on strategic advisor that turns your operational data into executive decisions.",
+       purpose:"Continuously analyzes operational data and provides strategic recommendations to management.",
        min:7500, max:12000, wMin:4, wMax:6,
-       inc:["Revenue Analysis","Attendance Trends","Theme Night Recommendations","Promotion Suggestions","Executive Reports","Operational Insights","Product Performance Analysis","Trend Identification"],
+       inc:["Revenue Analysis","Attendance Trends","Product Performance","Promotion Performance","Theme Night Recommendations","Marketing Suggestions","Executive Reports","Operational Insights","Business Trend Analysis"],
+       str:["Identifies new revenue opportunities","Recommends marketing initiatives","Detects operational trends","Provides executive-level insights","Supports strategic decision making"],
        cap:{rev:5,gx:1,eng:1,ops:5,mkt:4,bi:5}}
     ];
 
     function wk(a,b){ return a===b ? (a+" week"+(a>1?"s":"")) : (a+"–"+b+" weeks"); }
-    function starHtml(n){ var h=""; for(var i=1;i<=5;i++){ h+='<span class="s'+(i<=n?" on":"")+'">★</span>'; } return '<span class="stars" role="img" aria-label="'+n+' out of 5">'+h+'</span>'; }
 
     // per-capability maximum (base + every module) so a full bar = everything selected
     var capMax = {};
@@ -1743,24 +1768,37 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     MODULES.forEach(function(mod){
       var card = document.createElement("div"); card.className="mod"; card.setAttribute("data-id",mod.id);
       var incLis = mod.inc.map(function(x){ return "<li>"+x+"</li>"; }).join("");
-      var strRows = CAPS.map(function(c){
-        var n = mod.cap[c.k]||0;
-        var note = (mod.note && mod.note[c.k]) ? '<div class="str-note">'+mod.note[c.k]+'</div>' : "";
-        return '<div class="str"><div class="str-top"><span class="str-name">'+c.label+'</span>'+starHtml(n)+'</div>'+note+'</div>';
-      }).join("");
+      var strLis = mod.str.map(function(x){ return "<li>"+x+"</li>"; }).join("");
       var ai = mod.ai ? ' <span class="mod-ai">Powered by AI</span>' : "";
-      var purpose = mod.purpose ? '<p class="mod-purpose"><span class="ml">Purpose</span>'+mod.purpose+'</p>' : "";
+      var purpose = mod.purpose ? '<div class="mod-purpose"><span class="ml">Purpose</span>'+mod.purpose+'</div>' : "";
+      card.className = "mod "+mod.material;
       card.innerHTML =
-        '<div class="mod-head"><div><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p>'+purpose+'</div></div>'+
-        '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
-        '<div class="mod-strength"><span class="ml">How this enhancement strengthens your business</span><div class="str-grid">'+strRows+'</div></div>'+
+        '<div class="mod-head">'+
+          '<span class="mod-ic" aria-hidden="true">'+mod.icon+'</span>'+
+          '<div class="mod-hd-txt"><h4>'+mod.name+ai+'</h4><p class="mod-desc">'+mod.desc+'</p></div>'+
+          '<span class="mod-badge2">✓ Added</span>'+
+        '</div>'+
         '<div class="mod-meta">'+
           '<div><span class="ml">Estimated investment</span><span class="mv">'+CAD.format(mod.min)+"–"+CAD.format(mod.max)+'</span></div>'+
-          '<div><span class="ml">Estimated timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
         '</div>'+
-        '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tl">✨ Enhance My Platform</span></button>';
+        '<div class="mod-details"><div class="mod-details-inner">'+
+          purpose+
+          '<div class="mod-inc"><span class="ml">What’s included</span><ul>'+incLis+'</ul></div>'+
+          '<div class="mod-str"><span class="ml">How this enhancement strengthens your business</span><ul>'+strLis+'</ul></div>'+
+          '<div class="mod-dtime"><span class="ml">Estimated timeline</span><span class="mv">'+wk(mod.wMin,mod.wMax)+'</span></div>'+
+        '</div></div>'+
+        '<div class="mod-actions">'+
+          '<button class="mod-expand" type="button" aria-expanded="false">View details <span class="chev">↓</span></button>'+
+          '<button class="mod-toggle" type="button" aria-pressed="false"><span class="tl">✨ Enhance My Platform</span></button>'+
+        '</div>';
       var btn = card.querySelector(".mod-toggle");
       btn.setAttribute("aria-label","Add "+mod.name+" enhancement");
+      var exp = card.querySelector(".mod-expand");
+      exp.addEventListener("click", function(){
+        var open = card.classList.toggle("expanded");
+        exp.setAttribute("aria-expanded", open?"true":"false");
+        exp.firstChild.textContent = open ? "Collapse " : "View details ";
+      });
       if(mod.def){
         selected[mod.id]=true; card.classList.add("on");
         btn.setAttribute("aria-pressed","true");
@@ -1828,13 +1866,19 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         : CAD.format(minSum)+"–"+CAD.format(maxSum);
       $("#pfInvest").textContent = sel.length===0 ? CAD.format(BASE_INVEST)
         : CAD.format(BASE_INVEST+minSum)+"–"+CAD.format(BASE_INVEST+maxSum);
-      // implementation roadmap: base 8–10 wks, enhancements extend Development + Testing
+      // implementation schedule: base 8–10 wks, enhancements extend Development + Testing
       var enh = sel.length===0 ? "+0 weeks" : "+"+wMin+"–"+wMax+" weeks";
       var total = (8+wMin)+"–"+(10+wMax)+" weeks";
-      $("#pfEnh").textContent = sel.length===0 ? "+0 wks" : "+"+wMin+"–"+wMax+" wks";
-      $("#pfTotal").textContent = (8+wMin)+"–"+(10+wMax)+" wks";
+      $("#pfTime").textContent = (8+wMin)+"–"+(10+wMax)+" wks";
       $("#rmEnh").textContent = enh;
       $("#rmTotal").textContent = total;
+      // list the enhancements adding/removing time from the schedule
+      var rmList = $("#rmList");
+      if(rmList){
+        rmList.innerHTML = sel.length===0
+          ? '<li class="rm-empty">No enhancements added yet — the foundation timeline stands at 8–10 weeks.</li>'
+          : sel.map(function(m){ return '<li><span class="rm-li-n">'+m.name+'</span><span class="rm-li-w">+'+wk(m.wMin,m.wMax)+'</span></li>'; }).join("");
+      }
       // phase growth — visual expansion is dampened; pill numbers are the true split
       var addMid = (wMin+wMax)/2;
       var devVis = 3.5 + Math.min(addMid*0.20, 3.6);
