@@ -614,9 +614,11 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .mod-bf .ml{display:block; font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint); margin-bottom:9px}
 .mod-bf ul{list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:8px}
 .mod-bf li{font-size:12px; color:var(--muted); border:1px solid var(--line-soft); border-radius:999px; padding:5px 12px}
-.mod-pairs{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft); display:flex; align-items:center; justify-content:space-between; gap:12px}
+.mod-pairs{margin-top:16px; padding-top:15px; border-top:1px solid var(--line-soft)}
+.mod-pairs-row{display:flex; align-items:center; justify-content:space-between; gap:12px}
 .mod-pairs .ml{font-size:9.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--faint)}
 .mod-pairs .pairs-name{font-family:var(--serif); color:var(--acc); font-size:14px; text-align:right}
+.pairs-reason{font-size:12px; color:var(--muted); line-height:1.5; margin:9px 0 0}
 /* panel — platform focus */
 .pf-focus{margin-top:8px}
 @keyframes softIn{from{opacity:.35} to{opacity:1}}
@@ -635,8 +637,33 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 /* panel — solution summary */
 .pf-summary{margin-top:16px; margin-bottom:0}
 .pf-sum-text{font-size:13.5px; color:var(--text); line-height:1.6; font-style:italic}
+/* panel — investment caption + print action */
+.pf-invnote{grid-column:1/-1; font-size:11px; color:var(--faint); line-height:1.45; margin-top:-3px}
+.pf-print{margin-top:16px; width:100%; background:none; border:1px solid var(--line); color:var(--muted); border-radius:10px;
+  padding:11px 14px; cursor:pointer; font-family:var(--sans); font-size:12px; letter-spacing:.04em; transition:border-color .25s, color .25s}
+.pf-print:hover{border-color:var(--gold); color:var(--gold-bright)}
+.pf-print:focus-visible{outline:2px solid var(--gold); outline-offset:2px}
 /* enhancement section footer */
 .enh-footer{margin:36px auto 0; max-width:70ch; text-align:center; font-size:14px; color:var(--muted); line-height:1.65}
+/* one-page executive summary — screen-hidden, print only */
+#printSummary{display:none}
+@media print{
+  html, body{background:#fff !important}
+  body > *:not(#printSummary){display:none !important}
+  #printSummary{display:block !important; color:#20262b; font-family:var(--sans); padding:6px 4px}
+  #printSummary .ps-head{border-bottom:2px solid #c9a24b; padding-bottom:14px; margin-bottom:24px}
+  #printSummary .ps-brand{font-family:var(--serif); font-size:27px; color:#0e1a1f}
+  #printSummary .ps-meta{font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:#6a7176; margin-top:7px}
+  #printSummary .ps-grid{display:grid; grid-template-columns:1fr 1fr; gap:22px 30px}
+  #printSummary .ps-wide{grid-column:1 / -1}
+  #printSummary .ps-k{font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:#907a3c; margin-bottom:8px}
+  #printSummary .ps-v{font-family:var(--serif); font-size:21px; color:#0e1a1f}
+  #printSummary .ps-list{list-style:none; margin:0; padding:0}
+  #printSummary .ps-list li{font-size:13.5px; color:#22282d; padding:7px 0; border-bottom:1px solid #ececec; display:flex; justify-content:space-between; gap:18px}
+  #printSummary .ps-focus{font-size:15px; color:#22282d}
+  #printSummary .ps-sum{font-size:13.5px; line-height:1.65; color:#22282d; font-style:italic; margin:0}
+  #printSummary .ps-foot{margin-top:28px; padding-top:14px; border-top:1px solid #ddd; font-size:10.5px; color:#6a7176; line-height:1.55}
+}
 @media (prefers-reduced-motion: reduce){ .focus-chip{transition:none} }
 
 /* sticky platform summary */
@@ -1228,6 +1255,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
           <div class="pf-figs">
             <div class="pf-fig"><span class="pf-fl">Estimated Additional Investment</span><span class="pf-fv" id="pfAdd">$0</span></div>
             <div class="pf-fig"><span class="pf-fl">Updated Project Investment</span><span class="pf-fv" id="pfInvest">$43,750</span></div>
+            <div class="pf-invnote">All investment figures shown are estimated midpoints and are before HST.</div>
             <div class="pf-fig"><span class="pf-fl">Estimated Timeline</span><span class="pf-fv" id="pfTime">8–10 wks</span></div>
           </div>
           <div class="pf-group pf-profile">
@@ -1239,8 +1267,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
             <div class="focus-chips" id="pfFocus"></div>
           </div>
           <div class="pf-rec" id="pfRec" hidden>
-            <div class="pf-rec-h">Recommended Next Enhancement</div>
-            <p class="pf-rec-because">Because you selected <b id="pfRecTrigger"></b>, we recommend <b id="pfRecName" class="pf-rec-name"></b>.</p>
+            <div class="pf-rec-h" id="pfRecH">Recommended Next Enhancement</div>
+            <p class="pf-rec-because" id="pfRecBecause">Because you selected <b id="pfRecTrigger"></b>, we recommend <b id="pfRecName" class="pf-rec-name"></b>.</p>
             <p class="pf-rec-reason" id="pfRecReason"></p>
           </div>
           <div class="pf-group pf-summary">
@@ -1248,6 +1276,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
             <p class="pf-sum-text" id="pfSummary">Your platform currently reflects the Launch Package foundation — add enhancements to shape where it focuses.</p>
           </div>
           <div class="pf-note">Launch Package (from $43,750, before HST) is the base platform. Enhancement ranges are estimates confirmed on detailed spec. Care &amp; Hosting from $250/mo → ~$500/mo once the app is live.</div>
+          <button type="button" class="pf-print" id="pfPrint" aria-label="Print or save a one-page summary of your solution">⎙ Print / save a one-page summary</button>
         </div>
       </aside>
     </div>
@@ -1491,8 +1520,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       </div>
       <div class="sign">
         <div class="frow">
-          <div class="field"><label for="sig-name">Authorized for Oasis Aqualounge</label><input id="sig-name" type="text" placeholder="Full name" autocomplete="name"></div>
-          <div class="field"><label for="sig-date">Date</label><input id="sig-date" type="text" placeholder="July 17, 2026"></div>
+          <div class="field"><label for="sig-name">Authorized for Oasis Aqualounge</label><input id="sig-name" type="text" placeholder="Full name" autocomplete="name" data-clarity-mask="true"></div>
+          <div class="field"><label for="sig-date">Date</label><input id="sig-date" type="text" placeholder="July 17, 2026" data-clarity-mask="true"></div>
         </div>
         <div class="accept-actions">
           <button class="btn primary" id="signBtn">Accept &amp; request statement of work</button>
@@ -1511,6 +1540,25 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
 </footer>
 
 </main>
+
+<!-- one-page executive summary (print / PDF only) -->
+<div id="printSummary" aria-hidden="true">
+  <div class="ps-head">
+    <div class="ps-brand">Oasis Aqualounge</div>
+    <div class="ps-meta">Platform Solution Summary · Prepared by CraftWeb Studios · July 17, 2026</div>
+  </div>
+  <div class="ps-grid">
+    <div class="ps-block ps-wide">
+      <div class="ps-k">Selected Platform Enhancements</div>
+      <ul class="ps-list" id="psEnh"><li>None selected</li></ul>
+    </div>
+    <div class="ps-block"><div class="ps-k">Updated Project Investment</div><div class="ps-v" id="psInvest">$43,750</div></div>
+    <div class="ps-block"><div class="ps-k">Estimated Timeline</div><div class="ps-v" id="psTime">8–10 weeks</div></div>
+    <div class="ps-block ps-wide"><div class="ps-k">Platform Focus</div><div class="ps-v ps-focus" id="psFocus">—</div></div>
+    <div class="ps-block ps-wide"><div class="ps-k">Solution Summary</div><p class="ps-sum" id="psSummary">—</p></div>
+  </div>
+  <div class="ps-foot">All investment figures shown are estimated midpoints and are before HST. Final scope and figures are confirmed during Discovery.</div>
+</div>
 
 <!-- modal -->
 <div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="flyer-h">
@@ -1680,7 +1728,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
     {n:2,  title:"First Visit",         syn:"Turn curiosity into connection.",     detail:"The arrival experience does the selling: a fast, discreet 19+ check-in, a wallet door-card, and a warm welcome. A great first visit is the strongest predictor of whether a guest becomes a returning member."},
     {n:3,  title:"Membership",          syn:"Join the Oasis community.",           detail:"Age-verified accounts unlock everything else — the digital door card, the directory, connections and perks. Membership turns an anonymous guest into a named, reachable relationship you own and can bring back."},
     {n:4,  title:"Bar Orders",          syn:"Skip the line. Order ahead.",         detail:"In-app and poolside ordering from either bar, routed straight to staff. Shorter lines, fewer missed rounds, a higher average tab — the single biggest spend-per-visit lever in the whole app."},
-    {n:5,  title:"Reservations",        syn:"Reserve your perfect experience.",    detail:"Hourly private-room booking from 1 PM to 2 AM, taken in-app. Guests lock in exactly the experience they want in advance, and you fill rooms that used to sit empty — predictable, pre-paid and high-margin."},
+    {n:5,  title:"Reservations",        syn:"Reserve your perfect experience.",    detail:"Take private room reservations out of your staff's hands by fully automating the booking process. Guests secure their experience in advance while the platform works behind the scenes to capture every booking opportunity, reduce administrative workload, keep reservations organized, and provide valuable insights into room utilization, booking trends, and guest booking patterns."},
     {n:6,  title:"Private Hire",        syn:"Celebrate life's biggest moments.",   detail:"Off-hours venue rental — private shows, content and film shoots, corporate events, bachelor & bachelorette parties. One or two bookings a month is a meaningful new revenue line from space you already have."},
     {n:7,  title:"Community",           syn:"Connect beyond the venue.",           detail:"The “231 Mutual Connections” forum, double-opt-in QR connections, moderated chat and the perks network keep members engaged between visits. Community turns attendance into belonging — and belonging into retention."},
     {n:8,  title:"Merch",               syn:"Take Oasis home with you.",           detail:"Branded merchandise and member-priced add-ons: a new high-margin line and a walking advertisement for the brand. Every piece sold is both revenue and reach."},
@@ -1836,7 +1884,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       biassist:["Executive teams","Revenue optimization","Long-term strategic planning"]
     };
     // one recommended pairing per enhancement (Live has none per spec)
-    var PAIRS_WITH = { guest:"membership", membership:"community", community:"marketing", marketing:"bisuite", bisuite:"biassist", biassist:"bisuite" };
+    var PAIRS_WITH = { guest:"membership", membership:"community", live:"community", community:"marketing", marketing:"bisuite", bisuite:"biassist", biassist:"bisuite" };
+    var PAIRS_REASON = { live:"Community conversations naturally extend the live venue experience beyond each visit, encouraging members to stay engaged even after they leave." };
     var CRAFTWEB_PICK = "community";
     var CRAFTWEB_REASON = "Community engagement provides one of the strongest long-term returns for hospitality businesses — encouraging repeat visits, stronger customer relationships, and increased member participation.";
     // Phase 4 — one-sentence value propositions + consultant "Why add this?" copy
@@ -1850,27 +1899,58 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       biassist:"Turn your operational data into decisions — continuously."
     };
     var WHY_ADD = {
-      guest:"Regulars spend more when ordering gets out of their way. Saved favourites and one-tap reordering remove the small frictions that slow a busy night, while digital receipts keep the experience clean. It's a modest investment that compounds across every visit.",
-      membership:"A physical card turns a membership into something members feel part of. It speeds up the door, reinforces the brand each time it's used, and gives staff a fast, reliable way to recognise members. The lifecycle tools keep the program manageable as it grows.",
-      live:"Guests engage more when the venue feels alive inside the app. Showing what's happening now — the DJ, occupancy, wait times and specials — draws people toward quieter areas and promotes what you want to move. It turns the app into something guests open during their visit, not just before it.",
-      community:"Membership becomes far more valuable when members have reasons to return between visits. A feed, connections and events keep the community active off-site, which is where long-term loyalty is actually built. For a hospitality brand, this is one of the strongest levers for repeat visitation.",
-      marketing:"Retention is won in the quiet weeks, not the busy ones. Automated birthday, referral and win-back campaigns keep guests engaged without adding to anyone's workload. Once configured, the system pays for itself through visits that would otherwise not have happened.",
-      bisuite:"You can't improve what you can't see clearly. Consolidated analytics give management one reliable view of revenue, attendance and behaviour, replacing guesswork with evidence. The staff portal and waitlist tools turn that insight into smoother day-to-day operations.",
-      biassist:"Reporting tells you what happened; this tells you what to do about it. The advisor reviews your operational data continuously and surfaces specific, prioritised recommendations for management. It delivers the most value once the Business Intelligence Suite is feeding it complete data."
+      guest:"Regulars spend more when ordering gets out of their way. Saved favourites and one-tap reordering remove the small frictions that slow a busy night, while digital receipts keep the experience clean. It's a modest investment that continues to deliver value with every visit.",
+      membership:"A physical card turns a membership into something members feel part of. It speeds up entry, reinforces your brand each time it's used, and gives staff a fast, reliable way to recognize members. The lifecycle tools keep the program manageable as it grows.",
+      live:"Guests engage more when the venue feels alive inside the app. Showing the current DJ, occupancy, wait times, and specials encourages guests to explore different areas while highlighting the experiences you want to promote. It turns the app into something guests use throughout their visit, not just before they arrive.",
+      community:"Communities create reasons to return that go beyond entertainment alone. Shared experiences, conversations, achievements, and exclusive member content help build the long-term relationships that drive repeat visitation.",
+      marketing:"Retention is won in the quiet weeks, not the busy ones. Automated birthday, referral, and win-back campaigns keep guests engaged without adding to your staff's workload. Once configured, the platform continues working in the background, generating visits that might otherwise never happen.",
+      bisuite:"You can't improve what you can't see clearly. Consolidated analytics provide management with a single, reliable view of revenue, attendance, and guest behaviour, replacing assumptions with evidence. Staff tools and operational dashboards help turn those insights into better day-to-day decisions.",
+      biassist:"Reporting tells you what happened; the Strategic Intelligence Advisor helps you decide what to do next. It continuously reviews operational data and surfaces clear, prioritized recommendations for management. Its greatest value comes when paired with the Business Intelligence Suite, where it can analyze the fullest picture of your business."
     };
     // merge Phase 3/4 data onto each enhancement so every record carries its own positioning
     MODULES.forEach(function(m){
-      m.bestFor = BEST_FOR[m.id]||[]; m.pairsWith = PAIRS_WITH[m.id]||null; m.craftweb = (m.id===CRAFTWEB_PICK);
+      m.bestFor = BEST_FOR[m.id]||[]; m.pairsWith = PAIRS_WITH[m.id]||null; m.pairsReason = PAIRS_REASON[m.id]||""; m.craftweb = (m.id===CRAFTWEB_PICK);
       m.value = VALUE_PROP[m.id]||m.desc; m.why = WHY_ADD[m.id]||"";
     });
     function nameOf(id){ for(var i=0;i<MODULES.length;i++){ if(MODULES[i].id===id) return MODULES[i].name; } return ""; }
+    function byId(id){ for(var i=0;i<MODULES.length;i++){ if(MODULES[i].id===id) return MODULES[i]; } return null; }
+
+    // ---- shareable configuration via ?build=community,marketing ----
+    function applyBuildParam(){
+      try{
+        var q = new URLSearchParams(window.location.search);
+        if(q.has("build")){
+          var ids = (q.get("build")||"").split(",").map(function(s){ return s.trim(); }).filter(Boolean);
+          MODULES.forEach(function(m){ m.sel = ids.indexOf(m.id) !== -1; });
+        }
+      }catch(e){}
+    }
+    function updateBuildUrl(){
+      try{
+        var ids = MODULES.filter(function(m){ return m.sel; }).map(function(m){ return m.id; });
+        var url = new URL(window.location.href);
+        if(ids.length) url.searchParams.set("build", ids.join(",")); else url.searchParams.delete("build");
+        window.history.replaceState(null, "", url.toString());
+      }catch(e){}
+    }
+    // ---- analytics on enhancement select / deselect ----
+    function trackEnhancement(mod, on){
+      var build = MODULES.filter(function(m){ return m.sel; }).map(function(m){ return m.id; }).join(",") || "none";
+      var payload = { module: mod.name, module_id: mod.id, action: on?"selected":"deselected", build: build, ts: new Date().toISOString() };
+      try{ if(window.clarity){ window.clarity("event", "enhancement_"+(on?"selected":"deselected")); window.clarity("set", "last_enhancement", mod.name); window.clarity("set", "build", build); } }catch(e){}
+      try{ window.dataLayer = window.dataLayer || []; window.dataLayer.push({ event:"enhancement_toggle", module:payload.module, action:payload.action, build:payload.build, ts:payload.ts }); }catch(e){}
+      try{ if(typeof window.gtag === "function") window.gtag("event", "enhancement_toggle", payload); }catch(e){}
+      try{ document.dispatchEvent(new CustomEvent("oasis:enhancement", { detail: payload })); }catch(e){}
+    }
+    applyBuildParam();
 
     // recommendation rules — evaluated in priority order; first whose target is unselected wins
     var RECS = [
       { on:"community",  rec:"marketing", reason:"Community engagement is most effective when paired with automated communication that encourages repeat visits and ongoing participation." },
       { on:"bisuite",    rec:"biassist",  reason:"The Strategic Intelligence Advisor turns reporting into action, letting management move from understanding data to acting on it." },
       { on:"membership", rec:"community", reason:"Membership becomes significantly more valuable when members have meaningful reasons to return and interact." },
-      { on:"marketing",  rec:"bisuite",   reason:"Understanding campaign performance allows future marketing decisions to become increasingly effective." }
+      { on:"marketing",  rec:"bisuite",   reason:"Understanding campaign performance allows future marketing decisions to become increasingly effective." },
+      { on:"guest",      rec:"membership", reason:"Membership Enhancements complement Guest Convenience by strengthening customer loyalty and creating a more personalized experience for returning guests." }
     ];
     // consultant phrasing per capability for the dynamic Solution Summary
     var CAPMETA = {
@@ -1898,11 +1978,15 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       if(ratio >= 1.18) return "Our current solution is focused on "+a.lead+" and "+b.lead+".";
       return "Our current solution balances "+a.lead+" with "+b.lead+", creating a platform designed to improve both "+a.benefit+" and "+b.benefit+".";
     }
+    var COMPLETE_MSG = "This configuration provides a comprehensive digital platform that balances guest experience, operational efficiency, marketing, and business intelligence. During Discovery, we'll work together to fine-tune the solution to your specific goals.";
     function nextRecommendation(){
       for(var i=0;i<RECS.length;i++){
-        var r = RECS[i], on = MODULES.filter(function(m){return m.id===r.on;})[0], rec = MODULES.filter(function(m){return m.id===r.rec;})[0];
+        var r = RECS[i], on = byId(r.on), rec = byId(r.rec);
         if(on && on.sel && rec && !rec.sel) return {trigger:on.name, name:rec.name, reason:r.reason};
       }
+      // nothing left to pair — if the platform is substantially built, mark it complete
+      var selCount = MODULES.filter(function(m){ return m.sel; }).length;
+      if(selCount >= 5) return {complete:true};
       return null;
     }
 
@@ -1957,7 +2041,7 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       var purpose = mod.purpose ? '<div class="mod-purpose"><span class="ml">Purpose</span>'+mod.purpose+'</div>' : "";
       var cwBadge = mod.craftweb ? '<span class="mod-cw">✦ CraftWeb Recommendation</span>' : "";
       var cwReason = mod.craftweb ? '<div class="mod-cwr"><span class="ml">Why CraftWeb recommends this</span>'+CRAFTWEB_REASON+'</div>' : "";
-      var pairs = mod.pairsWith ? '<div class="mod-pairs"><span class="ml">Pairs well with</span><span class="pairs-name">'+nameOf(mod.pairsWith)+'</span></div>' : "";
+      var pairs = mod.pairsWith ? '<div class="mod-pairs"><div class="mod-pairs-row"><span class="ml">Pairs well with</span><span class="pairs-name">'+nameOf(mod.pairsWith)+'</span></div>'+(mod.pairsReason ? '<p class="pairs-reason">'+mod.pairsReason+'</p>' : "")+'</div>' : "";
       card.className = "mod "+mod.material + (mod.craftweb?" is-cw":"");
       card.innerHTML =
         '<div class="mod-head">'+
@@ -2002,6 +2086,8 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
         btn.setAttribute("aria-label", (on?"Remove ":"Add ")+mod.name+" enhancement");
         card.querySelector(".tl").textContent = on ? "✓ Added to My Platform" : "✨ Enhance My Platform";
         render();
+        updateBuildUrl();
+        trackEnhancement(mod, on);
       });
       modsEl.appendChild(card);
     });
@@ -2097,18 +2183,41 @@ footer .fmeta{font-size:12px; letter-spacing:.16em; text-transform:uppercase; ma
       }
       // ----- Phase 3: Solution Summary (consultant-style, selection-driven) -----
       var sumEl = $("#pfSummary"); if(sumEl) softText(sumEl, solutionSummary(sel));
-      // ----- Phase 3: Recommended Next Enhancement (one, never already-selected) -----
+      // ----- Phase 3/4: Recommended Next Enhancement, or completion state -----
       var rec = nextRecommendation(), recEl = $("#pfRec");
       if(recEl){
-        if(rec){
+        if(rec && rec.complete){
+          $("#pfRecH").textContent = "Your platform is complete";
+          $("#pfRecBecause").hidden = true;
+          $("#pfRecReason").textContent = COMPLETE_MSG;
+          recEl.hidden = false;
+        } else if(rec){
+          $("#pfRecH").textContent = "Recommended Next Enhancement";
+          $("#pfRecBecause").hidden = false;
           $("#pfRecTrigger").textContent = rec.trigger;
           $("#pfRecName").textContent = rec.name;
           $("#pfRecReason").textContent = rec.reason;
           recEl.hidden = false;
         } else { recEl.hidden = true; }
       }
+      // ----- Phase 4: keep the one-page print summary in sync -----
+      updatePrintSummary(sel);
+    }
+    // build the printable executive summary from final (non-animated) values
+    function updatePrintSummary(sel){
+      var psEnh = $("#psEnh"); if(!psEnh) return;
+      var enhInvest=0, addWeeks=0;
+      sel.forEach(function(m){ enhInvest+=m.investMid; addWeeks+=m.timeAdd; });
+      psEnh.innerHTML = sel.length===0 ? '<li><span>None selected</span><span></span></li>'
+        : sel.map(function(m){ return '<li><span>'+m.name+'</span><span>'+CAD.format(m.investMid)+'</span></li>'; }).join("");
+      var pv=$("#psInvest"); if(pv) pv.textContent = CAD.format(BASE_INVEST + enhInvest);
+      var pt=$("#psTime"); if(pt) pt.textContent = fmtWeeks(ENGINE.base.weeksMin+addWeeks)+"–"+fmtWeeks(ENGINE.base.weeksMax+addWeeks)+" weeks";
+      var totals = CAPS.map(function(c){ var v=CAP_BASE[c.k]; sel.forEach(function(m){ v+=m.cap[c.k]||0; }); return {k:c.k,v:v}; }).sort(function(a,b){ return b.v-a.v; });
+      var pf=$("#psFocus"); if(pf) pf.textContent = totals.slice(0,3).map(function(t){ return capLabel(t.k); }).join("  ·  ");
+      var ps=$("#psSummary"); if(ps) ps.textContent = solutionSummary(sel);
     }
     render();
+    var pfPrint = $("#pfPrint"); if(pfPrint) pfPrint.addEventListener("click", function(){ window.print(); });
   })();
 
   /* ---------- ROI calculator ---------- */
