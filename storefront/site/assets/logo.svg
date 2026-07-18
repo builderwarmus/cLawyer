@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 580 150" role="img" aria-label="Wally marts — handmade arts and crafts">
+  <defs>
+    <linearGradient id="wm-pal2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6a862"/>
+      <stop offset="1" stop-color="#e8843f"/>
+    </linearGradient>
+    <mask id="wm-hole2">
+      <rect x="0" y="0" width="120" height="120" fill="#ffffff"/>
+      <circle cx="43" cy="80" r="10.5" fill="#000000"/>
+    </mask>
+  </defs>
+
+  <!-- emblem -->
+  <g transform="translate(10,24) scale(0.86)">
+    <ellipse cx="60" cy="58" rx="46" ry="40" fill="url(#wm-pal2)" mask="url(#wm-hole2)"/>
+    <circle cx="47" cy="37" r="7.5" fill="#5aa89b"/>
+    <circle cx="67" cy="31" r="7.5" fill="#4fa3c7"/>
+    <circle cx="86" cy="41" r="7.5" fill="#e8739a"/>
+    <circle cx="93" cy="62" r="6.5" fill="#f4c34e"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="150" y="82" font-family="'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif" font-size="62" font-weight="700" letter-spacing="-1.5">
+    <tspan fill="#f6f0e7">Wally</tspan><tspan fill="#e8843f"> marts</tspan>
+  </text>
+  <text x="152" y="116" font-family="'Segoe UI', 'Helvetica Neue', Arial, system-ui, sans-serif" font-size="18" font-weight="600" letter-spacing="3.5" fill="#b0a598">HANDMADE ARTS &amp; CRAFTS</text>
+</svg>

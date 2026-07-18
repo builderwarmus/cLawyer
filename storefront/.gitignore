@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Secrets — never commit your real Stripe keys
+.env
+.env.local
+.env*.local
+
+# Logs & OS files
+*.log
+.DS_Store
