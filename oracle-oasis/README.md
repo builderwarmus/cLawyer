@@ -96,6 +96,18 @@ Delivered:
   Guest is calm and cool, Staff more energetic, Management deeper and warmer, the
   Build sequence briefly livelier. Nothing snaps — everything eases, and it's
   reduced-motion aware.
+- **Finalize → Discovery Experience** — the journey's endpoint. **Revise** loops
+  back to the selector (keep refining, selections preserved); **Finalize** commits
+  the design and opens the **Discovery Experience** module: Platform Summary →
+  **Discovery Scheduling** (a live month calendar with the **first 7 days blocked**
+  — finalize today → earliest session is a week out) → Confirmation (date + slot,
+  pointing to Implementation Preparation). Reachable from Platform Complete and the
+  shell's now-live Finalize/Revise modes.
+
+**The full client journey now runs end to end**, all in one continuous world:
+Proposal → Build My Platform → Generate → Complete → Experience (age-gated,
+four perspectives) → Revise ⟲ / Finalize → Discovery (Summary → Schedule →
+Confirm) → Implementation Preparation — with the Concierge guiding throughout.
 
 ### Not yet built (later increments, in Directive priority order)
 

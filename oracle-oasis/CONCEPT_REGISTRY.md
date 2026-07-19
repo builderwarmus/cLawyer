@@ -51,12 +51,26 @@ The shell's inert mode rail is the placeholder for this.
 
 ---
 
-## CR-004 · Discovery Experience as its own module 🔍
-**Context (settled decision):** Discovery Experience is an Experience Module
-(not a popup): Platform Summary + Discovery Scheduling + Confirmation.
-**Scheduling rule:** live calendar with the first 7 days blocked (finalize on the
-1st → earliest appointment the 8th).
-**Placement:** registers like any other module; entered after Finalize.
+## CR-003b · Revise vs Finalize ✅ (delivered)
+Implemented as a real navigational fork: **Revise** → the selector (keep refining,
+selections preserved); **Finalize** → the Discovery module (commit to
+implementation prep). Both surfaced on Platform Complete and the shell mode rail.
+
+## CR-004 · Discovery Experience as its own module ✅ (delivered)
+Built as an Experience Module (not a popup): Platform Summary → Discovery
+Scheduling → Confirmation, as a 3-step stepper. **Scheduling rule** implemented:
+a live month calendar with the first 7 days blocked (earliest = today + 7), month
+navigation that can't go before the current month, time slots, and a confirmation
+that points to Implementation Preparation.
+**Bug caught & fixed here (worth remembering):** a module's delegated click
+handler must NOT use `closest("[data-experience]")` for its own buttons — the
+runtime tags every experience section with `data-experience="<id>"`, so that
+selector matches the section on *every* click. Use a distinct attribute
+(`data-go-exp`). Watch for the same trap with any future `data-*` that overlaps a
+runtime-owned attribute.
+**Still open:** Implementation Preparation is currently a reference on the
+confirmation screen, not its own module — promote it if the flow needs real
+requirements/content/access intake.
 
 ---
 

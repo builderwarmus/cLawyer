@@ -10,42 +10,69 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 page.on('console', m => { if (m.type() === 'error') errors.push('console.error: ' + m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 
-const env = () => page.evaluate(() => ({ tgt: { ...window.__ENV.tgt }, cur: { ...window.__ENV.cur }, count: window.__ENV.count() }));
-const P = ".experience[data-experience='platform']";
+const D = ".experience[data-experience='discovery']";
+
+// expected earliest = today + 7 (local), computed in Node — same clock as the browser
+const t0 = new Date(); t0.setHours(0,0,0,0);
+const earliest = new Date(t0); earliest.setDate(earliest.getDate() + 7);
+const isoE = earliest.getFullYear() + '-' + String(earliest.getMonth()+1).padStart(2,'0') + '-' + String(earliest.getDate()).padStart(2,'0');
 
 await page.goto(file + '?build=guest,community,marketing', { waitUntil: 'networkidle' });
 await page.waitForTimeout(600);
-const envInitial = await env();
 
-// Enter the platform (member): a transition should have rippled + set mood
-await page.click('.mode-rail [data-mode="experience"]');
-await page.waitForTimeout(300);
-await page.click(P + ' [data-age-yes]');
-await page.waitForTimeout(400);
-const afterEnter = await env();
+// Reach Finalize via the shell mode rail
+await page.click('.mode-rail [data-mode="finalize"]');
+await page.waitForTimeout(500);
+const finalizeActive = await page.getAttribute('.mode-rail [data-mode="finalize"]', 'data-active');
+const onSummary = await page.evaluate((d) => /Your finalized platform/.test(document.querySelector(d).textContent), D);
 
-// Switch to Staff → higher-energy mood target
-await page.click("#perspective button[data-perspective='staff']");
-await page.waitForTimeout(1100);   // let it ripple + ease toward the target
-const staff = await env();
+// Summary → Schedule
+await page.click(D + ' [data-next]');
+await page.waitForTimeout(250);
+const calEarliest = await page.getAttribute(D + ' [data-cal-earliest]', 'data-cal-earliest');
 
-// Switch to Guest → cooler, calmer mood target
-await page.click("#perspective button[data-perspective='guest']");
-await page.waitForTimeout(400);
-const guest = await env();
+// The 7-day rule: no available day may precede `earliest`; earliest available >= earliest
+const dayInfo = await page.evaluate((d) => {
+  const avail = Array.from(document.querySelectorAll(d + ' .cal-day.avail')).map(b => b.getAttribute('data-date')).filter(Boolean);
+  const blocked = document.querySelectorAll(d + ' .cal-day.disabled').length;
+  return { firstAvail: avail.sort()[0] || null, availCount: avail.length, blocked };
+}, D);
+
+// If this month has no available day (today near month end), advance a month
+if (!dayInfo.firstAvail) {
+  await page.click(D + ' [data-mo="1"]');
+  await page.waitForTimeout(200);
+}
+const pick = await page.evaluate((d) => {
+  const b = document.querySelector(d + ' .cal-day.avail'); if (b) { b.click(); return b.getAttribute('data-date'); } return null;
+}, D);
+await page.waitForTimeout(200);
+const slotsShown = await page.evaluate((d) => document.querySelectorAll(d + ' .slot').length, D);
+await page.click(D + ' .slot');
+await page.waitForTimeout(150);
+await page.screenshot({ path: path.join(__dirname, 'v9-schedule.png') });
+
+// Confirm → confirmation
+await page.click(D + ' [data-confirm]');
+await page.waitForTimeout(250);
+const confirmed = await page.evaluate((d) => /Discovery session booked/.test(document.querySelector(d).textContent) && /Implementation preparation/.test(document.querySelector(d).textContent), D);
+await page.screenshot({ path: path.join(__dirname, 'v9-confirmed.png') });
+
+// Revise from discovery → back to the selector
+await page.click(D + ' [data-revise]');
+await page.waitForTimeout(500);
+const revisedToCatalog = await page.evaluate(() => { const c = document.querySelector(".experience[data-experience='catalog']"); return c && !c.hidden; });
 
 await browser.close();
 
-const results = { envInitial, afterEnter, staff, guest, errors };
+const results = { finalizeActive, onSummary, calEarliest, isoE, dayInfo, pick, slotsShown, confirmed, revisedToCatalog, errors };
 console.log(JSON.stringify(results, null, 2));
 
-const ok =
-  afterEnter.count > 0                                   // transitions fire ripples
-  && Math.abs(staff.tgt.energy - 1.25) < 1e-6            // staff mood target set
-  && staff.cur.energy > 1.15                             // and the current value eased toward it
-  && Math.abs(guest.tgt.tint - 0.34) < 1e-6             // guest is cooler
-  && Math.abs(guest.tgt.energy - 0.80) < 1e-6          // and calmer
-  && guest.count > staff.count                           // perspective change on platform rippled again
+const ok = finalizeActive === 'true' && onSummary
+  && calEarliest === isoE                                  // calendar blocks exactly the first 7 days
+  && (dayInfo.firstAvail === null || dayInfo.firstAvail >= isoE)   // no available day precedes earliest
+  && pick && pick >= isoE                                  // the day we picked respects the rule
+  && slotsShown === 4 && confirmed && revisedToCatalog
   && errors.length === 0;
 console.log(ok ? '\n✅ VERIFY PASSED' : '\n❌ VERIFY FAILED');
 process.exit(ok ? 0 : 1);

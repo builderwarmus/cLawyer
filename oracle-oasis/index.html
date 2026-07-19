@@ -417,6 +417,46 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 @keyframes cc-ping{0%{box-shadow:0 0 0 0 rgba(79,186,203,.5)}70%{box-shadow:0 0 0 9px rgba(79,186,203,0)}100%{box-shadow:0 0 0 0 rgba(79,186,203,0)}}
 @media (prefers-reduced-motion: reduce){ .concierge.fresh:not(.open) .cc-fab .ping{animation:none} .cc-panel{transition:opacity .001s} }
 @media (max-width:600px){ .concierge{right:14px; bottom:14px} }
+
+/* ── Finalize → Discovery Experience (summary · schedule · confirm) ────── */
+.disc{max-width:720px; margin:0 auto; padding:44px 24px 96px}
+.disc-eyebrow{font-size:12px; letter-spacing:.32em; text-transform:uppercase; color:var(--gold); font-weight:700; margin:0 0 14px}
+.disc h1{font-family:var(--serif); font-weight:600; font-size:clamp(28px,4.6vw,40px); margin:0 0 8px}
+.disc .lead{color:var(--muted); margin:0 0 28px}
+.steps{display:flex; align-items:center; gap:0; margin:0 0 30px}
+.steps .st{display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--faint)}
+.steps .st .n{width:24px; height:24px; border-radius:50%; border:1.5px solid var(--line); display:grid; place-items:center; font-size:12px; flex:0 0 auto}
+.steps .st.on{color:var(--text)} .steps .st.on .n{border-color:transparent; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--ink); font-weight:700}
+.steps .st.done .n{border-color:var(--gold); color:var(--gold)}
+.steps .sep{flex:1; height:1px; background:var(--line-soft); margin:0 12px; min-width:18px}
+
+.disc-card{background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--line); border-radius:16px; padding:22px 24px; box-shadow:var(--shadow)}
+.disc .rowset{display:grid; gap:10px; margin-top:4px}
+.disc .rowset .row{display:flex; justify-content:space-between; gap:16px; padding:11px 15px; border-radius:11px; border:1px solid var(--line-soft); background:rgba(255,255,255,.02)}
+.disc .rowset .row span{color:var(--muted)} .disc .rowset .row b{font-family:var(--serif); color:var(--gold-bright); font-weight:600}
+.disc .actions{display:flex; gap:12px; flex-wrap:wrap; margin-top:26px}
+
+/* calendar */
+.cal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px}
+.cal-head .mo{font-family:var(--serif); font-size:18px; font-weight:600}
+.cal-nav{font:inherit; color:var(--text); background:transparent; border:1px solid var(--line); border-radius:9px; width:34px; height:34px; cursor:pointer}
+.cal-nav:disabled{opacity:.35; cursor:not-allowed} .cal-nav:not(:disabled):hover{border-color:var(--gold)}
+.cal-dow{display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:6px}
+.cal-dow span{text-align:center; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--faint)}
+.cal-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:6px}
+.cal-cell.blank{visibility:hidden}
+.cal-day{font:inherit; font-size:14px; aspect-ratio:1; border-radius:10px; border:1px solid var(--line-soft); background:rgba(255,255,255,.02); color:var(--text); cursor:pointer; transition:.15s}
+.cal-day.disabled{color:var(--faint); background:transparent; border-color:transparent; cursor:not-allowed; opacity:.5}
+.cal-day.avail:hover{border-color:var(--gold); transform:translateY(-1px)}
+.cal-day.sel{background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--ink); border-color:transparent; font-weight:700}
+.cal-note{font-size:12px; color:var(--faint); margin:14px 0 0}
+.slots{display:flex; flex-wrap:wrap; gap:9px; margin-top:18px}
+.slot{font:inherit; font-size:13.5px; color:var(--text); background:rgba(255,255,255,.03); border:1px solid var(--line); border-radius:999px; padding:8px 15px; cursor:pointer; transition:.15s}
+.slot:hover{border-color:var(--gold)} .slot.sel{background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--ink); border-color:transparent; font-weight:600}
+.disc-confirm{text-align:center; padding:20px 0}
+.disc-confirm .badge{width:70px; height:70px; margin:0 auto 20px; border-radius:50%; display:grid; place-items:center; font-size:32px; color:var(--ink);
+  background:radial-gradient(circle at 38% 32%, var(--gold-bright), var(--gold) 60%, var(--aqua-deep) 130%); box-shadow:0 14px 40px -12px rgba(201,162,75,.6)}
+.disc-confirm .when{font-family:var(--serif); font-size:22px; color:var(--gold-bright); margin:14px 0 4px}
 </style>
 </head>
 <body>
@@ -446,10 +486,10 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   <!-- Journey mode rail. Build is live (→ Build My Platform); the rest are
        placeholders until their increments land. -->
   <nav class="mode-rail" aria-label="Platform mode">
-    <button data-mode="build"      data-nav="catalog"  data-active="false">Build</button>
-    <button data-mode="experience" data-nav="platform" data-active="false">Experience</button>
-    <button data-mode="finalize"   data-active="false" disabled title="Arrives with Finalize My Platform">Finalize</button>
-    <button data-mode="revise"     data-active="false" disabled title="Arrives with Revise My Platform">Revise</button>
+    <button data-mode="build"      data-nav="catalog"   data-active="false">Build</button>
+    <button data-mode="experience" data-nav="platform"  data-active="false">Experience</button>
+    <button data-mode="finalize"   data-nav="discovery" data-active="false">Finalize</button>
+    <button data-mode="revise"     data-nav="catalog"   data-active="false">Revise</button>
   </nav>
 </header>
 
@@ -3371,13 +3411,12 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
   // Keep the mode rail's active state in sync with the current experience.
   // Build is "active" while building the platform (selector or generation).
   Oracle.api.onNavigate(function(id){
-    var buildActive = (id === "catalog" || id === "build");
-    var expActive = (id === "platform");
-    var b = document.querySelector('.mode-rail [data-mode="build"]');
-    var x = document.querySelector('.mode-rail [data-mode="experience"]');
-    if(b) b.setAttribute("data-active", buildActive ? "true" : "false");
-    if(x) x.setAttribute("data-active", expActive ? "true" : "false");
-    Oracle.api.setConfig({ mode: buildActive ? "build" : (expActive ? "experience" : "view") });
+    var active = { build:(id==="catalog"||id==="build"), experience:(id==="platform"), finalize:(id==="discovery") };
+    ["build","experience","finalize"].forEach(function(k){
+      var el = document.querySelector('.mode-rail [data-mode="'+k+'"]');
+      if(el) el.setAttribute("data-active", active[k] ? "true" : "false");
+    });
+    Oracle.api.setConfig({ mode: active.build ? "build" : active.experience ? "experience" : active.finalize ? "finalize" : "view" });
   });
 
   /* The Living Environment reacts to context: a ripple emanates from the point
@@ -3440,6 +3479,9 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       { id:"build", when:function(c){ return c.module==="build"; },
         title:"Assembling your platform",
         body:"Oracle is configuring your selections into one Oasis platform." },
+      { id:"discovery", when:function(c){ return c.module==="discovery"; },
+        title:"Finalize your platform",
+        body:"Review the summary, then choose a discovery date — the first available is a week out so the team can prepare. You can still revise anytime." },
       { id:"plat-guest", when:function(c){ return c.module==="platform" && c.perspective==="guest"; },
         title:"The guest view",
         body:"This is what a prospective member sees. Switch to Member for the full app.",
@@ -3618,11 +3660,13 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
             '</div>'+
             '<div class="actions">'+
               '<button class="cta" data-experience>Experience My Platform →</button>'+
+              '<button class="cta ghost" data-finalize>Finalize My Platform</button>'+
               '<button class="cta ghost" data-revise>Revise My Platform</button>'+
             '</div>'+
           '</div>';
         root.querySelector('[data-revise]').addEventListener('click', function(){ Oracle.api.navigate('catalog'); });
         root.querySelector('[data-experience]').addEventListener('click', function(){ Oracle.api.navigate('platform'); });
+        root.querySelector('[data-finalize]').addEventListener('click', function(){ Oracle.api.navigate('discovery'); });
       }
 
       root.innerHTML =
@@ -3908,6 +3952,130 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
         });
         // re-render live when selection or perspective changes while visible
         Oracle.api.onConfig(function(){ if(verified && Oracle.api.current()==="platform") renderPlatform(); });
+      }
+    });
+  })();
+
+  // ---- Module: Discovery Experience (Finalize My Platform) ----
+  // The endpoint of the design journey. Finalize (as opposed to Revise, which
+  // loops back to the selector) commits the design and opens this module:
+  // Platform Summary → Discovery Scheduling → Confirmation. Scheduling rule:
+  // a live calendar with the first 7 days blocked (finalize today → earliest
+  // appointment is 7 days out).
+  (function(){
+    var host = null, step = 1, sel = null, slot = null, view = null;
+    var SLOTS = ["11:00 AM","1:00 PM","3:00 PM","5:00 PM"];
+    var DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+    var MON = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    function today0(){ var d = new Date(); d.setHours(0,0,0,0); return d; }
+    function earliestDate(){ var d = today0(); d.setDate(d.getDate()+7); return d; }   // first 7 days blocked
+    function iso(d){ return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+    function fromIso(s){ var p=s.split("-"); return new Date(+p[0], +p[1]-1, +p[2]); }
+    function sameMonth(a,b){ return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth(); }
+    function longDate(d){ return DOW[d.getDay()]+", "+MON[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear(); }
+
+    function stepBar(){
+      var labels = ["Platform Summary","Schedule Discovery","Confirmation"];
+      return '<div class="steps">'+ labels.map(function(l,i){
+        var n=i+1, cls = step===n ? "on" : (step>n ? "done" : "");
+        return (i? '<span class="sep"></span>':'')+'<span class="st '+cls+'"><span class="n">'+(step>n?'✓':n)+'</span>'+l+'</span>';
+      }).join("") +'</div>';
+    }
+
+    function summaryStep(){
+      var ec = Oracle.api.economics();
+      return '<p class="disc-eyebrow">Finalize My Platform</p>'+
+        '<h1>Your finalized platform.</h1>'+
+        '<p class="lead">This locks the design and moves to implementation preparation. You can still revise it — nothing is built yet.</p>'+
+        stepBar()+
+        '<div class="disc-card"><div class="rowset">'+
+          '<div class="row"><span>Configuration</span><b>Launch Package + '+ec.count+' enhancement'+(ec.count===1?'':'s')+'</b></div>'+
+          '<div class="row"><span>Investment</span><b>'+Oracle.api.formatMoney(ec.invest)+'</b></div>'+
+          '<div class="row"><span>Estimated timeline</span><b>'+fmtWeeks(ec.weeksMin)+'–'+fmtWeeks(ec.weeksMax)+' weeks</b></div>'+
+        '</div>'+
+        '<div class="actions"><button class="cta" data-next>Schedule my discovery session →</button>'+
+          '<button class="cta ghost" data-revise>Revise My Platform</button></div></div>';
+    }
+
+    function calendar(){
+      if(!view) view = new Date(today0().getFullYear(), today0().getMonth(), 1);
+      var earliest = earliestDate();
+      var y=view.getFullYear(), m=view.getMonth();
+      var startDow = new Date(y,m,1).getDay();
+      var days = new Date(y,m+1,0).getDate();
+      var cells = "";
+      for(var i=0;i<startDow;i++) cells += '<span class="cal-cell blank"></span>';
+      for(var d=1; d<=days; d++){
+        var date = new Date(y,m,d), diso = iso(date);
+        var blocked = date < earliest;
+        var isSel = sel && iso(sel)===diso;
+        cells += '<button class="cal-day '+(blocked?'disabled':'avail')+(isSel?' sel':'')+'" '+
+                 (blocked ? 'disabled' : 'data-date="'+diso+'"')+'>'+d+'</button>';
+      }
+      var canPrev = !sameMonth(view, today0());
+      var slotsHtml = sel ? '<div class="slots">'+ SLOTS.map(function(s){
+          return '<button class="slot '+(slot===s?'sel':'')+'" data-slot="'+s+'">'+s+'</button>';
+        }).join("") +'</div>' : '';
+      var confirmBtn = (sel && slot) ? '<div class="actions"><button class="cta" data-confirm>Confirm '+DOW[sel.getDay()]+' '+MON[sel.getMonth()]+' '+sel.getDate()+' · '+slot+'</button></div>' : '';
+      return '<p class="disc-eyebrow">Discovery Scheduling</p>'+
+        '<h1>Choose a discovery date.</h1>'+
+        '<p class="lead">We hold your discovery session at least a week out so the team can prepare. The first seven days are unavailable.</p>'+
+        stepBar()+
+        '<div class="disc-card" data-cal-earliest="'+iso(earliest)+'">'+
+          '<div class="cal-head"><button class="cal-nav" data-mo="-1" '+(canPrev?'':'disabled')+' aria-label="Previous month">‹</button>'+
+            '<span class="mo">'+MON[m]+' '+y+'</span>'+
+            '<button class="cal-nav" data-mo="1" aria-label="Next month">›</button></div>'+
+          '<div class="cal-dow">'+ DOW.map(function(w){return '<span>'+w+'</span>';}).join("") +'</div>'+
+          '<div class="cal-grid">'+cells+'</div>'+
+          '<p class="cal-note">Earliest available: '+longDate(earliest)+'.</p>'+
+          slotsHtml + confirmBtn +
+        '</div>'+
+        '<div class="actions"><button class="cta ghost" data-back>← Back to summary</button></div>';
+    }
+
+    function confirmedStep(){
+      return '<p class="disc-eyebrow">Confirmation</p>'+
+        '<h1>Discovery session booked.</h1>'+
+        stepBar()+
+        '<div class="disc-card"><div class="disc-confirm">'+
+          '<div class="badge" aria-hidden="true">✓</div>'+
+          '<div class="when">'+longDate(sel)+'</div>'+
+          '<p class="lead" style="margin:2px 0 0">'+slot+' · with the CraftWeb implementation team</p>'+
+        '</div>'+
+        '<div class="rowset" style="margin-top:8px">'+
+          '<div class="row"><span>What happens next</span><b>Implementation preparation</b></div>'+
+          '<div class="row"><span>Before we build</span><b>Requirements, content &amp; access</b></div>'+
+        '</div>'+
+        '<div class="actions"><button class="cta" data-go-exp>Experience My Platform →</button>'+
+          '<button class="cta ghost" data-revise>Revise My Platform</button></div></div>';
+    }
+
+    function render(){
+      host.innerHTML = '<div class="disc">'+ (step===1 ? summaryStep() : step===2 ? calendar() : confirmedStep()) +'</div>';
+    }
+
+    Oracle.api.register({
+      id: "discovery",
+      name: "Discovery Experience",
+      validateConfig: function(){ return { ok:true }; },
+      mount: function(stage){ host = document.createElement("div"); stage.appendChild(host); return stage; },
+      onShow: function(){ step = 1; render(); },   // Finalize always starts at the summary
+      activate: function(el){
+        el.addEventListener("click", function(ev){
+          var t;
+          // NB: the runtime tags each section with data-experience="<id>", so a
+          // [data-experience] selector would match the section on every click —
+          // the platform-launch button uses data-go-exp instead.
+          if(ev.target.closest("[data-next]")){ step = 2; render(); return; }
+          if(ev.target.closest("[data-back]")){ step = 1; render(); return; }
+          if(ev.target.closest("[data-revise]")){ Oracle.api.navigate("catalog"); return; }
+          if(ev.target.closest("[data-go-exp]")){ Oracle.api.navigate("platform"); return; }
+          if((t = ev.target.closest("[data-mo]"))){ view = new Date(view.getFullYear(), view.getMonth()+parseInt(t.getAttribute("data-mo"),10), 1); render(); return; }
+          if((t = ev.target.closest("[data-date]"))){ sel = fromIso(t.getAttribute("data-date")); slot = null; render(); return; }
+          if((t = ev.target.closest("[data-slot]"))){ slot = t.getAttribute("data-slot"); render(); return; }
+          if(ev.target.closest("[data-confirm]")){ if(sel && slot){ step = 3; render(); } return; }
+        });
       }
     });
   })();
