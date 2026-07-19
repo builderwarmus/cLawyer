@@ -108,6 +108,16 @@ bridge lands (CR-009), collapse to ONE economics source (ideally derived from th
 live Master Registry per the Founding Docs) so numbers can never drift between the
 proposal and the selector.
 
+## CR-014 · Concierge rule engine → data-driven 🔍 (Increment #7)
+Delivered: a persistent, rule-driven concierge (ordered `RULES`, first match wins)
+reads module · perspective · config and surfaces the most relevant next step; its
+actions drive the app (navigate, toggle enhancements, switch perspective). It is
+deliberately NOT AI. **Open thread:** the rules are hand-authored in-module. Later,
+express them as data (context predicate → guidance → action) so new
+modules/capabilities can register their own concierge rules, and optionally let an
+AI *enhancement* propose guidance that still routes through the same deterministic
+action layer.
+
 ## CR-011 · Build sequence is presentational (for now) 🌱
 The 5-stage generation sequence is a timed animation, not real work — it sets the
 tone of "the platform is being assembled." When real platform generation exists

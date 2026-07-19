@@ -388,6 +388,35 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .offer .tag{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); font-weight:700}
 .offer h4{font-family:var(--serif); font-weight:600; font-size:17px; margin:6px 0 4px}
 .offer p{font-size:13px; color:var(--muted); margin:0 0 12px}
+
+/* ── Concierge — persistent, rule-driven contextual guide (not AI) ─────── */
+.concierge{position:fixed; right:22px; bottom:22px; z-index:36; display:flex; flex-direction:column; align-items:flex-end; gap:12px}
+.cc-panel{width:306px; max-width:80vw; background:linear-gradient(180deg,var(--surface),var(--surface-2));
+  border:1px solid var(--line); border-radius:16px; padding:16px 17px 17px; box-shadow:var(--shadow);
+  opacity:0; transform:translateY(10px) scale(.98); transform-origin:bottom right; pointer-events:none;
+  transition:opacity .24s ease, transform .24s cubic-bezier(.22,.68,.24,1)}
+.concierge.open .cc-panel{opacity:1; transform:none; pointer-events:auto}
+.cc-head{display:flex; align-items:center; gap:9px; margin-bottom:8px}
+.cc-head .badge{width:26px; height:26px; border-radius:50%; flex:0 0 auto; display:grid; place-items:center; font-size:13px; color:var(--ink);
+  background:radial-gradient(circle at 34% 30%, var(--gold-bright), var(--gold) 62%, var(--aqua-deep) 150%)}
+.cc-head .who{font-size:10.5px; letter-spacing:.2em; text-transform:uppercase; color:var(--gold); font-weight:700}
+.cc-head .x{margin-left:auto; cursor:pointer; color:var(--faint); background:none; border:0; font-size:16px; line-height:1; padding:2px 4px}
+.cc-head .x:hover{color:var(--text)}
+.cc-title{font-family:var(--serif); font-weight:600; font-size:16.5px; margin:0 0 4px}
+.cc-body{font-size:13.5px; color:var(--muted); line-height:1.5; margin:0}
+.cc-act{margin-top:13px; display:inline-flex; align-items:center; gap:8px; font:inherit; font-weight:600; font-size:13.5px;
+  color:var(--ink); cursor:pointer; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); border:0; border-radius:10px; padding:9px 15px;
+  box-shadow:0 8px 22px -10px rgba(201,162,75,.6); transition:transform .16s}
+.cc-act:hover{transform:translateY(-1px)}
+.cc-fab{position:relative; width:52px; height:52px; border-radius:50%; cursor:pointer; border:1px solid rgba(255,255,255,.14);
+  background:radial-gradient(circle at 34% 30%, var(--gold-bright), var(--gold) 60%, var(--aqua-deep) 145%);
+  color:var(--ink); display:grid; place-items:center; font-size:22px; box-shadow:0 12px 34px -10px rgba(201,162,75,.6); transition:transform .2s}
+.cc-fab:hover{transform:translateY(-2px)}
+.cc-fab .ping{position:absolute; top:2px; right:2px; width:12px; height:12px; border-radius:50%; background:var(--aqua); border:2px solid var(--ground); opacity:0; transition:opacity .2s}
+.concierge.fresh:not(.open) .cc-fab .ping{opacity:1; animation:cc-ping 1.6s ease-out infinite}
+@keyframes cc-ping{0%{box-shadow:0 0 0 0 rgba(79,186,203,.5)}70%{box-shadow:0 0 0 9px rgba(79,186,203,0)}100%{box-shadow:0 0 0 0 rgba(79,186,203,0)}}
+@media (prefers-reduced-motion: reduce){ .concierge.fresh:not(.open) .cc-fab .ping{animation:none} .cc-panel{transition:opacity .001s} }
+@media (max-width:600px){ .concierge{right:14px; bottom:14px} }
 </style>
 </head>
 <body>
@@ -430,6 +459,18 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 </main>
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Concierge · persistent, rule-driven contextual guide (populated by the runtime) -->
+<div class="concierge" id="concierge" aria-live="polite">
+  <div class="cc-panel" role="dialog" aria-label="Concierge">
+    <div class="cc-head"><span class="badge" aria-hidden="true">✦</span><span class="who">Concierge</span>
+      <button class="x" data-cc-close aria-label="Close concierge">×</button></div>
+    <p class="cc-title" data-cc-title></p>
+    <p class="cc-body" data-cc-body></p>
+    <div data-cc-actions></div>
+  </div>
+  <button class="cc-fab" data-cc-fab aria-label="Concierge">✦<span class="ping" aria-hidden="true"></span></button>
+</div>
 
 <!-- Migrated proposal: markup + isolated styles live inert in a <template>; the Proposal module clones them into a shadow root. -->
 <template id="proposal-template"><style>
@@ -3286,6 +3327,99 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
     if(x) x.setAttribute("data-active", expActive ? "true" : "false");
     Oracle.api.setConfig({ mode: buildActive ? "build" : (expActive ? "experience" : "view") });
   });
+
+  /* =================================================================
+     CONCIERGE — persistent, rule-driven contextual guide (NOT AI).
+     A deterministic rule set reads the live context (module · perspective ·
+     config) and surfaces the single most relevant next step. It never calls a
+     model; AI is an optional platform enhancement, not the concierge itself.
+     ================================================================= */
+  (function(){
+    var el = document.getElementById("concierge");
+    if(!el) return;
+    var titleEl = el.querySelector("[data-cc-title]");
+    var bodyEl  = el.querySelector("[data-cc-body]");
+    var actsEl  = el.querySelector("[data-cc-actions]");
+    var lastId = null, currentAction = null, firstEver = true;
+
+    function has(id){ return Oracle.api.config.selected.indexOf(id) >= 0; }
+    function setPerspective(p){
+      var btn = document.querySelector('#perspective button[data-perspective="'+p+'"]');
+      if(btn) btn.click();
+    }
+    function ctx(){
+      var c = Oracle.api.config, ec = Oracle.api.economics();
+      return { module: Oracle.api.current(), perspective: c.perspective, count: ec.count, invest: ec.invest };
+    }
+
+    // Ordered; first match wins. Specific rules precede general ones.
+    var RULES = [
+      { id:"proposal", when:function(c){ return c.module==="proposal"; },
+        title:"Welcome to Oracle",
+        body:"You’re inside a live proposal. When you’re ready, build the platform and watch it populate around you.",
+        action:{ label:"Build My Platform", run:function(){ Oracle.api.navigate("catalog"); } } },
+      { id:"catalog-empty", when:function(c){ return c.module==="catalog" && c.count===0; },
+        title:"Start with what matters",
+        body:"Pick the enhancements that belong in this platform. Investment and timeline update as you choose.",
+        action:{ label:"Add the Community Suite", run:function(){ Oracle.api.toggleEnhancement("community"); } } },
+      { id:"catalog-some", when:function(c){ return c.module==="catalog" && c.count>0; },
+        title:"Ready when you are",
+        body:function(c){ return "You’ve selected "+c.count+" enhancement"+(c.count===1?"":"s")+" — "+Oracle.api.formatMoney(c.invest)+". Generate the platform to see it come to life."; },
+        action:{ label:"Build My Platform", run:function(){ Oracle.api.navigate("build"); } } },
+      { id:"build", when:function(c){ return c.module==="build"; },
+        title:"Assembling your platform",
+        body:"Oracle is configuring your selections into one Oasis platform." },
+      { id:"plat-guest", when:function(c){ return c.module==="platform" && c.perspective==="guest"; },
+        title:"The guest view",
+        body:"This is what a prospective member sees. Switch to Member for the full app.",
+        action:{ label:"See the Member view", run:function(){ setPerspective("member"); } } },
+      { id:"plat-staff", when:function(c){ return c.module==="platform" && c.perspective==="staff"; },
+        title:"The staff view",
+        body:"The operational lens — incoming orders, floor status and member safety, all from the same platform." },
+      { id:"plat-mgmt-nobi", when:function(c){ return c.module==="platform" && c.perspective==="management" && !has("bisuite"); },
+        title:"Unlock the numbers",
+        body:"Management fills with revenue, attendance and advisor insight once the Business Intelligence Suite is in the build.",
+        action:{ label:"Add the BI Suite", run:function(){ Oracle.api.toggleEnhancement("bisuite"); } } },
+      { id:"plat-mgmt", when:function(c){ return c.module==="platform" && c.perspective==="management"; },
+        title:"The management view",
+        body:"Your operating picture — revenue, attendance and the busiest floor, live." },
+      { id:"plat-member", when:function(c){ return c.module==="platform"; },
+        title:"Your platform, live",
+        body:"This is the members’ app your selections built. Switch perspective — Guest, Staff or Management — to see the same platform through each lens.",
+        action:{ label:"Try the Staff view", run:function(){ setPerspective("staff"); } } }
+    ];
+
+    function render(rule, c){
+      titleEl.textContent = typeof rule.title === "function" ? rule.title(c) : rule.title;
+      bodyEl.textContent  = typeof rule.body  === "function" ? rule.body(c)  : rule.body;
+      currentAction = rule.action || null;
+      actsEl.innerHTML = currentAction ? '<button class="cc-act" data-cc-run>'+currentAction.label+'</button>' : "";
+    }
+    function update(){
+      var c = ctx(), rule = null;
+      for(var i=0;i<RULES.length;i++){ if(RULES[i].when(c)){ rule = RULES[i]; break; } }
+      if(!rule) return;
+      render(rule, c);
+      if(rule.id !== lastId){
+        lastId = rule.id;
+        // Don't hijack the proposal's own gateway; just pulse there. Reveal the
+        // concierge the first time the client reaches a building/experience surface.
+        if(firstEver && c.module !== "proposal"){ firstEver = false; el.classList.add("open"); el.classList.remove("fresh"); }
+        else if(!el.classList.contains("open")){ el.classList.add("fresh"); }
+      }
+    }
+
+    el.querySelector("[data-cc-fab]").addEventListener("click", function(){
+      el.classList.toggle("open"); el.classList.remove("fresh");
+    });
+    el.querySelector("[data-cc-close]").addEventListener("click", function(){ el.classList.remove("open"); });
+    actsEl.addEventListener("click", function(ev){
+      if(ev.target.closest("[data-cc-run]") && currentAction){ currentAction.run(); }
+    });
+
+    Oracle.api.onNavigate(update);
+    Oracle.api.onConfig(update);
+  })();
 
   /* =================================================================
      EXPERIENCE MODULES

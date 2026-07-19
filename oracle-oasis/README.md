@@ -81,6 +81,15 @@ Delivered:
     that **scales with the selected analytics** (no BI Suite → an upsell prompt;
     BI Suite + Advisor → dashboards + executive recommendations).
 
+- **Concierge** — a persistent, **rule-driven** contextual guide (never calls a
+  model — AI is an optional platform enhancement, not the concierge). A deterministic,
+  ordered rule set reads the live context (module · perspective · config) and
+  surfaces the single most relevant next step, with an action that actually drives
+  the app: "Build My Platform" on the proposal, "Ready when you are →" in the
+  selector, "Try the Staff view" on the platform, "Add the BI Suite" under a
+  Management view with no analytics (which toggles config and enriches the view
+  live). A gold FAB (bottom-right) pulses on new guidance and expands to the panel.
+
 ### Not yet built (later increments, in Directive priority order)
 
 1. ~~Experience Shell~~ ✅
@@ -89,7 +98,7 @@ Delivered:
 4. ~~Product Catalog / Build My Platform (real selection engine)~~ ✅
 5. ~~Platform Experience~~ ✅
 6. ~~Perspectives (Guest / Member / Staff / Management — real)~~ ✅
-7. Concierge (rule-driven, not AI)
+7. ~~Concierge (rule-driven, not AI)~~ ✅
 8. Environmental interactions
 9. Configuration integration (against the live Master Registry)
 10. Visual refinement
