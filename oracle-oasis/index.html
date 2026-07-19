@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Oracle · Oasis</title>
+<meta name="description" content="Oracle — a configurable hospitality platform. Oasis Aqualounge is the first implementation." />
+
+<!--
+  ORACLE — Experience Shell (Increment #1)
+  ======================================================================
+  This is the NEW unified Oracle application. It is a fresh foundation and
+  does NOT modify either existing site (oasisproposal.craftwebstudios.ca or
+  oasis.craftwebstudios.ca), which remain live reference implementations.
+
+  Architecture (bottom → top), per the Founding Documents:
+
+    Living Environment   — one persistent water world behind everything
+    Experience Shell     — one persistent chrome (brand + perspective/mode)
+    Oracle Runtime       — one config store (single source of truth),
+                           one module registry, one stage, one transition
+    Experience Modules   — swappable experiences mounted into the stage
+
+  Principles honoured here:
+    · Vanilla, modular, no framework, no build step (single file).
+    · Configuration-driven: the Config store is the single source of truth,
+      seeded from the ?build= URL parameter (shared with the proposal).
+    · Registry-backed: enhancement catalog mirrors the Master Registry model
+      (capability IDs → enhancements → client configuration).
+    · Context-preserving morph transitions (250–400ms, reduced-motion aware).
+    · Implement before optimizing. Keep the app working at every step.
+
+  This increment delivers the SHELL only: the continuous premium environment,
+  the persistent chrome (controls are present but inert placeholders), the
+  runtime + transition primitive, and two minimal stub modules (Proposal,
+  Product Catalog) that prove the module-swap morph. Real experiences,
+  perspectives, concierge, and the Build/Experience/Finalize/Revise journey
+  arrive in later increments.
+-->
+
+<style>
+:root{
+  /* Dark — the committed nocturnal world (matches the proposal palette) */
+  --ink:#070C0F;
+  --ground:#0A1216;
+  --surface:#0F1A20;
+  --surface-2:#14242C;
+  --line:rgba(233,205,150,.14);
+  --line-soft:rgba(255,255,255,.06);
+  --gold:#C9A24B;
+  --gold-bright:#E6CA86;
+  --aqua:#4FBACb;
+  --aqua-deep:#1E6B78;
+  --text:#ECE3D1;
+  --muted:#93A6AC;
+  --faint:#5E7278;
+  --good:#5FB98A;
+  --shadow:0 30px 80px -30px rgba(0,0,0,.8);
+  --glow:rgba(79,186,203,.10);
+  --veilb:rgba(7,12,15,.55);
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  --sans:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  --maxw:1080px;
+  --shell-top:64px;
+}
+:root[data-theme="light"]{
+  --ink:#EDE7DB; --ground:#F4EFE5; --surface:#FBF7EF; --surface-2:#F5EEDF;
+  --line:rgba(120,90,30,.22); --line-soft:rgba(0,0,0,.07);
+  --gold:#9A742A; --gold-bright:#7E5D18; --aqua:#1B7A88; --aqua-deep:#0E5561;
+  --text:#241A0E; --muted:#6C5C46; --faint:#93826A;
+  --shadow:0 24px 60px -32px rgba(60,40,10,.35);
+  --glow:rgba(201,162,75,.12); --veilb:rgba(120,90,30,.05);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0; background:var(--ground); color:var(--text);
+  font-family:var(--sans); line-height:1.6; font-size:17px;
+  -webkit-font-smoothing:antialiased;
+  /* clip (not hidden) avoids turning <body> into a scroll container */
+  overflow-x:clip;
+  min-height:100vh;
+}
+
+/* ── Layer 0: Living Environment ─────────────────────────────────────
+   Two composited water layers behind everything. Both are reused
+   verbatim from the proposal's procedural canvas water; here they are
+   re-composed into one persistent, app-wide environment. (A note is
+   logged in the Concept Registry to add further depth layers later.) */
+#env-caustics{position:fixed; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; opacity:.42; mix-blend-mode:screen}
+#env-ambient{position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.9}
+.env-veil{position:fixed; inset:0; z-index:0; pointer-events:none;
+  background:
+    radial-gradient(120% 80% at 50% -10%, var(--glow), transparent 55%),
+    linear-gradient(180deg, transparent 0%, var(--veilb) 100%);
+}
+
+/* ── Layer 1: Experience Shell (persistent chrome) ───────────────────
+   Brand mark + inert control placeholders. These controls do NOT drive
+   any real journey yet — they are wired to the runtime purely to prove
+   the swap and to reserve their permanent place in the layout. */
+.shell{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  height:var(--shell-top);
+  display:flex; align-items:center; gap:18px;
+  padding:0 20px;
+  background:linear-gradient(180deg, rgba(7,12,15,.78), rgba(7,12,15,.36) 70%, transparent);
+  backdrop-filter:blur(10px) saturate(1.05); -webkit-backdrop-filter:blur(10px) saturate(1.05);
+  border-bottom:1px solid var(--line-soft);
+}
+:root[data-theme="light"] .shell{
+  background:linear-gradient(180deg, rgba(244,239,229,.86), rgba(244,239,229,.4) 70%, transparent);
+}
+.brand{display:flex; align-items:center; gap:11px; text-decoration:none; color:inherit; flex:0 0 auto}
+.brand .mark{
+  width:30px; height:30px; border-radius:9px; position:relative; flex:0 0 auto;
+  background:radial-gradient(circle at 32% 28%, var(--gold-bright), var(--gold) 55%, var(--aqua-deep) 130%);
+  box-shadow:0 4px 14px -4px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.14);
+}
+.brand .mark::after{content:""; position:absolute; inset:7px; border-radius:5px;
+  background:radial-gradient(circle at 60% 65%, rgba(255,255,255,.55), transparent 60%); opacity:.7}
+.brand .name{display:flex; flex-direction:column; line-height:1.05}
+.brand .name b{font-family:var(--serif); font-size:18px; letter-spacing:.02em; font-weight:600}
+.brand .name span{font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--gold); font-weight:600}
+
+.shell-spacer{flex:1 1 auto}
+
+/* Perspective selector — inert placeholder (presentation, not authorization). */
+.perspective{display:flex; align-items:center; gap:4px; padding:3px;
+  background:rgba(255,255,255,.04); border:1px solid var(--line-soft); border-radius:999px}
+.perspective button{
+  font:inherit; font-size:12px; letter-spacing:.02em; color:var(--muted);
+  background:transparent; border:0; padding:5px 12px; border-radius:999px; cursor:pointer;
+  transition:color .2s, background .2s;
+}
+.perspective button[aria-pressed="true"]{color:var(--ink); background:linear-gradient(180deg,var(--gold-bright),var(--gold)); font-weight:600}
+.perspective button:not([aria-pressed="true"]):hover{color:var(--text)}
+@media (max-width:720px){ .perspective button{padding:5px 9px; font-size:11px} .perspective button .pfull{display:none} }
+
+/* Mode rail — Build · Experience · Finalize · Revise (inert placeholders). */
+.mode-rail{display:flex; align-items:center; gap:2px; margin-left:4px}
+.mode-rail button{
+  font:inherit; font-size:11.5px; letter-spacing:.03em; color:var(--faint);
+  background:transparent; border:0; padding:6px 10px; border-radius:8px; cursor:not-allowed;
+  position:relative;
+}
+.mode-rail button[data-active="true"]{color:var(--gold)}
+.mode-rail button:disabled{opacity:.85}
+@media (max-width:960px){ .mode-rail{display:none} }
+
+/* ── Layer 2: the stage (single viewport for the mounted module) ─────── */
+.stage{
+  position:relative; z-index:1;
+  padding-top:var(--shell-top);
+  min-height:100vh;
+}
+.stage-inner{position:relative; min-height:calc(100vh - var(--shell-top))}
+
+/* Morph transition primitive. The outgoing module fades+lifts, the
+   incoming module fades+settles. Context (config) is preserved across
+   the swap by the runtime; only the DOM is exchanged. */
+.experience{
+  opacity:0; transform:translateY(14px) scale(.994);
+  transition:opacity .32s ease, transform .34s cubic-bezier(.22,.68,.24,1);
+  will-change:opacity, transform;
+}
+.experience.enter{opacity:1; transform:none}
+.experience.leave{opacity:0; transform:translateY(-10px) scale(.994)}
+@media (prefers-reduced-motion: reduce){
+  .experience{transition:opacity .001s; transform:none}
+  .experience.leave{transform:none}
+}
+
+/* ── Shared experience-module presentation ───────────────────────────── */
+.xp{max-width:var(--maxw); margin:0 auto; padding:56px 24px 96px}
+.xp-eyebrow{font-size:12px; letter-spacing:.34em; text-transform:uppercase; color:var(--gold); font-weight:700; margin:0 0 14px}
+.xp h1{font-family:var(--serif); font-weight:600; font-size:clamp(34px,6vw,58px); line-height:1.04; margin:0 0 18px; letter-spacing:-.01em}
+.xp .lead{font-size:clamp(17px,2.4vw,20px); color:var(--muted); max-width:60ch; margin:0 0 34px}
+.xp h2{font-family:var(--serif); font-weight:600; font-size:clamp(23px,3.4vw,30px); margin:44px 0 16px}
+
+.card{
+  background:linear-gradient(180deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line); border-radius:16px; padding:22px 24px;
+  box-shadow:var(--shadow);
+}
+.grid{display:grid; gap:16px}
+@media (min-width:640px){ .grid.cols-2{grid-template-columns:1fr 1fr} .grid.cols-3{grid-template-columns:repeat(3,1fr)} }
+
+.chip{display:inline-flex; align-items:center; gap:7px; padding:5px 11px; border-radius:999px;
+  border:1px solid var(--line); background:rgba(255,255,255,.03); font-size:12.5px; color:var(--muted)}
+.chip b{color:var(--text); font-weight:600}
+.chip.on{border-color:rgba(201,162,75,.5); color:var(--text)}
+.chip.on .dot{background:var(--gold)}
+.dot{width:7px; height:7px; border-radius:50%; background:var(--faint); flex:0 0 auto}
+
+.cta{
+  display:inline-flex; align-items:center; gap:10px; margin-top:8px;
+  font:inherit; font-weight:600; font-size:15px; letter-spacing:.01em;
+  color:var(--ink); cursor:pointer;
+  background:linear-gradient(180deg, var(--gold-bright), var(--gold));
+  border:0; border-radius:12px; padding:13px 22px;
+  box-shadow:0 10px 30px -12px rgba(201,162,75,.6);
+  transition:transform .18s ease, box-shadow .2s ease;
+}
+.cta:hover{transform:translateY(-1px); box-shadow:0 16px 40px -14px rgba(201,162,75,.7)}
+.cta.ghost{background:transparent; color:var(--text); border:1px solid var(--line); box-shadow:none}
+.cta.ghost:hover{border-color:var(--gold); box-shadow:none}
+
+.muted{color:var(--muted)}
+.faint{color:var(--faint)}
+.enh-list{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.enh-list li{display:flex; align-items:flex-start; gap:12px; padding:13px 15px; border-radius:12px;
+  border:1px solid var(--line-soft); background:rgba(255,255,255,.02)}
+.enh-list li.sel{border-color:rgba(201,162,75,.5); background:rgba(201,162,75,.06)}
+.enh-list .ico{font-size:19px; line-height:1; flex:0 0 auto; margin-top:1px}
+.enh-list .body b{display:block; font-size:15px; color:var(--text)}
+.enh-list .body span{font-size:13.5px; color:var(--muted)}
+.enh-list .flag{margin-left:auto; font-size:11px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); font-weight:700; flex:0 0 auto; padding-top:3px}
+
+.kpi{display:grid; gap:4px}
+.kpi b{font-family:var(--serif); font-size:clamp(26px,4vw,34px); color:var(--gold-bright); font-weight:600}
+.kpi span{font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint)}
+
+/* Small footer note that the runtime prints its live config for proof. */
+.debug{margin-top:40px; padding:14px 16px; border:1px dashed var(--line); border-radius:12px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; color:var(--faint); overflow-x:auto}
+.debug b{color:var(--muted); font-weight:600}
+
+/* Toast for inert-control feedback. */
+.toast{position:fixed; left:50%; bottom:26px; transform:translateX(-50%) translateY(20px);
+  z-index:40; background:var(--surface-2); border:1px solid var(--line); color:var(--text);
+  padding:11px 18px; border-radius:12px; font-size:14px; box-shadow:var(--shadow);
+  opacity:0; pointer-events:none; transition:opacity .25s, transform .25s}
+.toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<!-- Layer 0 · Living Environment (two water layers, persistent) -->
+<canvas id="env-caustics" aria-hidden="true"></canvas>
+<canvas id="env-ambient" aria-hidden="true"></canvas>
+<div class="env-veil" aria-hidden="true"></div>
+
+<!-- Layer 1 · Experience Shell (persistent chrome) -->
+<header class="shell" role="banner">
+  <a class="brand" href="#" data-nav="proposal" aria-label="Oracle home">
+    <span class="mark" aria-hidden="true"></span>
+    <span class="name"><b>Oasis</b><span>Oracle Platform</span></span>
+  </a>
+
+  <div class="shell-spacer"></div>
+
+  <!-- Perspective controls presentation, not authorization (inert placeholder). -->
+  <nav class="perspective" aria-label="Perspective" id="perspective">
+    <button data-perspective="guest"      aria-pressed="true">Guest</button>
+    <button data-perspective="member"     aria-pressed="false">Member</button>
+    <button data-perspective="staff"      aria-pressed="false">Staff</button>
+    <button data-perspective="management" aria-pressed="false"><span class="pfull">Management</span></button>
+  </nav>
+
+  <!-- Journey mode rail (inert placeholders for a later increment). -->
+  <nav class="mode-rail" aria-label="Platform mode">
+    <button data-mode="build"      data-active="true"  disabled title="Coming in a later increment">Build</button>
+    <button data-mode="experience" data-active="false" disabled title="Coming in a later increment">Experience</button>
+    <button data-mode="finalize"   data-active="false" disabled title="Coming in a later increment">Finalize</button>
+    <button data-mode="revise"     data-active="false" disabled title="Coming in a later increment">Revise</button>
+  </nav>
+</header>
+
+<!-- Layer 2 · the stage (single viewport; the runtime mounts modules here) -->
+<main class="stage" role="main">
+  <div class="stage-inner" id="stage"></div>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+(function(){
+  var root = document.documentElement;
+  var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function(s, r){ return (r||document).querySelector(s); };
+  var $all = function(s, r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+
+  /* =================================================================
+     ORACLE RUNTIME
+     One config store, one module registry, one stage, one transition.
+     Everything a module needs is handed to it through `ctx`; modules
+     never reach outside their given stage element.
+     ================================================================= */
+  var Oracle = (function(){
+
+    /* --- Enhancement catalog (registry-backed, mirrors Master Registry) ---
+       Minimal but real: each enhancement carries a capability ID in the
+       ORACLE dot-notation and the label the client sees. The ?build=
+       parameter selects a subset; Config is the single source of truth. */
+    var CATALOG = {
+      base: { id:"base", name:"Launch Package", capability:"PLATFORM.CORE.LAUNCH" },
+      enhancements: [
+        { id:"guest",      code:"g", name:"Guest Experience Suite",     icon:"🛎️", capability:"ORDERING.GUEST.SUBMIT" },
+        { id:"membership", code:"m", name:"Membership Enhancements",     icon:"🪪", capability:"RESERVATIONS.MEMBER.CREATE" },
+        { id:"live",       code:"l", name:"Live Tonight & Presence",     icon:"🌙", capability:"PRESENCE.MEMBER.SIGNAL" },
+        { id:"community",  code:"c", name:"Community Suite",             icon:"💬", capability:"COMMUNITY.MEMBER.CONNECT" },
+        { id:"marketing",  code:"k", name:"Marketing Automation Suite",  icon:"📣", capability:"MARKETING.MGMT.AUTOMATE" },
+        { id:"bisuite",    code:"b", name:"Business Intelligence Suite",  icon:"📊", capability:"ANALYTICS.MGMT.REPORT" },
+        { id:"biassist",   code:"a", name:"BI + AI Assistant",          icon:"🤖", capability:"ANALYTICS.MGMT.ASSIST" }
+      ]
+    };
+    var byId = {}; CATALOG.enhancements.forEach(function(e){ byId[e.id] = e; });
+    var byCode = {}; CATALOG.enhancements.forEach(function(e){ byCode[e.code] = e; });
+
+    /* --- Config store: the single source of truth --------------------
+       Seeded from ?build=. Two encodings are accepted so the Oracle app
+       stays compatible with the proposal's shareable links:
+         · comma list of enhancement ids  (?build=guest,community)
+         · compact code string            (?build=gc)
+       Config is observable; modules re-read it on activate. */
+    var config = {
+      perspective: "guest",
+      mode: "build",
+      selected: []          // array of enhancement ids, order-preserving
+    };
+    var subscribers = [];
+
+    function seedFromUrl(){
+      var raw = "";
+      try {
+        var p = new URLSearchParams(window.location.search);
+        raw = p.get("build") || "";
+      } catch(e){ raw = ""; }
+      if(!raw) return;
+      var ids = [];
+      if(raw.indexOf(",") >= 0 || byId[raw]){
+        raw.split(",").forEach(function(tok){ tok = tok.trim(); if(byId[tok]) ids.push(tok); });
+      } else {
+        raw.split("").forEach(function(ch){ if(byCode[ch]) ids.push(byCode[ch].id); });
+      }
+      // de-dupe, preserve order
+      config.selected = ids.filter(function(v,i){ return ids.indexOf(v)===i; });
+    }
+
+    function setConfig(patch){
+      Object.keys(patch).forEach(function(k){ config[k] = patch[k]; });
+      subscribers.forEach(function(fn){ try{ fn(config); }catch(e){} });
+    }
+    function onConfig(fn){ subscribers.push(fn); }
+
+    function selectedEnhancements(){
+      return config.selected.map(function(id){ return byId[id]; }).filter(Boolean);
+    }
+    function buildCode(){
+      return config.selected.map(function(id){ return byId[id] ? byId[id].code : ""; }).join("");
+    }
+
+    /* --- Module registry --------------------------------------------- */
+    var modules = {};
+    var order = [];
+    function register(mod){
+      if(!mod || !mod.id){ return; }
+      modules[mod.id] = mod;
+      if(order.indexOf(mod.id) < 0) order.push(mod.id);
+      if(typeof mod.init === "function"){ try{ mod.init(api); }catch(e){} }
+    }
+
+    /* --- Stage + morph transition ------------------------------------
+       The Experience Contract lifecycle, simplified for the shell:
+         validateConfig → mount → activate → (later) destroy.
+       Only one module occupies the stage at a time. Context (config) is
+       preserved across the swap; only the DOM is exchanged. */
+    var stage = null;
+    var currentId = null;
+    var currentEl = null;
+    var swapping = false;
+
+    function ctxFor(){
+      return {
+        config: config,
+        catalog: CATALOG,
+        selectedEnhancements: selectedEnhancements,
+        buildCode: buildCode,
+        navigate: navigate,
+        onConfig: onConfig
+      };
+    }
+
+    function navigate(id){
+      if(swapping || id === currentId) return;
+      var mod = modules[id];
+      if(!mod){ return; }
+
+      var ctx = ctxFor();
+      if(typeof mod.validateConfig === "function"){
+        var v = mod.validateConfig(config);
+        if(v && v.ok === false){ toast(v.reason || "That experience isn't available yet."); return; }
+      }
+
+      swapping = true;
+      var incoming = document.createElement("section");
+      incoming.className = "experience";
+      incoming.setAttribute("data-experience", id);
+
+      // mount incoming (built off-screen, opacity 0) then morph the swap
+      var mounted = mod.mount(incoming, ctx);
+      if(mounted && mounted.nodeType === 1 && mounted !== incoming){ incoming.appendChild(mounted); }
+
+      var outgoing = currentEl;
+      var dur = reduce ? 0 : 340;
+
+      function finishIn(){
+        if(typeof mod.activate === "function"){ try{ mod.activate(ctx); }catch(e){} }
+        currentId = id; currentEl = incoming; swapping = false;
+        try{ history.replaceState(null, "", withBuild(window.location.pathname)); }catch(e){}
+        window.scrollTo({ top:0, behavior: reduce ? "auto" : "smooth" });
+      }
+
+      if(outgoing){
+        outgoing.classList.add("leave");
+        outgoing.classList.remove("enter");
+        setTimeout(function(){
+          var prev = modules[currentId];
+          if(prev && typeof prev.destroy === "function"){ try{ prev.destroy(); }catch(e){} }
+          if(outgoing.parentNode){ outgoing.parentNode.removeChild(outgoing); }
+          stage.appendChild(incoming);
+          requestAnimationFrame(function(){ requestAnimationFrame(function(){ incoming.classList.add("enter"); }); });
+          finishIn();
+        }, dur);
+      } else {
+        stage.appendChild(incoming);
+        requestAnimationFrame(function(){ requestAnimationFrame(function(){ incoming.classList.add("enter"); }); });
+        finishIn();
+      }
+    }
+
+    function withBuild(path){
+      var code = buildCode();
+      return code ? (path + "?build=" + code) : path;
+    }
+
+    /* --- Public API --------------------------------------------------- */
+    var api = {
+      config: config,
+      catalog: CATALOG,
+      register: register,
+      navigate: navigate,
+      setConfig: setConfig,
+      onConfig: onConfig,
+      selectedEnhancements: selectedEnhancements,
+      buildCode: buildCode,
+      moduleOrder: function(){ return order.slice(); },
+      current: function(){ return currentId; }
+    };
+
+    function start(stageEl, startId){
+      stage = stageEl;
+      seedFromUrl();
+      navigate(startId || order[0]);
+    }
+
+    return { api: api, start: start };
+  })();
+
+  /* =================================================================
+     LIVING ENVIRONMENT — persistent water world
+     Both canvases are reused verbatim from the proposal's procedural
+     water. Layer A: deep caustics (full-viewport). Layer B: drifting
+     ambient blobs. Composited, they read as one continuous environment.
+     (Concept Registry: add further depth/foam/parallax layers later.)
+     ================================================================= */
+
+  /* Layer A — caustics (from proposal hero water, now full-viewport) */
+  (function(){
+    var cv = document.getElementById("env-caustics"); if(!cv) return;
+    var ctx = cv.getContext("2d");
+    var OW = 240, OH = 150;
+    var off = document.createElement("canvas"); off.width=OW; off.height=OH;
+    var octx = off.getContext("2d");
+    var frame = octx.createImageData(OW, OH), data = frame.data;
+    function light(){ var t=root.getAttribute("data-theme"); if(t) return t==="light"; return !window.matchMedia("(prefers-color-scheme: dark)").matches; }
+    function resize(){ cv.width=Math.max(2,Math.floor(window.innerWidth*0.16)); cv.height=Math.max(2,Math.floor(window.innerHeight*0.16)); }
+    function render(t){
+      var isL = light();
+      for(var y=0;y<OH;y++){
+        for(var x=0;x<OW;x++){
+          var v = Math.sin(x*0.10 + t)
+                + Math.sin(y*0.13 - t*0.9)
+                + Math.sin((x+y)*0.068 + t*0.6)
+                + Math.sin((x-y)*0.085 - t*0.7)
+                + Math.sin(Math.sqrt((x-OW*0.5)*(x-OW*0.5)+(y-OH*0.62)*(y-OH*0.62))*0.085 - t*1.05);
+          var n=(v+5)/10; if(n<0)n=0; else if(n>1)n=1;
+          var caustic=n*n*n, glow=Math.pow(n,1.5), i=(y*OW+x)*4;
+          if(isL){
+            data[i]=170+caustic*74; data[i+1]=204+caustic*46; data[i+2]=206+caustic*44;
+          } else {
+            data[i]  = 8  + glow*30 + caustic*74;
+            data[i+1] = 32 + glow*88 + caustic*150;
+            data[i+2] = 44 + glow*100 + caustic*140;
+          }
+          data[i+3]=255;
+        }
+      }
+      octx.putImageData(frame,0,0);
+      ctx.imageSmoothingEnabled=true;
+      ctx.drawImage(off,0,0,cv.width,cv.height);
+    }
+    var t=0;
+    function loop(){ t+=0.013; render(t); requestAnimationFrame(loop); }
+    resize();
+    if(reduce){ render(1.9); } else { loop(); }
+    var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz=setTimeout(function(){ resize(); if(reduce) render(1.9); }, 200); });
+  })();
+
+  /* Layer B — ambient drifting blobs (from proposal ambient water) */
+  (function(){
+    var cv = document.getElementById("env-ambient"); if(!cv) return;
+    var ctx = cv.getContext("2d"), W, H, dpr = Math.min(window.devicePixelRatio||1, 1.6);
+    var blobs = [];
+    function isLight(){ var t=root.getAttribute("data-theme"); if(t) return t==="light"; return !window.matchMedia("(prefers-color-scheme: dark)").matches; }
+    function resize(){
+      W = cv.width = Math.floor(window.innerWidth*dpr); H = cv.height = Math.floor(window.innerHeight*dpr);
+      cv.style.width = window.innerWidth+"px"; cv.style.height = window.innerHeight+"px";
+    }
+    function seed(){
+      blobs = [];
+      var n = 7;
+      for(var i=0;i<n;i++){
+        blobs.push({
+          x: (i/n + 0.05)*1, y: (i%3)/3,
+          r: (0.18 + (i%4)*0.05),
+          sx: (i%2? 1:-1)*(0.00004 + (i%3)*0.00002),
+          sy: (i%2? -1:1)*(0.00003 + (i%2)*0.00002),
+          hue: i%3
+        });
+      }
+    }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.globalCompositeOperation = "lighter";
+      var light = isLight();
+      for(var i=0;i<blobs.length;i++){
+        var b = blobs[i];
+        if(!reduce){ b.x += b.sx; b.y += b.sy;
+          if(b.x<-0.2) b.x=1.2; if(b.x>1.2) b.x=-0.2; if(b.y<-0.2) b.y=1.2; if(b.y>1.2) b.y=-0.2; }
+        var cx = b.x*W, cy = b.y*H, rad = b.r*Math.max(W,H);
+        var g = ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
+        var col = b.hue===0 ? [79,186,203] : (b.hue===1 ? [201,162,75] : [30,107,120]);
+        var a = light ? 0.05 : 0.09;
+        g.addColorStop(0,"rgba("+col[0]+","+col[1]+","+col[2]+","+a+")");
+        g.addColorStop(1,"rgba("+col[0]+","+col[1]+","+col[2]+",0)");
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.fill();
+      }
+      ctx.globalCompositeOperation = "source-over";
+      if(!reduce) requestAnimationFrame(draw);
+    }
+    resize(); seed(); requestAnimationFrame(draw);
+    var rT; window.addEventListener("resize", function(){ clearTimeout(rT); rT=setTimeout(function(){ resize(); seed(); if(reduce) requestAnimationFrame(draw); }, 200); });
+  })();
+
+  /* =================================================================
+     SHELL WIRING — perspective + mode controls (inert placeholders)
+     They round-trip through Config so their permanent place and the
+     morph plumbing are proven, but they do not yet change authorization
+     or drive the journey. Feedback via toast so the intent is legible.
+     ================================================================= */
+  var toastEl = document.getElementById("toast"), toastT;
+  window.__toast = function(msg){
+    toastEl.textContent = msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.classList.remove("show"); }, 2400);
+  };
+  function toast(m){ window.__toast(m); }
+
+  $all("#perspective button").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      var p = btn.getAttribute("data-perspective");
+      $all("#perspective button").forEach(function(b){ b.setAttribute("aria-pressed", b===btn ? "true" : "false"); });
+      Oracle.api.setConfig({ perspective: p });
+      toast("Perspective: " + p.charAt(0).toUpperCase()+p.slice(1) + " — presentation preview (full perspectives arrive in a later increment).");
+    });
+  });
+
+  $all(".brand[data-nav], [data-nav]").forEach(function(el){
+    el.addEventListener("click", function(e){
+      e.preventDefault();
+      var id = el.getAttribute("data-nav");
+      if(id) Oracle.api.navigate(id);
+    });
+  });
+
+  /* =================================================================
+     EXPERIENCE MODULES (stubs)
+     Two minimal modules prove the registry + morph swap. They read the
+     live Config (selected enhancements) so the config-driven contract is
+     demonstrated end-to-end. Real content lands in later increments.
+     ================================================================= */
+
+  function enhListHtml(selectedIds){
+    var sel = {}; selectedIds.forEach(function(id){ sel[id]=true; });
+    return Oracle.api.catalog.enhancements.map(function(e){
+      var on = !!sel[e.id];
+      return '<li class="'+(on?'sel':'')+'">'+
+        '<span class="ico">'+e.icon+'</span>'+
+        '<span class="body"><b>'+e.name+'</b><span>'+e.capability+'</span></span>'+
+        (on?'<span class="flag">In build</span>':'')+
+      '</li>';
+    }).join("");
+  }
+
+  function configDebug(ctx){
+    var code = ctx.buildCode() || "(none)";
+    var sel = ctx.selectedEnhancements().map(function(e){ return e.id; }).join(", ") || "just the Launch Package";
+    return '<div class="debug"><b>Live config (single source of truth)</b><br>'+
+      'perspective: '+ctx.config.perspective+' &nbsp;·&nbsp; mode: '+ctx.config.mode+'<br>'+
+      'build code: '+code+'<br>'+
+      'selected: '+sel+'</div>';
+  }
+
+  // ---- Module: Proposal (stub) ----
+  Oracle.api.register({
+    id: "proposal",
+    name: "Proposal",
+    validateConfig: function(){ return { ok:true }; },
+    mount: function(stage, ctx){
+      var n = ctx.selectedEnhancements().length;
+      stage.innerHTML =
+        '<div class="xp">'+
+          '<p class="xp-eyebrow">The Oracle Platform · Oasis Aqualounge</p>'+
+          '<h1>One continuous world.<br>Configured to the client.</h1>'+
+          '<p class="lead">This is the Oracle shell: a single premium environment that carries a client from proposal, through building their platform, into experiencing it — without ever leaving the water. This module is a placeholder; the full proposal migrates here in a later increment.</p>'+
+          '<div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:8px">'+
+            '<button class="cta" data-go="catalog">Explore the enhancements →</button>'+
+            '<button class="cta ghost" data-go="catalog">Build My Platform</button>'+
+          '</div>'+
+          '<h2>What the client selected</h2>'+
+          '<p class="muted" style="margin-top:-6px">Read live from the configuration store, seeded from the shared <code>?build=</code> link.</p>'+
+          '<ul class="enh-list">'+ enhListHtml(ctx.config.selected) +'</ul>'+
+          '<div class="grid cols-3" style="margin-top:26px">'+
+            '<div class="card kpi"><b>'+ (n||0) +'</b><span>Enhancements in build</span></div>'+
+            '<div class="card kpi"><b>4</b><span>Perspectives</span></div>'+
+            '<div class="card kpi"><b>1</b><span>Living environment</span></div>'+
+          '</div>'+
+          configDebug(ctx)+
+        '</div>';
+      return stage;
+    },
+    activate: function(){
+      $all(".experience[data-experience='proposal'] [data-go]").forEach(function(b){
+        b.addEventListener("click", function(){ Oracle.api.navigate(b.getAttribute("data-go")); });
+      });
+    }
+  });
+
+  // ---- Module: Product Catalog (stub) ----
+  Oracle.api.register({
+    id: "catalog",
+    name: "Product Catalog",
+    validateConfig: function(){ return { ok:true }; },
+    mount: function(stage, ctx){
+      var cards = ctx.catalog.enhancements.map(function(e){
+        var on = ctx.config.selected.indexOf(e.id) >= 0;
+        return '<div class="card" style="display:flex; flex-direction:column; gap:10px">'+
+          '<div style="font-size:26px">'+e.icon+'</div>'+
+          '<b style="font-family:var(--serif); font-size:19px">'+e.name+'</b>'+
+          '<span class="chip '+(on?'on':'')+'"><span class="dot"></span>'+(on?'In this build':'Available')+'</span>'+
+          '<span class="faint" style="font-size:12px; font-family:ui-monospace,monospace">'+e.capability+'</span>'+
+        '</div>';
+      }).join("");
+      stage.innerHTML =
+        '<div class="xp">'+
+          '<p class="xp-eyebrow">Enhancement Catalog</p>'+
+          '<h1>Build the platform.</h1>'+
+          '<p class="lead">Every enhancement is a capability drawn from the Master Registry. Selecting them shapes the generated platform. In this shell increment the catalog is read-only — the selection engine and platform generation arrive next.</p>'+
+          '<div class="grid cols-3">'+ cards +'</div>'+
+          '<div style="margin-top:28px; display:flex; gap:12px; flex-wrap:wrap">'+
+            '<button class="cta ghost" data-go="proposal">← Back to proposal</button>'+
+          '</div>'+
+          configDebug(ctx)+
+        '</div>';
+      return stage;
+    },
+    activate: function(){
+      $all(".experience[data-experience='catalog'] [data-go]").forEach(function(b){
+        b.addEventListener("click", function(){ Oracle.api.navigate(b.getAttribute("data-go")); });
+      });
+    }
+  });
+
+  /* =================================================================
+     BOOT
+     ================================================================= */
+  Oracle.start(document.getElementById("stage"), "proposal");
+
+})();
+</script>
+</body>
+</html>
