@@ -143,11 +143,12 @@ body{
 .mode-rail{display:flex; align-items:center; gap:2px; margin-left:4px}
 .mode-rail button{
   font:inherit; font-size:11.5px; letter-spacing:.03em; color:var(--faint);
-  background:transparent; border:0; padding:6px 10px; border-radius:8px; cursor:not-allowed;
-  position:relative;
+  background:transparent; border:0; padding:6px 10px; border-radius:8px; cursor:pointer;
+  position:relative; transition:color .2s;
 }
+.mode-rail button:not(:disabled):hover{color:var(--text)}
 .mode-rail button[data-active="true"]{color:var(--gold)}
-.mode-rail button:disabled{opacity:.85}
+.mode-rail button:disabled{opacity:.85; cursor:not-allowed}
 @media (max-width:960px){ .mode-rail{display:none} }
 
 /* ── Layer 2: the stage (single viewport for the mounted module) ─────── */
@@ -245,6 +246,69 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   padding:11px 18px; border-radius:12px; font-size:14px; box-shadow:var(--shadow);
   opacity:0; pointer-events:none; transition:opacity .25s, transform .25s}
 .toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+
+/* ── Build My Platform — selector, generation sequence, complete ─────── */
+.build-layout{display:grid; gap:26px; align-items:start}
+@media (min-width:900px){ .build-layout{grid-template-columns:1fr 320px} }
+
+.sel-grid{display:grid; gap:14px}
+@media (min-width:560px){ .sel-grid{grid-template-columns:1fr 1fr} }
+.sel-card{position:relative; text-align:left; cursor:pointer; color:inherit;
+  background:linear-gradient(180deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line); border-radius:16px; padding:18px 18px 16px;
+  transition:border-color .2s, transform .15s, box-shadow .2s; display:flex; flex-direction:column; gap:9px}
+.sel-card:hover{transform:translateY(-2px); box-shadow:var(--shadow)}
+.sel-card.on{border-color:rgba(201,162,75,.62); box-shadow:0 0 0 1px rgba(201,162,75,.32), var(--shadow)}
+.sel-card .top{display:flex; align-items:center; gap:11px}
+.sel-card .ico{font-size:23px; line-height:1}
+.sel-card .nm{font-family:var(--serif); font-size:18px; font-weight:600; color:var(--text); flex:1}
+.sel-card .desc{font-size:13.5px; color:var(--muted); line-height:1.45}
+.sel-card .meta{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:2px}
+.sel-card .cap{font-size:11px; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; color:var(--faint)}
+.sel-card .price{font-size:12.5px; color:var(--muted)} .sel-card .price b{color:var(--gold-bright); font-weight:600}
+.sel-card .ai-tag{font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--aqua); font-weight:700}
+.sel-check{position:absolute; top:14px; right:14px; width:22px; height:22px; border-radius:50%;
+  border:1.5px solid var(--line); display:grid; place-items:center; transition:.2s; color:transparent; font-size:12px}
+.sel-card.on .sel-check{background:linear-gradient(180deg,var(--gold-bright),var(--gold)); border-color:transparent; color:var(--ink)}
+
+.summary{position:sticky; top:calc(var(--shell-top) + 16px);
+  background:linear-gradient(180deg, var(--surface), var(--surface-2));
+  border:1px solid var(--line); border-radius:18px; padding:22px; box-shadow:var(--shadow)}
+.summary h3{font-family:var(--serif); font-weight:600; font-size:20px; margin:0 0 4px}
+.summary .sub{font-size:12.5px; color:var(--faint); margin:0 0 16px}
+.summary .row{display:flex; justify-content:space-between; align-items:baseline; padding:9px 0; border-top:1px solid var(--line-soft)}
+.summary .row .k{font-size:13px; color:var(--muted)}
+.summary .row .v{font-family:var(--serif); font-size:19px; color:var(--gold-bright); font-weight:600}
+.summary .total .v{font-size:26px}
+.summary .hint{font-size:11.5px; color:var(--faint); margin:14px 0 0; line-height:1.5}
+.summary .cta{width:100%; justify-content:center; margin-top:18px}
+
+/* generation sequence + complete */
+.gen{max-width:640px; margin:0 auto; padding:80px 24px; text-align:center; min-height:70vh; display:flex; flex-direction:column; justify-content:center}
+.gen h1{font-family:var(--serif); font-weight:600; font-size:clamp(28px,5vw,42px); margin:0 0 8px}
+.gen .gensub{color:var(--muted); margin:0 0 34px}
+.gen-stages{display:grid; gap:12px; text-align:left; max-width:460px; margin:0 auto; width:100%}
+.gen-stage{display:flex; align-items:center; gap:14px; padding:13px 16px; border-radius:12px;
+  border:1px solid var(--line-soft); background:rgba(255,255,255,.02); opacity:.4; transition:opacity .4s, border-color .4s}
+.gen-stage.active{opacity:1; border-color:rgba(79,186,203,.4)}
+.gen-stage.complete{opacity:1; border-color:rgba(201,162,75,.4)}
+.gen-stage .st-ico{width:24px; height:24px; border-radius:50%; border:2px solid var(--faint); flex:0 0 auto; display:grid; place-items:center; font-size:12px; color:transparent}
+.gen-stage.active .st-ico{border-color:var(--aqua); border-top-color:transparent; animation:spin .8s linear infinite}
+.gen-stage.complete .st-ico{border-color:transparent; background:linear-gradient(180deg,var(--gold-bright),var(--gold)); color:var(--ink); animation:none}
+.gen-stage .st-label{font-size:15px; color:var(--text)}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){ .gen-stage.active .st-ico{animation:none} }
+.gen-bar{height:4px; border-radius:4px; background:rgba(255,255,255,.06); overflow:hidden; max-width:460px; margin:26px auto 0; width:100%}
+.gen-bar i{display:block; height:100%; width:0; background:linear-gradient(90deg,var(--aqua),var(--gold)); transition:width .5s ease}
+
+.complete-badge{width:72px; height:72px; margin:0 auto 22px; border-radius:50%;
+  background:radial-gradient(circle at 38% 32%, var(--gold-bright), var(--gold) 60%, var(--aqua-deep) 130%);
+  display:grid; place-items:center; font-size:34px; color:var(--ink); box-shadow:0 14px 40px -12px rgba(201,162,75,.6)}
+.complete .rowset{display:grid; gap:10px; max-width:420px; margin:22px auto 0; text-align:left}
+.complete .rowset .row{display:flex; justify-content:space-between; gap:16px; padding:11px 15px; border-radius:11px; border:1px solid var(--line-soft); background:rgba(255,255,255,.02)}
+.complete .rowset .row span{color:var(--muted)}
+.complete .rowset .row b{font-family:var(--serif); color:var(--gold-bright); font-weight:600}
+.complete .actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:30px}
 </style>
 </head>
 <body>
@@ -271,12 +335,13 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
     <button data-perspective="management" aria-pressed="false"><span class="pfull">Management</span></button>
   </nav>
 
-  <!-- Journey mode rail (inert placeholders for a later increment). -->
+  <!-- Journey mode rail. Build is live (→ Build My Platform); the rest are
+       placeholders until their increments land. -->
   <nav class="mode-rail" aria-label="Platform mode">
-    <button data-mode="build"      data-active="true"  disabled title="Coming in a later increment">Build</button>
-    <button data-mode="experience" data-active="false" disabled title="Coming in a later increment">Experience</button>
-    <button data-mode="finalize"   data-active="false" disabled title="Coming in a later increment">Finalize</button>
-    <button data-mode="revise"     data-active="false" disabled title="Coming in a later increment">Revise</button>
+    <button data-mode="build"      data-nav="catalog" data-active="false">Build</button>
+    <button data-mode="experience" data-active="false" disabled title="Arrives with the Platform Experience">Experience</button>
+    <button data-mode="finalize"   data-active="false" disabled title="Arrives with Finalize My Platform">Finalize</button>
+    <button data-mode="revise"     data-active="false" disabled title="Arrives with Revise My Platform">Revise</button>
   </nav>
 </header>
 
@@ -2786,16 +2851,19 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
        Minimal but real: each enhancement carries a capability ID in the
        ORACLE dot-notation and the label the client sees. The ?build=
        parameter selects a subset; Config is the single source of truth. */
+    // Enhancement catalog — names + economics match the approved proposal's
+    // ENGINE (the source of truth); investMid / timeAdd drive live totals.
     var CATALOG = {
-      base: { id:"base", name:"Launch Package", capability:"PLATFORM.CORE.LAUNCH" },
+      base: { id:"base", name:"Launch Package", capability:"PLATFORM.CORE.LAUNCH",
+              invest:43750, weeksMin:8, weeksMax:10 },
       enhancements: [
-        { id:"guest",      code:"g", name:"Guest Experience Suite",     icon:"🛎️", capability:"ORDERING.GUEST.SUBMIT" },
-        { id:"membership", code:"m", name:"Membership Enhancements",     icon:"🪪", capability:"RESERVATIONS.MEMBER.CREATE" },
-        { id:"live",       code:"l", name:"Live Tonight & Presence",     icon:"🌙", capability:"PRESENCE.MEMBER.SIGNAL" },
-        { id:"community",  code:"c", name:"Community Suite",             icon:"💬", capability:"COMMUNITY.MEMBER.CONNECT" },
-        { id:"marketing",  code:"k", name:"Marketing Automation Suite",  icon:"📣", capability:"MARKETING.MGMT.AUTOMATE" },
-        { id:"bisuite",    code:"b", name:"Business Intelligence Suite",  icon:"📊", capability:"ANALYTICS.MGMT.REPORT" },
-        { id:"biassist",   code:"a", name:"BI + AI Assistant",          icon:"🤖", capability:"ANALYTICS.MGMT.ASSIST" }
+        { id:"guest",      code:"g", name:"Guest Convenience Suite",       icon:"🛎️", capability:"ORDERING.GUEST.SUBMIT",     invest:2000, timeAdd:1.5, desc:"Frictionless, one-tap ordering that turns regulars into effortless repeat spend." },
+        { id:"membership", code:"m", name:"Membership Enhancements",        icon:"🪪", capability:"RESERVATIONS.MEMBER.CREATE", invest:2750, timeAdd:1.5, desc:"Physical, scannable membership cards with full lifecycle management." },
+        { id:"live",       code:"l", name:"Live Venue Experience",          icon:"🌙", capability:"PRESENCE.MEMBER.SIGNAL",     invest:3250, timeAdd:2.5, desc:"A living, real-time picture of the venue that pulls guests in tonight." },
+        { id:"community",  code:"c", name:"Community Suite",                icon:"💬", capability:"COMMUNITY.MEMBER.CONNECT",   invest:3250, timeAdd:3,   desc:"The connective tissue that turns members into a returning community." },
+        { id:"marketing",  code:"k", name:"Marketing Automation Suite",     icon:"📣", capability:"MARKETING.MGMT.AUTOMATE",    invest:4000, timeAdd:3,   desc:"Always-on campaigns that bring guests back without lifting a finger." },
+        { id:"bisuite",    code:"b", name:"Business Intelligence Suite",    icon:"📊", capability:"ANALYTICS.MGMT.REPORT",      invest:5500, timeAdd:4,   desc:"The dashboards and back-office to run the whole operation on data." },
+        { id:"biassist",   code:"a", name:"Strategic Intelligence Advisor", icon:"🤖", capability:"ANALYTICS.MGMT.ASSIST",      invest:9750, timeAdd:5,   desc:"An always-on strategic advisor that turns operational data into executive decisions.", ai:true }
       ]
     };
     var byId = {}; CATALOG.enhancements.forEach(function(e){ byId[e.id] = e; });
@@ -2833,6 +2901,8 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
 
     function setConfig(patch){
       Object.keys(patch).forEach(function(k){ config[k] = patch[k]; });
+      // keep the shareable ?build= link in sync when the selection changes
+      if(patch.selected){ try{ history.replaceState(null, "", withBuild(window.location.pathname)); }catch(e){} }
       subscribers.forEach(function(fn){ try{ fn(config); }catch(e){} });
     }
     function onConfig(fn){ subscribers.push(fn); }
@@ -2918,12 +2988,16 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
         rec.activated = true;
         if(typeof mod.activate === "function"){ try{ mod.activate(incoming, ctx); }catch(e){} }
       }
+      // onShow runs on EVERY reveal (activate runs once) — modules that replay
+      // (e.g. the Build generation sequence) hook here.
+      if(typeof mod.onShow === "function"){ try{ mod.onShow(incoming, ctx); }catch(e){} }
       requestAnimationFrame(function(){ requestAnimationFrame(function(){ incoming.classList.add("enter"); }); });
 
       function done(){
         currentId = id; currentEl = incoming; swapping = false;
         try{ history.replaceState(null, "", withBuild(window.location.pathname)); }catch(e){}
         window.scrollTo({ top:0, behavior: reduce ? "auto" : "smooth" });
+        navSubs.forEach(function(fn){ try{ fn(id); }catch(e){} });
       }
 
       if(outgoing && outgoing !== incoming){
@@ -2944,6 +3018,28 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       return code ? (path + "?build=" + code) : path;
     }
 
+    var navSubs = [];
+    function onNavigate(fn){ navSubs.push(fn); }
+
+    // Toggle one enhancement in the config (single source of truth).
+    function toggleEnhancement(id){
+      if(!byId[id]) return;
+      var next = config.selected.slice();
+      var i = next.indexOf(id);
+      if(i >= 0) next.splice(i, 1); else next.push(id);
+      setConfig({ selected: next });
+    }
+
+    /* --- Economics — mirrors the approved proposal's ENGINE ------------- */
+    var CAD = new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 });
+    function economics(){
+      var sel = selectedEnhancements();
+      var invest = CATALOG.base.invest, add = 0;
+      sel.forEach(function(e){ invest += (e.invest||0); add += (e.timeAdd||0); });
+      return { count: sel.length, invest: invest,
+               weeksMin: CATALOG.base.weeksMin + add, weeksMax: CATALOG.base.weeksMax + add };
+    }
+
     /* --- Public API --------------------------------------------------- */
     var api = {
       config: config,
@@ -2952,7 +3048,11 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       navigate: navigate,
       setConfig: setConfig,
       onConfig: onConfig,
+      onNavigate: onNavigate,
+      toggleEnhancement: toggleEnhancement,
       selectedEnhancements: selectedEnhancements,
+      economics: economics,
+      formatMoney: function(n){ return CAD.format(n); },
       buildCode: buildCode,
       moduleOrder: function(){ return order.slice(); },
       current: function(){ return currentId; }
@@ -3093,33 +3193,22 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
     });
   });
 
+  // Keep the mode rail's active state in sync with the current experience.
+  // Build is "active" while building the platform (selector or generation).
+  Oracle.api.onNavigate(function(id){
+    var buildActive = (id === "catalog" || id === "build");
+    var b = document.querySelector('.mode-rail [data-mode="build"]');
+    if(b) b.setAttribute("data-active", buildActive ? "true" : "false");
+    Oracle.api.setConfig({ mode: buildActive ? "build" : "view" });
+  });
+
   /* =================================================================
-     EXPERIENCE MODULES (stubs)
-     Two minimal modules prove the registry + morph swap. They read the
-     live Config (selected enhancements) so the config-driven contract is
-     demonstrated end-to-end. Real content lands in later increments.
+     EXPERIENCE MODULES
+     Proposal (migrated, full-canvas) · Build My Platform (selector →
+     generation → complete). All read and write the single Config store.
      ================================================================= */
 
-  function enhListHtml(selectedIds){
-    var sel = {}; selectedIds.forEach(function(id){ sel[id]=true; });
-    return Oracle.api.catalog.enhancements.map(function(e){
-      var on = !!sel[e.id];
-      return '<li class="'+(on?'sel':'')+'">'+
-        '<span class="ico">'+e.icon+'</span>'+
-        '<span class="body"><b>'+e.name+'</b><span>'+e.capability+'</span></span>'+
-        (on?'<span class="flag">In build</span>':'')+
-      '</li>';
-    }).join("");
-  }
-
-  function configDebug(ctx){
-    var code = ctx.buildCode() || "(none)";
-    var sel = ctx.selectedEnhancements().map(function(e){ return e.id; }).join(", ") || "just the Launch Package";
-    return '<div class="debug"><b>Live config (single source of truth)</b><br>'+
-      'perspective: '+ctx.config.perspective+' &nbsp;·&nbsp; mode: '+ctx.config.mode+'<br>'+
-      'build code: '+code+'<br>'+
-      'selected: '+sel+'</div>';
-  }
+  function fmtWeeks(n){ return String(Math.round(n * 2) / 2); }
 
   // ---- Module: Proposal (migrated — full proposal inside a Shadow DOM) ----
   // The approved proposal is mounted verbatim inside a shadow root for total
@@ -3150,38 +3239,131 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
     }
   });
 
-  // ---- Module: Product Catalog (stub) ----
+  // ---- Module: Build My Platform (real config-driven selector) ----
+  // Selecting a card writes straight to the Config store (single source of
+  // truth) and the ?build= URL; the investment + timeline update live from
+  // the same economics the proposal uses. "Build My Platform" hands off to
+  // the generation sequence.
   Oracle.api.register({
     id: "catalog",
-    name: "Product Catalog",
+    name: "Build My Platform",
     validateConfig: function(){ return { ok:true }; },
-    mount: function(stage, ctx){
-      var cards = ctx.catalog.enhancements.map(function(e){
-        var on = ctx.config.selected.indexOf(e.id) >= 0;
-        return '<div class="card" style="display:flex; flex-direction:column; gap:10px">'+
-          '<div style="font-size:26px">'+e.icon+'</div>'+
-          '<b style="font-family:var(--serif); font-size:19px">'+e.name+'</b>'+
-          '<span class="chip '+(on?'on':'')+'"><span class="dot"></span>'+(on?'In this build':'Available')+'</span>'+
-          '<span class="faint" style="font-size:12px; font-family:ui-monospace,monospace">'+e.capability+'</span>'+
-        '</div>';
-      }).join("");
+    mount: function(stage){
       stage.innerHTML =
         '<div class="xp">'+
-          '<p class="xp-eyebrow">Enhancement Catalog</p>'+
-          '<h1>Build the platform.</h1>'+
-          '<p class="lead">Every enhancement is a capability drawn from the Master Registry. Selecting them shapes the generated platform. In this shell increment the catalog is read-only — the selection engine and platform generation arrive next.</p>'+
-          '<div class="grid cols-3">'+ cards +'</div>'+
-          '<div style="margin-top:28px; display:flex; gap:12px; flex-wrap:wrap">'+
-            '<button class="cta ghost" data-go="proposal">← Back to proposal</button>'+
+          '<p class="xp-eyebrow">Build My Platform</p>'+
+          '<h1>Choose the platform.</h1>'+
+          '<p class="lead">Every enhancement is a capability from the Master Registry. Select what belongs in this build — investment and timeline update live, and your choices become the platform Oracle generates.</p>'+
+          '<div class="build-layout">'+
+            '<div class="sel-grid" data-sel-grid></div>'+
+            '<aside class="summary" data-summary aria-live="polite"></aside>'+
           '</div>'+
-          configDebug(ctx)+
         '</div>';
       return stage;
     },
-    activate: function(){
-      $all(".experience[data-experience='catalog'] [data-go]").forEach(function(b){
-        b.addEventListener("click", function(){ Oracle.api.navigate(b.getAttribute("data-go")); });
+    activate: function(el){
+      var grid = el.querySelector('[data-sel-grid]');
+      var summary = el.querySelector('[data-summary]');
+
+      function cardHtml(e, on){
+        return '<button class="sel-card '+(on?'on':'')+'" data-enh="'+e.id+'" aria-pressed="'+(on?'true':'false')+'">'+
+          '<span class="sel-check" aria-hidden="true">✓</span>'+
+          '<span class="top"><span class="ico" aria-hidden="true">'+e.icon+'</span><span class="nm">'+e.name+'</span></span>'+
+          '<span class="desc">'+e.desc+'</span>'+
+          '<span class="meta"><span class="cap">'+e.capability+'</span>'+
+            '<span class="price">'+(e.ai?'<span class="ai-tag">AI</span> ':'')+'<b>+'+Oracle.api.formatMoney(e.invest)+'</b></span></span>'+
+        '</button>';
+      }
+      function render(){
+        var sel = Oracle.api.config.selected;
+        grid.innerHTML = Oracle.api.catalog.enhancements.map(function(e){ return cardHtml(e, sel.indexOf(e.id) >= 0); }).join('');
+        var ec = Oracle.api.economics();
+        summary.innerHTML =
+          '<h3>Your platform</h3>'+
+          '<p class="sub">Launch Package + '+ec.count+' enhancement'+(ec.count===1?'':'s')+'</p>'+
+          '<div class="row total"><span class="k">Investment</span><span class="v">'+Oracle.api.formatMoney(ec.invest)+'</span></div>'+
+          '<div class="row"><span class="k">Timeline</span><span class="v">'+fmtWeeks(ec.weeksMin)+'–'+fmtWeeks(ec.weeksMax)+' wks</span></div>'+
+          '<p class="hint">Mirrors the proposal — investment before HST, timeline from finalized design. Everything stays revisable until you finalize.</p>'+
+          '<button class="cta" data-build>Build My Platform →</button>';
+      }
+
+      // delegated handlers (activate runs once; card DOM is rebuilt on render)
+      grid.addEventListener('click', function(ev){
+        var b = ev.target.closest('[data-enh]'); if(!b) return;
+        Oracle.api.toggleEnhancement(b.getAttribute('data-enh'));
       });
+      summary.addEventListener('click', function(ev){
+        if(ev.target.closest('[data-build]')) Oracle.api.navigate('build');
+      });
+      Oracle.api.onConfig(function(){ render(); });
+      render();
+    }
+  });
+
+  // ---- Module: Platform Generation → Complete ----
+  // Replays on every entry (onShow). Plays the 5-stage generation sequence
+  // from the Technical Architecture, then lands on Platform Complete with the
+  // Revise (→ keep refining) vs Experience distinction wired in.
+  var GEN_STAGES = ["Building Configuration","Loading Enhancements","Configuring Perspectives","Preparing Concierge","Optimizing Experience"];
+  Oracle.api.register({
+    id: "build",
+    name: "Platform Generation",
+    validateConfig: function(){ return { ok:true }; },
+    mount: function(stage){ stage.innerHTML = '<div data-genroot></div>'; return stage; },
+    onShow: function(el){
+      var root = el.querySelector('[data-genroot]');
+      var ec = Oracle.api.economics();
+      var reduceM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function renderComplete(){
+        root.innerHTML =
+          '<div class="gen complete">'+
+            '<div class="complete-badge" aria-hidden="true">✓</div>'+
+            '<h1>Your platform is ready.</h1>'+
+            '<p class="gensub">Oasis is configured with the Launch Package'+(ec.count?(' and '+ec.count+' enhancement'+(ec.count===1?'':'s')):'')+'.</p>'+
+            '<div class="rowset">'+
+              '<div class="row"><span>Enhancements</span><b>'+ec.count+'</b></div>'+
+              '<div class="row"><span>Investment</span><b>'+Oracle.api.formatMoney(ec.invest)+'</b></div>'+
+              '<div class="row"><span>Timeline</span><b>'+fmtWeeks(ec.weeksMin)+'–'+fmtWeeks(ec.weeksMax)+' weeks</b></div>'+
+            '</div>'+
+            '<div class="actions">'+
+              '<button class="cta" data-experience>Experience My Platform →</button>'+
+              '<button class="cta ghost" data-revise>Revise My Platform</button>'+
+            '</div>'+
+          '</div>';
+        root.querySelector('[data-revise]').addEventListener('click', function(){ Oracle.api.navigate('catalog'); });
+        root.querySelector('[data-experience]').addEventListener('click', function(){
+          window.__toast('Experience My Platform arrives next — your live, configured platform.');
+        });
+      }
+
+      root.innerHTML =
+        '<div class="gen">'+
+          '<h1>Generating your platform</h1>'+
+          '<p class="gensub">Assembling '+ec.count+' enhancement'+(ec.count===1?'':'s')+' into one Oasis platform…</p>'+
+          '<div class="gen-stages">'+ GEN_STAGES.map(function(s){
+            return '<div class="gen-stage" data-stage><span class="st-ico" aria-hidden="true">✓</span><span class="st-label">'+s+'</span></div>';
+          }).join('') +'</div>'+
+          '<div class="gen-bar" aria-hidden="true"><i data-bar></i></div>'+
+        '</div>';
+      var stages = Array.prototype.slice.call(root.querySelectorAll('[data-stage]'));
+      var bar = root.querySelector('[data-bar]');
+
+      if(reduceM){
+        stages.forEach(function(s){ s.classList.add('complete'); });
+        bar.style.width = '100%';
+        renderComplete();
+        return;
+      }
+      var i = 0;
+      (function step(){
+        if(i > 0){ stages[i-1].classList.remove('active'); stages[i-1].classList.add('complete'); }
+        if(i >= stages.length){ bar.style.width = '100%'; setTimeout(renderComplete, 420); return; }
+        stages[i].classList.add('active');
+        bar.style.width = Math.round((i / stages.length) * 100) + '%';
+        i++;
+        setTimeout(step, 720);
+      })();
     }
   });
 

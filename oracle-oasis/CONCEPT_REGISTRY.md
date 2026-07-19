@@ -88,3 +88,28 @@ chrome (brand, perspective) is the visible continuity proof over the proposal.
 The proposal brings its own `<main>` inside its shadow root, so the flattened a11y
 tree can expose two `main` landmarks. Reconcile when perspectives/landmarks get a
 dedicated pass (roadmap #6 / #10).
+
+---
+
+## CR-009 · Config bridge: proposal ⇆ Config (bidirectional) 🔍
+**Raised by:** Increment #4.
+The **Build My Platform** selector is now the config-driven selection surface —
+toggles write to the single Config store and the `?build=` URL. The migrated
+proposal still runs its **own** enhancement selector (its ENGINE), seeded from the
+same `?build=` on load but not live-synced afterward. Later (roadmap #9,
+"Configuration integration") make it bidirectional: proposal selections → Config,
+Config → proposal, so both surfaces always agree in real time. For now the two
+agree on load, and the selector is the authoritative surface.
+
+## CR-010 · Economics as one shared source 🔍
+Increment #4 mirrored the proposal's ENGINE economics (base $43,750, per-enhancement
+`invest`/`timeAdd`) into Oracle's `CATALOG`. Two copies now exist. When the config
+bridge lands (CR-009), collapse to ONE economics source (ideally derived from the
+live Master Registry per the Founding Docs) so numbers can never drift between the
+proposal and the selector.
+
+## CR-011 · Build sequence is presentational (for now) 🌱
+The 5-stage generation sequence is a timed animation, not real work — it sets the
+tone of "the platform is being assembled." When real platform generation exists
+(assembling actual modules/perspectives from Config), drive the stages from genuine
+progress events instead of fixed timers.

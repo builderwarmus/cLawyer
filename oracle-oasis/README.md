@@ -48,15 +48,27 @@ Delivered:
   style isolation, opacity-only transition so its `position:fixed` gateway /
   elevator / water stay anchored. Design tokens inherit from Oracle's `:root`
   through the shadow boundary. (`images/` holds the proposal's photography.)
-- **Product Catalog** — stub module proving multi-module swap and the
-  config-driven, capability-ID contract end-to-end.
+- **Build My Platform** — the real, config-driven flow:
+  - **Selector** — every enhancement is a selectable card; toggling writes
+    straight to the Config store (single source of truth) and the `?build=`
+    URL. A live summary shows investment + timeline from the **same economics
+    as the approved proposal** (Launch Package $43,750; per-enhancement
+    midpoints and timeline adds).
+  - **Generation** — "Build My Platform" plays the 5-stage sequence from the
+    Technical Architecture (Building Configuration → Loading Enhancements →
+    Configuring Perspectives → Preparing Concierge → Optimizing Experience),
+    reduced-motion aware.
+  - **Platform Complete** — a summary with **Experience My Platform** (next
+    increment) and **Revise My Platform** (→ back to the selector, selections
+    preserved — the settled Revise-vs-Finalize distinction).
+  - Reachable from the shell's **Build** mode; the mode rail tracks state.
 
 ### Not yet built (later increments, in Directive priority order)
 
 1. ~~Experience Shell~~ ✅
 2. ~~Living Environment~~ ✅
 3. ~~Proposal (migrate the real proposal here)~~ ✅
-4. Product Catalog (real enhancement selection engine)
+4. ~~Product Catalog / Build My Platform (real selection engine)~~ ✅
 5. Platform Experience
 6. Perspectives (Guest / Member / Staff / Management — real)
 7. Concierge (rule-driven, not AI)
