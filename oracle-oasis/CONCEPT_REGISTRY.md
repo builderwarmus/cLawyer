@@ -124,9 +124,13 @@ rows rather than a hand-written table, so the platform's surface always matches 
 registry (ties into CR-010 / roadmap #9). Panel *content* is representative demo
 data for now.
 
-## CR-013 · Perspective morph (member vs staff vs management) 🔍 → feeds #6
-Increment #5 makes the perspective selector do something real for the first time:
-the platform re-renders on perspective change and management-facing features lead
-under Management/Staff. Increment #6 turns this into a full **presentation morph** —
-same configured platform, re-shaped chrome/affordances per perspective (CR-002),
-"perspective controls presentation, not authorization."
+## CR-013 · Perspective morph (member vs staff vs management) ✅ (Increment #6)
+Delivered: the platform re-presents through four lenses (Member / Guest / Staff /
+Management) with a morph transition. The same capability shows differently per
+lens (ordering → "order a drink" for members, an "incoming orders" queue for
+staff, "bar revenue" for management), and management depth scales with the
+selected analytics. "Perspective controls presentation, not authorization."
+**Open thread:** today each lens is a distinct render path. Later, drive the
+per-lens presentation from capability metadata (per CR-012 / Master Registry) so
+new capabilities automatically get member/staff/management presentations without
+hand-written view code.

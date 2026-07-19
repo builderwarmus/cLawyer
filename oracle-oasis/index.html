@@ -337,7 +337,10 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 
 .pf-panel{animation:pf-fade .3s ease}
 @keyframes pf-fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
-@media (prefers-reduced-motion: reduce){ .pf-panel{animation:none} }
+/* perspective morph — the whole platform re-shapes when the lens changes */
+.platform.pf-morph{animation:pf-morph .36s cubic-bezier(.22,.68,.24,1)}
+@keyframes pf-morph{from{opacity:0; transform:translateY(12px) scale(.992)}to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){ .pf-panel, .platform.pf-morph{animation:none} }
 .pf-panel h2{font-family:var(--serif); font-weight:600; font-size:22px; margin:0 0 4px}
 .pf-panel .pintro{color:var(--muted); font-size:14px; margin:0 0 20px; max-width:60ch}
 .pf-grid{display:grid; gap:14px}
@@ -405,8 +408,8 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 
   <!-- Perspective controls presentation, not authorization (inert placeholder). -->
   <nav class="perspective" aria-label="Perspective" id="perspective">
-    <button data-perspective="guest"      aria-pressed="true">Guest</button>
-    <button data-perspective="member"     aria-pressed="false">Member</button>
+    <button data-perspective="guest"      aria-pressed="false">Guest</button>
+    <button data-perspective="member"     aria-pressed="true">Member</button>
     <button data-perspective="staff"      aria-pressed="false">Staff</button>
     <button data-perspective="management" aria-pressed="false"><span class="pfull">Management</span></button>
   </nav>
@@ -2952,9 +2955,9 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
          · compact code string            (?build=gc)
        Config is observable; modules re-read it on activate. */
     var config = {
-      perspective: "guest",
+      perspective: "member",   // the platform's headline lens; guest/staff/management are toggles
       mode: "build",
-      selected: []          // array of enhancement ids, order-preserving
+      selected: []             // array of enhancement ids, order-preserving
     };
     var subscribers = [];
 
@@ -3257,7 +3260,10 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       var p = btn.getAttribute("data-perspective");
       $all("#perspective button").forEach(function(b){ b.setAttribute("aria-pressed", b===btn ? "true" : "false"); });
       Oracle.api.setConfig({ perspective: p });
-      toast("Perspective: " + p.charAt(0).toUpperCase()+p.slice(1) + " — presentation preview (full perspectives arrive in a later increment).");
+      // On the platform the change morphs live; elsewhere, point the way in.
+      if(Oracle.api.current() !== "platform"){
+        toast(p.charAt(0).toUpperCase()+p.slice(1)+" perspective — open Experience to see it.");
+      }
     });
   });
 
@@ -3454,6 +3460,7 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
   (function(){
     var verified = false;      // session-remembered age check
     var activeTab = null;
+    var lastPersp = null;      // drives the perspective morph on change
     var cart = { count:0, total:0 };
     var host = null;
 
@@ -3555,34 +3562,102 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
         '</div>'+
         '<div class="tile" style="margin-top:14px"><div class="lab">Busiest floor</div><div class="big" style="font-size:20px">The Waters</div><p class="pintro" style="margin:8px 0 0">Bar spend is tracking 12% above the same night last month.</p></div>';
     }
-    function renderAdvisor(){
+    function advisorFeed(){
       var recs=[["Revenue","Open the third bar Fridays after 11 PM — occupancy and wait-time data suggest ~$1,400 in unserved demand."],["Programming","Repeat the ‘Deep Current’ DJ night — attendance ran 23% above your Friday average."]];
-      var cards=recs.map(function(r){ return '<div class="post"><div class="head"><span class="av">◎</span><span class="who2">Strategic Advisor</span><span class="when">'+r[0]+'</span></div><div class="body">'+r[1]+'</div></div>'; }).join("");
-      return '<h2>Advisor <span class="pf-tab mgmt" style="padding:2px 8px">Management</span></h2><p class="pintro">Your operational data, turned into executive decisions — the Strategic Intelligence Advisor.</p><div class="feed">'+cards+'</div>';
+      return '<div class="feed">'+ recs.map(function(r){ return '<div class="post"><div class="head"><span class="av">◎</span><span class="who2">Strategic Advisor</span><span class="when">'+r[0]+'</span></div><div class="body">'+r[1]+'</div></div>'; }).join("") +'</div>';
+    }
+    function renderAdvisor(){
+      return '<h2>Advisor <span class="pf-tab mgmt" style="padding:2px 8px">Management</span></h2><p class="pintro">Your operational data, turned into executive decisions — the Strategic Intelligence Advisor.</p>'+ advisorFeed();
+    }
+    function has(id){ return Oracle.api.config.selected.indexOf(id) >= 0; }
+
+    function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+
+    /* ---------- perspective presentations ----------
+       Same configured platform, four lenses. Perspective controls
+       PRESENTATION, not authorization — a capability like ordering shows as
+       "order a drink" for a member, an "incoming orders" queue for staff, and
+       "bar revenue" for management. The available capabilities are still the
+       ones the client selected in Build My Platform. */
+    function topBar(sub){
+      var p = Oracle.api.config.perspective;
+      var initial = p==="staff" ? "S" : p==="management" ? "M" : p==="guest" ? "G" : "A";
+      return '<div class="pf-top"><span class="venue">Oasis Aqualounge</span>'+
+        '<span class="status"><span class="dot"></span>Open now</span>'+
+        '<span class="who"><span>'+cap(p)+' view</span><span class="av">'+initial+'</span></span></div>'+
+        '<p class="pf-sub">'+sub+'</p>';
     }
 
-    function renderPlatform(){
+    // Member — the full tabbed app; tabs derive from selected enhancements.
+    function memberBody(){
       var feats = activeFeatures();
       if(!activeTab || !feats.some(function(f){ return f.id === activeTab; })){ activeTab = feats[0].id; }
       var tabs = feats.map(function(f){
         return '<button class="pf-tab '+(f.id===activeTab?'on':'')+'" data-tab="'+f.id+'"><span class="ic">'+f.def.ic+'</span>'+f.def.tab+(f.def.mgmt?' <span class="mgmt">MGMT</span>':'')+'</button>';
       }).join("");
       var current = feats.filter(function(f){ return f.id===activeTab; })[0];
-      host.innerHTML =
-        '<div class="platform">'+
-          '<div class="pf-top"><span class="venue">Oasis Aqualounge</span>'+
-            '<span class="status"><span class="dot"></span>Open now</span>'+
-            '<span class="who"><span>'+cap(Oracle.api.config.perspective)+' view</span><span class="av">A</span></span></div>'+
-          '<p class="pf-sub">Your platform · Launch Package + '+Oracle.api.economics().count+' enhancement'+(Oracle.api.economics().count===1?'':'s')+'</p>'+
-          '<div class="pf-tabs">'+tabs+'</div>'+
-          '<div class="pf-panel" data-panel>'+current.def.render()+'</div>'+
+      return '<div class="pf-tabs">'+tabs+'</div><div class="pf-panel" data-panel>'+current.def.render()+'</div>';
+    }
+
+    // Guest — prospective member: the room, plus what membership would unlock.
+    function guestBody(){
+      var perks = Oracle.api.selectedEnhancements();
+      var perkList = perks.map(function(e){
+        return '<li><span class="ic">'+e.icon+'</span><span class="g"><b>'+e.name+'</b><span>'+e.desc+'</span></span></li>';
+      }).join("");
+      return '<div class="pf-panel"><h2>Welcome to Oasis.</h2>'+
+        '<p class="pintro">You’re browsing as a guest. Here’s the room — and what your membership would unlock.</p>'+
+        '<div class="pf-grid two">'+
+          '<div class="tile"><div class="lab">Tonight</div><div class="big">Open · 4 floors</div><p class="pintro" style="margin:10px 0 0">The Lounge, the Waters, the Playrooms and the Quarters — open until 2 AM.</p></div>'+
+          '<div class="tile"><div class="lab">Membership</div><div class="big" style="font-size:20px">19+ · Members only</div><p class="pintro" style="margin:8px 0 14px">Ordering, the community and your digital door card unlock the moment you join.</p><button class="pf-add" data-toast="Membership sign-up would begin here.">Become a member</button></div>'+
+        '</div>'+
+        (perkList ? '<h2 style="margin-top:28px;font-size:19px">Your membership would include</h2><ul class="plist">'+perkList+'</ul>' : '')+
         '</div>';
-      // faux-QR canvases
+    }
+
+    // Staff — operational lens: floor status, incoming orders, member safety.
+    function staffBody(){
+      var orders = has("guest")
+        ? '<div class="tile" style="margin-bottom:14px"><div class="lab">Incoming orders</div>'+
+            '<ul class="plist" style="margin-top:12px">'+
+              '<li><span class="ic">🍸</span><span class="g"><b>2× Signature Martini</b><span>Table 4 · Waters floor</span></span><button class="pf-add" data-toast="Order marked ready — guest notified.">Mark ready</button></li>'+
+              '<li><span class="ic">🥂</span><span class="g"><b>1× House Red</b><span>Main Bar · Member 0231</span></span><button class="pf-add" data-toast="Order marked ready — guest notified.">Mark ready</button></li>'+
+            '</ul></div>'
+        : '';
+      return '<div class="pf-panel"><h2>Floor</h2><p class="pintro">The operational view — live floor status, orders and member safety.</p>'+
+        '<div class="pf-grid three">'+
+          '<div class="tile"><div class="lab">Pool</div><div class="big">72%</div><div class="meter"><i style="width:72%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Main Bar</div><div class="big">48%</div><div class="meter"><i style="width:48%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Members in</div><div class="big">42</div></div>'+
+        '</div><div style="height:14px"></div>'+ orders +
+        '<div class="tile" style="border-color:rgba(224,120,120,.4)"><div class="lab" style="color:#e58a8a">Member safety</div><div class="big" style="font-size:19px">All clear</div><p class="pintro" style="margin:8px 0 12px">Discreet alerts route here instantly with the member’s floor and location.</p><button class="pf-ghost-btn" data-toast="Test alert acknowledged. In a live alert, security is dispatched with the member’s location.">Acknowledge test alert</button></div>'+
+        '</div>';
+    }
+
+    // Management — business lens: KPIs; depth scales with selected analytics.
+    function managementBody(){
+      var kpis = '<div class="pf-grid three">'+
+          '<div class="tile"><div class="lab">Revenue · tonight</div><div class="big">$8,240</div><div class="meter"><i style="width:68%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Members in</div><div class="big">42</div><div class="meter"><i style="width:52%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Avg spend</div><div class="big">$196</div><div class="meter"><i style="width:74%"></i></div></div>'+
+        '</div>';
+      var deeper = "";
+      if(has("bisuite")) deeper += '<div class="tile" style="margin-top:14px"><div class="lab">Busiest floor</div><div class="big" style="font-size:20px">The Waters</div><p class="pintro" style="margin:8px 0 0">Bar spend is tracking 12% above the same night last month.</p></div>';
+      if(has("biassist")) deeper += '<h2 style="margin-top:26px;font-size:19px">Advisor</h2>'+ advisorFeed();
+      if(!has("bisuite") && !has("biassist")) deeper += '<div class="tile" style="margin-top:14px"><div class="lab">Unlock analytics</div><div class="big" style="font-size:18px">Add the Business Intelligence Suite</div><p class="pintro" style="margin:8px 0 0">Selecting the BI Suite — and the Strategic Advisor — fills this view with revenue, attendance and executive recommendations.</p></div>';
+      return '<div class="pf-panel"><h2>Management</h2><p class="pintro">The operating picture for the whole venue.</p>'+ kpis + deeper +'</div>';
+    }
+
+    function renderPlatform(){
+      var p = Oracle.api.config.perspective;
+      var ec = Oracle.api.economics();
+      var sub = 'Your platform · Launch Package + '+ec.count+' enhancement'+(ec.count===1?'':'s');
+      var body = p==="guest" ? guestBody() : p==="staff" ? staffBody() : p==="management" ? managementBody() : memberBody();
+      var morph = (p !== lastPersp); lastPersp = p;
+      host.innerHTML = '<div class="platform'+(morph?' pf-morph':'')+'">'+ topBar(sub) + body + '</div>';
       $all('canvas[data-qr]', host).forEach(function(cv){ drawQR(cv, cv.getAttribute("data-qr")); });
       cart = { count:0, total:0 };
     }
-
-    function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
 
     function renderAgeGate(){
       host.innerHTML =

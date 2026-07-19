@@ -69,8 +69,17 @@ Delivered:
   (marketing) + Insights & Advisor (management-facing, from bisuite/biassist).
   Each panel is real and interactive (order a drink, request a song, claim an
   offer, RSVP). Reachable from the shell's **Experience** mode and from Platform
-  Complete. Perspective lightly shapes it today (management-facing features lead
-  under the Management perspective); full perspective morph is #6.
+  Complete.
+- **Perspectives** — the platform re-presents itself through four lenses via a
+  **morph transition** (perspective controls *presentation, not authorization*):
+  - **Member** (default) — the full tabbed app.
+  - **Guest** — prospective-member view: the room + what membership would unlock
+    (the selected enhancements framed as benefits) + a Join CTA.
+  - **Staff** — operational lens: floor status, an **incoming-orders queue** (the
+    same ordering capability members use, shown as staff work), member safety.
+  - **Management** — business lens: revenue / attendance / spend KPIs, with depth
+    that **scales with the selected analytics** (no BI Suite → an upsell prompt;
+    BI Suite + Advisor → dashboards + executive recommendations).
 
 ### Not yet built (later increments, in Directive priority order)
 
@@ -79,7 +88,7 @@ Delivered:
 3. ~~Proposal (migrate the real proposal here)~~ ✅
 4. ~~Product Catalog / Build My Platform (real selection engine)~~ ✅
 5. ~~Platform Experience~~ ✅
-6. Perspectives (Guest / Member / Staff / Management — real)
+6. ~~Perspectives (Guest / Member / Staff / Management — real)~~ ✅
 7. Concierge (rule-driven, not AI)
 8. Environmental interactions
 9. Configuration integration (against the live Master Registry)
