@@ -113,3 +113,20 @@ The 5-stage generation sequence is a timed animation, not real work — it sets 
 tone of "the platform is being assembled." When real platform generation exists
 (assembling actual modules/perspectives from Config), drive the stages from genuine
 progress events instead of fixed timers.
+
+## CR-012 · Platform feature registry ⇆ Master Registry 🔍
+**Raised by:** Increment #5.
+The Platform Experience maps `enhancement id → feature panel` in a small in-module
+`FEATURES` table (guest→The Bar, live→Tonight, bisuite→Insights, …). This is the
+value-prop made literal: selecting an enhancement makes its feature appear. Later,
+derive these features (and their sub-capabilities) from the **live Master Registry**
+rows rather than a hand-written table, so the platform's surface always matches the
+registry (ties into CR-010 / roadmap #9). Panel *content* is representative demo
+data for now.
+
+## CR-013 · Perspective morph (member vs staff vs management) 🔍 → feeds #6
+Increment #5 makes the perspective selector do something real for the first time:
+the platform re-renders on perspective change and management-facing features lead
+under Management/Staff. Increment #6 turns this into a full **presentation morph** —
+same configured platform, re-shaped chrome/affordances per perspective (CR-002),
+"perspective controls presentation, not authorization."

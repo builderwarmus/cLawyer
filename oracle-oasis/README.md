@@ -58,10 +58,19 @@ Delivered:
     Technical Architecture (Building Configuration → Loading Enhancements →
     Configuring Perspectives → Preparing Concierge → Optimizing Experience),
     reduced-motion aware.
-  - **Platform Complete** — a summary with **Experience My Platform** (next
-    increment) and **Revise My Platform** (→ back to the selector, selections
-    preserved — the settled Revise-vs-Finalize distinction).
+  - **Platform Complete** — a summary with **Experience My Platform** and
+    **Revise My Platform** (→ back to the selector, selections preserved — the
+    settled Revise-vs-Finalize distinction).
   - Reachable from the shell's **Build** mode; the mode rail tracks state.
+- **Platform Experience** — the configured platform the client walks into.
+  Entry passes through **age verification (19+)**, then opens an app-style
+  surface whose **feature tabs are derived from `Config.selected`**: Home
+  (always) + The Bar (guest) + Membership + Tonight (live) + Community + Offers
+  (marketing) + Insights & Advisor (management-facing, from bisuite/biassist).
+  Each panel is real and interactive (order a drink, request a song, claim an
+  offer, RSVP). Reachable from the shell's **Experience** mode and from Platform
+  Complete. Perspective lightly shapes it today (management-facing features lead
+  under the Management perspective); full perspective morph is #6.
 
 ### Not yet built (later increments, in Directive priority order)
 
@@ -69,7 +78,7 @@ Delivered:
 2. ~~Living Environment~~ ✅
 3. ~~Proposal (migrate the real proposal here)~~ ✅
 4. ~~Product Catalog / Build My Platform (real selection engine)~~ ✅
-5. Platform Experience
+5. ~~Platform Experience~~ ✅
 6. Perspectives (Guest / Member / Staff / Management — real)
 7. Concierge (rule-driven, not AI)
 8. Environmental interactions

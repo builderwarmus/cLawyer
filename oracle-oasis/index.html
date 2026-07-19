@@ -309,6 +309,82 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
 .complete .rowset .row span{color:var(--muted)}
 .complete .rowset .row b{font-family:var(--serif); color:var(--gold-bright); font-weight:600}
 .complete .actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-top:30px}
+
+/* ── Platform Experience — the configured platform the client walks into ─ */
+.age-gate{max-width:440px; margin:0 auto; padding:90px 24px; text-align:center; min-height:66vh; display:flex; flex-direction:column; justify-content:center}
+.age-gate .lock{font-size:40px; margin-bottom:12px}
+.age-gate h1{font-family:var(--serif); font-weight:600; font-size:clamp(26px,4vw,34px); margin:0 0 10px}
+.age-gate p{color:var(--muted); margin:0 0 26px}
+.age-gate .actions{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+
+.platform{max-width:1000px; margin:0 auto; padding:34px 24px 90px}
+.pf-top{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-bottom:8px}
+.pf-top .venue{font-family:var(--serif); font-size:clamp(22px,3.4vw,28px); font-weight:600}
+.pf-top .status{display:inline-flex; align-items:center; gap:7px; font-size:12.5px; color:var(--good)}
+.pf-top .status .dot{width:8px; height:8px; border-radius:50%; background:var(--good); box-shadow:0 0 8px var(--good)}
+.pf-top .who{margin-left:auto; display:flex; align-items:center; gap:9px; font-size:13px; color:var(--muted)}
+.pf-top .who .av{width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--aqua-deep),var(--gold)); display:grid; place-items:center; color:var(--ink); font-weight:700; font-size:13px}
+.pf-sub{color:var(--faint); font-size:13px; margin:0 0 20px}
+
+.pf-tabs{display:flex; gap:6px; overflow-x:auto; padding-bottom:10px; margin-bottom:22px; border-bottom:1px solid var(--line-soft); scrollbar-width:thin}
+.pf-tab{flex:0 0 auto; display:inline-flex; align-items:center; gap:8px; font:inherit; font-size:13.5px; color:var(--muted);
+  background:transparent; border:1px solid transparent; border-radius:999px; padding:8px 15px; cursor:pointer; transition:.18s; white-space:nowrap}
+.pf-tab .ic{font-size:15px}
+.pf-tab:hover{color:var(--text)}
+.pf-tab.on{color:var(--ink); background:linear-gradient(180deg,var(--gold-bright),var(--gold)); font-weight:600}
+.pf-tab .mgmt{font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--aqua); font-weight:700}
+.pf-tab.on .mgmt{color:var(--ink)}
+
+.pf-panel{animation:pf-fade .3s ease}
+@keyframes pf-fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+@media (prefers-reduced-motion: reduce){ .pf-panel{animation:none} }
+.pf-panel h2{font-family:var(--serif); font-weight:600; font-size:22px; margin:0 0 4px}
+.pf-panel .pintro{color:var(--muted); font-size:14px; margin:0 0 20px; max-width:60ch}
+.pf-grid{display:grid; gap:14px}
+@media (min-width:620px){ .pf-grid.two{grid-template-columns:1fr 1fr} .pf-grid.three{grid-template-columns:repeat(3,1fr)} }
+
+/* membership card */
+.memcard{background:linear-gradient(135deg,#14242C,#0b171c 60%,#1a1206); border:1px solid var(--line); border-radius:18px; padding:22px; position:relative; overflow:hidden; box-shadow:var(--shadow)}
+.memcard::after{content:""; position:absolute; right:-40px; top:-40px; width:160px; height:160px; border-radius:50%; background:radial-gradient(circle,var(--glow),transparent 70%)}
+.memcard .brand{font-family:var(--serif); font-size:19px; font-weight:600}
+.memcard .tier{font-size:11px; letter-spacing:.24em; text-transform:uppercase; color:var(--gold)}
+.memcard .num{font-family:ui-monospace,monospace; letter-spacing:.18em; color:var(--text); margin-top:26px; font-size:15px}
+.memcard .row{display:flex; justify-content:space-between; align-items:flex-end; margin-top:6px}
+.memcard .nm{font-size:14px; color:var(--muted)}
+.memcard .qr{width:52px; height:52px; border-radius:8px; background:#fff; padding:5px}
+.memcard .qr canvas{width:100%; height:100%; image-rendering:pixelated; display:block}
+
+/* generic tiles / meters */
+.tile{background:linear-gradient(180deg,var(--surface),var(--surface-2)); border:1px solid var(--line); border-radius:14px; padding:16px 17px}
+.tile .lab{font-size:11.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--faint)}
+.tile .big{font-family:var(--serif); font-size:27px; color:var(--gold-bright); font-weight:600; margin-top:4px}
+.tile .meter{height:7px; border-radius:6px; background:rgba(255,255,255,.07); margin-top:10px; overflow:hidden}
+.tile .meter i{display:block; height:100%; background:linear-gradient(90deg,var(--aqua),var(--gold))}
+
+.plist{list-style:none; margin:0; padding:0; display:grid; gap:10px}
+.plist li{display:flex; align-items:center; gap:12px; padding:13px 15px; border-radius:12px; border:1px solid var(--line-soft); background:rgba(255,255,255,.02)}
+.plist li .ic{font-size:18px}
+.plist li .g{flex:1} .plist li .g b{display:block; font-size:14.5px} .plist li .g span{font-size:12.5px; color:var(--muted)}
+.pf-add{font:inherit; font-size:13px; font-weight:600; color:var(--ink); background:linear-gradient(180deg,var(--gold-bright),var(--gold)); border:0; border-radius:9px; padding:8px 13px; cursor:pointer}
+.pf-ghost-btn{font:inherit; font-size:13px; color:var(--text); background:transparent; border:1px solid var(--line); border-radius:9px; padding:8px 13px; cursor:pointer}
+.pf-ghost-btn:hover{border-color:var(--gold)}
+
+.cartbar{position:sticky; bottom:16px; margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface)); border:1px solid var(--line); border-radius:14px; padding:13px 18px; box-shadow:var(--shadow)}
+.cartbar.empty{opacity:.55}
+.cartbar b{font-family:var(--serif); color:var(--gold-bright)}
+
+.feed{display:grid; gap:12px}
+.post{border:1px solid var(--line-soft); border-radius:14px; padding:14px 16px; background:rgba(255,255,255,.02)}
+.post .head{display:flex; align-items:center; gap:10px; margin-bottom:7px}
+.post .av{width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg,var(--aqua-deep),var(--gold)); display:grid; place-items:center; color:var(--ink); font-weight:700; font-size:12px}
+.post .who2{font-size:13px; font-weight:600} .post .when{font-size:11.5px; color:var(--faint); margin-left:auto}
+.post .body{font-size:14px; color:var(--text)}
+
+.offer{border:1px solid rgba(201,162,75,.3); border-radius:14px; padding:16px; background:linear-gradient(180deg,rgba(201,162,75,.07),transparent)}
+.offer .tag{font-size:10.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--gold); font-weight:700}
+.offer h4{font-family:var(--serif); font-weight:600; font-size:17px; margin:6px 0 4px}
+.offer p{font-size:13px; color:var(--muted); margin:0 0 12px}
 </style>
 </head>
 <body>
@@ -338,8 +414,8 @@ html.gw-locked, html.gw-locked body{overflow:hidden !important; height:100%; ove
   <!-- Journey mode rail. Build is live (→ Build My Platform); the rest are
        placeholders until their increments land. -->
   <nav class="mode-rail" aria-label="Platform mode">
-    <button data-mode="build"      data-nav="catalog" data-active="false">Build</button>
-    <button data-mode="experience" data-active="false" disabled title="Arrives with the Platform Experience">Experience</button>
+    <button data-mode="build"      data-nav="catalog"  data-active="false">Build</button>
+    <button data-mode="experience" data-nav="platform" data-active="false">Experience</button>
     <button data-mode="finalize"   data-active="false" disabled title="Arrives with Finalize My Platform">Finalize</button>
     <button data-mode="revise"     data-active="false" disabled title="Arrives with Revise My Platform">Revise</button>
   </nav>
@@ -3197,9 +3273,12 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
   // Build is "active" while building the platform (selector or generation).
   Oracle.api.onNavigate(function(id){
     var buildActive = (id === "catalog" || id === "build");
+    var expActive = (id === "platform");
     var b = document.querySelector('.mode-rail [data-mode="build"]');
+    var x = document.querySelector('.mode-rail [data-mode="experience"]');
     if(b) b.setAttribute("data-active", buildActive ? "true" : "false");
-    Oracle.api.setConfig({ mode: buildActive ? "build" : "view" });
+    if(x) x.setAttribute("data-active", expActive ? "true" : "false");
+    Oracle.api.setConfig({ mode: buildActive ? "build" : (expActive ? "experience" : "view") });
   });
 
   /* =================================================================
@@ -3332,9 +3411,7 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
             '</div>'+
           '</div>';
         root.querySelector('[data-revise]').addEventListener('click', function(){ Oracle.api.navigate('catalog'); });
-        root.querySelector('[data-experience]').addEventListener('click', function(){
-          window.__toast('Experience My Platform arrives next — your live, configured platform.');
-        });
+        root.querySelector('[data-experience]').addEventListener('click', function(){ Oracle.api.navigate('platform'); });
       }
 
       root.innerHTML =
@@ -3366,6 +3443,194 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       })();
     }
   });
+
+  // ---- Module: Platform Experience (Experience My Platform) ----
+  // The configured platform the client walks into. Its feature set is derived
+  // from Config.selected — selecting an enhancement in Build My Platform makes
+  // its feature appear here. Entry passes through age verification (19+), per
+  // the journey. Perspective lightly shapes presentation (management-facing
+  // features lead under the Management perspective); full perspective morph is
+  // a later increment.
+  (function(){
+    var verified = false;      // session-remembered age check
+    var activeTab = null;
+    var cart = { count:0, total:0 };
+    var host = null;
+
+    // enhancement id -> platform feature. 'home' is always present (base).
+    var FEATURES = {
+      home:       { tab:"Home",       ic:"🎴", mgmt:false, render:renderHome },
+      guest:      { tab:"The Bar",    ic:"🍸", mgmt:false, render:renderBar,       key:"order" },
+      membership: { tab:"Membership", ic:"🪪", mgmt:false, render:renderMembership, key:"membership" },
+      live:       { tab:"Tonight",    ic:"🌙", mgmt:false, render:renderTonight,    key:"tonight" },
+      community:  { tab:"Community",  ic:"💬", mgmt:false, render:renderCommunity,  key:"community" },
+      marketing:  { tab:"Offers",     ic:"✨", mgmt:false, render:renderOffers,     key:"offers" },
+      bisuite:    { tab:"Insights",   ic:"📊", mgmt:true,  render:renderInsights,   key:"insights" },
+      biassist:   { tab:"Advisor",    ic:"🤖", mgmt:true,  render:renderAdvisor,    key:"advisor" }
+    };
+
+    function activeFeatures(){
+      var sel = Oracle.api.config.selected;
+      var list = [{ id:"home", def:FEATURES.home }];
+      Oracle.api.catalog.enhancements.forEach(function(e){
+        if(sel.indexOf(e.id) >= 0 && FEATURES[e.id]){ list.push({ id:FEATURES[e.id].key, def:FEATURES[e.id], enh:e }); }
+      });
+      // Management perspective leads with management-facing features.
+      if(Oracle.api.config.perspective === "management" || Oracle.api.config.perspective === "staff"){
+        list.sort(function(a,b){ return (b.def.mgmt?1:0) - (a.def.mgmt?1:0); });
+      }
+      return list;
+    }
+
+    function money(n){ return Oracle.api.formatMoney(n); }
+
+    // deterministic faux-QR (no randomness, stable across renders)
+    function drawQR(cv, seed){
+      var n=21, ctx=cv.getContext("2d"); cv.width=n; cv.height=n;
+      var h=2166136261; for(var i=0;i<seed.length;i++){ h^=seed.charCodeAt(i); h=(h*16777619)>>>0; }
+      ctx.fillStyle="#fff"; ctx.fillRect(0,0,n,n); ctx.fillStyle="#0b0b0b";
+      for(var y=0;y<n;y++)for(var x=0;x<n;x++){ var v=((x*73856093)^(y*19349663)^h)>>>0; if((v & 7) > 3) ctx.fillRect(x,y,1,1); }
+      function finder(ox,oy){ ctx.fillStyle="#fff"; ctx.fillRect(ox-1,oy-1,9,9); ctx.fillStyle="#0b0b0b"; ctx.fillRect(ox,oy,7,7); ctx.fillStyle="#fff"; ctx.fillRect(ox+1,oy+1,5,5); ctx.fillStyle="#0b0b0b"; ctx.fillRect(ox+2,oy+2,3,3); }
+      finder(0,0); finder(n-7,0); finder(0,n-7);
+    }
+
+    /* ---------- feature panels ---------- */
+    function renderHome(){
+      return '<h2>Welcome back, Alex.</h2>'+
+        '<p class="pintro">Your Oasis membership, live. This is the platform your selected enhancements populate.</p>'+
+        '<div class="pf-grid two">'+
+          '<div class="memcard">'+
+            '<div style="display:flex;justify-content:space-between;align-items:flex-start">'+
+              '<div><div class="brand">Oasis Aqualounge</div><div class="tier">Full Member</div></div>'+
+              '<div class="qr"><canvas data-qr="OASIS-MEM-0231-ALEX"></canvas></div>'+
+            '</div>'+
+            '<div class="num">0231 · 8842 · ALEX M.</div>'+
+            '<div class="row"><span class="nm">Member since 2021</span><span class="nm">19+ verified</span></div>'+
+          '</div>'+
+          '<div class="tile"><div class="lab">Tonight</div><div class="big">Open · 4 floors</div>'+
+            '<p class="pintro" style="margin:10px 0 0">The Lounge, the Waters, the Playrooms and the Quarters are all open until 2 AM. 42 members in tonight.</p></div>'+
+        '</div>';
+    }
+    function renderBar(){
+      var items=[["Signature Martini",18],["Old Fashioned",16],["Sparkling Water",6],["House Red",14]];
+      var rows=items.map(function(it){ return '<li><span class="ic">🥂</span><span class="g"><b>'+it[0]+'</b><span>'+money(it[1])+'</span></span><button class="pf-add" data-add="'+it[1]+'">Add</button></li>'; }).join("");
+      return '<h2>The Bar</h2><p class="pintro">One-tap ordering from either bar, routed straight to staff — the Guest Convenience Suite in action.</p>'+
+        '<ul class="plist">'+rows+'</ul>'+
+        '<div class="cartbar empty" data-cart><span data-cart-label>Add drinks to send</span><b data-cart-total></b></div>';
+    }
+    function renderMembership(){
+      return '<h2>Membership</h2><p class="pintro">Your physical + digital card, managed end-to-end — the Membership Enhancements.</p>'+
+        '<div class="pf-grid two">'+
+          '<div class="tile"><div class="lab">Card status</div><div class="big" style="font-size:20px">Active</div><p class="pintro" style="margin:8px 0 14px">Apple &amp; Google Wallet linked. Physical card #0231 issued.</p><button class="pf-ghost-btn" data-toast="A replacement card has been requested — ready at the front desk tonight.">Request replacement</button></div>'+
+          '<div class="tile"><div class="lab">Renewal</div><div class="big" style="font-size:20px">Mar 2027</div><p class="pintro" style="margin:8px 0 14px">Auto-renews. Full Member tier.</p><button class="pf-ghost-btn" data-toast="Membership settings opened.">Manage membership</button></div>'+
+        '</div>';
+    }
+    function renderTonight(){
+      return '<h2>Tonight</h2><p class="pintro">A living picture of the venue right now — the Live Venue Experience.</p>'+
+        '<div class="pf-grid three">'+
+          '<div class="tile"><div class="lab">Pool</div><div class="big">72%</div><div class="meter"><i style="width:72%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Main Bar</div><div class="big">48%</div><div class="meter"><i style="width:48%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Lounge</div><div class="big">61%</div><div class="meter"><i style="width:61%"></i></div></div>'+
+        '</div>'+
+        '<div class="tile" style="margin-top:14px;display:flex;align-items:center;gap:14px;flex-wrap:wrap"><div style="flex:1"><div class="lab">Now playing</div><div class="big" style="font-size:19px">DJ Marée — “Deep Current”</div></div><button class="pf-add" data-toast="Your song request was sent to the booth.">Request a song</button></div>';
+    }
+    function renderCommunity(){
+      var posts=[["M","Mara","2h","Waters floor is unreal tonight — the new lighting 🌊"],["J","Jules","4h","Anyone in for the Friday theme night? RSVP’d ✨"],["K","Kai","1d","Thanks to the staff for the birthday surprise 🖤"]];
+      var feed=posts.map(function(p){ return '<div class="post"><div class="head"><span class="av">'+p[0]+'</span><span class="who2">'+p[1]+'</span><span class="when">'+p[2]+'</span></div><div class="body">'+p[3]+'</div></div>'; }).join("");
+      return '<h2>Community</h2><p class="pintro">The connective tissue that turns members into a returning community.</p>'+
+        '<div style="display:flex;gap:10px;margin-bottom:16px"><button class="pf-add" data-toast="You’re RSVP’d for Friday’s theme night.">RSVP · Friday theme night</button></div>'+
+        '<div class="feed">'+feed+'</div>';
+    }
+    function renderOffers(){
+      var offers=[["Just for you","A complimentary Signature Martini on your next visit — because it’s been three weeks."],["Birthday month","Bring three guests, they get member pricing all night."]];
+      var cards=offers.map(function(o){ return '<div class="offer"><div class="tag">'+o[0]+'</div><h4>'+o[1].split(" — ")[0]+'</h4><p>'+o[1]+'</p><button class="pf-add" data-toast="Offer claimed — it’s in your wallet.">Claim offer</button></div>'; }).join("");
+      return '<h2>Offers</h2><p class="pintro">Always-on, personalized campaigns — the Marketing Automation Suite.</p><div class="pf-grid two">'+cards+'</div>';
+    }
+    function renderInsights(){
+      return '<h2>Insights <span class="pf-tab mgmt" style="padding:2px 8px">Management</span></h2><p class="pintro">The operating picture — the Business Intelligence Suite.</p>'+
+        '<div class="pf-grid three">'+
+          '<div class="tile"><div class="lab">Revenue · tonight</div><div class="big">$8,240</div><div class="meter"><i style="width:68%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Members in</div><div class="big">42</div><div class="meter"><i style="width:52%"></i></div></div>'+
+          '<div class="tile"><div class="lab">Avg spend</div><div class="big">$196</div><div class="meter"><i style="width:74%"></i></div></div>'+
+        '</div>'+
+        '<div class="tile" style="margin-top:14px"><div class="lab">Busiest floor</div><div class="big" style="font-size:20px">The Waters</div><p class="pintro" style="margin:8px 0 0">Bar spend is tracking 12% above the same night last month.</p></div>';
+    }
+    function renderAdvisor(){
+      var recs=[["Revenue","Open the third bar Fridays after 11 PM — occupancy and wait-time data suggest ~$1,400 in unserved demand."],["Programming","Repeat the ‘Deep Current’ DJ night — attendance ran 23% above your Friday average."]];
+      var cards=recs.map(function(r){ return '<div class="post"><div class="head"><span class="av">◎</span><span class="who2">Strategic Advisor</span><span class="when">'+r[0]+'</span></div><div class="body">'+r[1]+'</div></div>'; }).join("");
+      return '<h2>Advisor <span class="pf-tab mgmt" style="padding:2px 8px">Management</span></h2><p class="pintro">Your operational data, turned into executive decisions — the Strategic Intelligence Advisor.</p><div class="feed">'+cards+'</div>';
+    }
+
+    function renderPlatform(){
+      var feats = activeFeatures();
+      if(!activeTab || !feats.some(function(f){ return f.id === activeTab; })){ activeTab = feats[0].id; }
+      var tabs = feats.map(function(f){
+        return '<button class="pf-tab '+(f.id===activeTab?'on':'')+'" data-tab="'+f.id+'"><span class="ic">'+f.def.ic+'</span>'+f.def.tab+(f.def.mgmt?' <span class="mgmt">MGMT</span>':'')+'</button>';
+      }).join("");
+      var current = feats.filter(function(f){ return f.id===activeTab; })[0];
+      host.innerHTML =
+        '<div class="platform">'+
+          '<div class="pf-top"><span class="venue">Oasis Aqualounge</span>'+
+            '<span class="status"><span class="dot"></span>Open now</span>'+
+            '<span class="who"><span>'+cap(Oracle.api.config.perspective)+' view</span><span class="av">A</span></span></div>'+
+          '<p class="pf-sub">Your platform · Launch Package + '+Oracle.api.economics().count+' enhancement'+(Oracle.api.economics().count===1?'':'s')+'</p>'+
+          '<div class="pf-tabs">'+tabs+'</div>'+
+          '<div class="pf-panel" data-panel>'+current.def.render()+'</div>'+
+        '</div>';
+      // faux-QR canvases
+      $all('canvas[data-qr]', host).forEach(function(cv){ drawQR(cv, cv.getAttribute("data-qr")); });
+      cart = { count:0, total:0 };
+    }
+
+    function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+
+    function renderAgeGate(){
+      host.innerHTML =
+        '<div class="age-gate">'+
+          '<div class="lock" aria-hidden="true">🔞</div>'+
+          '<h1>Members only · 19+</h1>'+
+          '<p>Oasis Aqualounge is a licensed, adults-only venue. Please confirm you are 19 years of age or older to enter your platform.</p>'+
+          '<div class="actions"><button class="cta" data-age-yes>I am 19 or older</button><button class="cta ghost" data-age-no>Exit</button></div>'+
+        '</div>';
+    }
+
+    Oracle.api.register({
+      id: "platform",
+      name: "Platform Experience",
+      validateConfig: function(){ return { ok:true }; },
+      mount: function(stage){ host = document.createElement("div"); stage.appendChild(host); return stage; },
+      onShow: function(){
+        if(!verified){ renderAgeGate(); } else { renderPlatform(); }
+      },
+      activate: function(el){
+        // delegated interactions (activate runs once; panels are re-rendered)
+        el.addEventListener("click", function(ev){
+          var t;
+          if((t = ev.target.closest("[data-age-yes]"))){ verified = true; renderPlatform(); return; }
+          if((t = ev.target.closest("[data-age-no]"))){ Oracle.api.navigate("catalog"); return; }
+          if((t = ev.target.closest("[data-tab]"))){ activeTab = t.getAttribute("data-tab"); renderPlatform(); return; }
+          if((t = ev.target.closest("[data-toast]"))){ window.__toast(t.getAttribute("data-toast")); return; }
+          if((t = ev.target.closest("[data-add]"))){
+            cart.count++; cart.total += parseInt(t.getAttribute("data-add"),10);
+            var bar = el.querySelector("[data-cart]");
+            if(bar){ bar.classList.remove("empty");
+              el.querySelector("[data-cart-label]").textContent = "Send "+cart.count+(cart.count===1?" drink":" drinks")+" to the bar";
+              el.querySelector("[data-cart-total]").textContent = money(cart.total); }
+            return;
+          }
+          if((t = ev.target.closest("[data-cart]"))){
+            if(cart.count===0) return;
+            window.__toast(cart.count+(cart.count===1?" drink":" drinks")+" sent — "+money(cart.total)+". Staff notified.");
+            cart={count:0,total:0}; t.classList.add("empty");
+            el.querySelector("[data-cart-label]").textContent="Add drinks to send"; el.querySelector("[data-cart-total]").textContent="";
+            return;
+          }
+        });
+        // re-render live when selection or perspective changes while visible
+        Oracle.api.onConfig(function(){ if(verified && Oracle.api.current()==="platform") renderPlatform(); });
+      }
+    });
+  })();
 
   /* =================================================================
      BOOT
