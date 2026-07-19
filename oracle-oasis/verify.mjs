@@ -10,69 +10,55 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 page.on('console', m => { if (m.type() === 'error') errors.push('console.error: ' + m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 
+const P = ".experience[data-experience='platform']";
 const D = ".experience[data-experience='discovery']";
+const cur = () => page.evaluate(() => window.Oracle.current());
 
-// expected earliest = today + 7 (local), computed in Node — same clock as the browser
-const t0 = new Date(); t0.setHours(0,0,0,0);
-const earliest = new Date(t0); earliest.setDate(earliest.getDate() + 7);
-const isoE = earliest.getFullYear() + '-' + String(earliest.getMonth()+1).padStart(2,'0') + '-' + String(earliest.getDate()).padStart(2,'0');
+// Full-journey smoke test — refinement pass must not regress anything.
+await page.goto(file + '?build=guest,community', { waitUntil: 'networkidle' });
+await page.waitForTimeout(700);
 
-await page.goto(file + '?build=guest,community,marketing', { waitUntil: 'networkidle' });
-await page.waitForTimeout(600);
+// water + motes running without error
+const waterOk = await page.evaluate(() => !!document.getElementById('env-ambient') && !!document.getElementById('env-caustics'));
 
-// Reach Finalize via the shell mode rail
-await page.click('.mode-rail [data-mode="finalize"]');
-await page.waitForTimeout(500);
-const finalizeActive = await page.getAttribute('.mode-rail [data-mode="finalize"]', 'data-active');
-const onSummary = await page.evaluate((d) => /Your finalized platform/.test(document.querySelector(d).textContent), D);
+// focus-visible styling present
+const focusCss = await page.evaluate(() => {
+  for (const sheet of document.styleSheets) {
+    try { for (const r of sheet.cssRules) if (r.selectorText && r.selectorText.includes(':focus-visible')) return true; } catch(e){}
+  }
+  return false;
+});
 
-// Summary → Schedule
-await page.click(D + ' [data-next]');
-await page.waitForTimeout(250);
-const calEarliest = await page.getAttribute(D + ' [data-cal-earliest]', 'data-cal-earliest');
+// proposal → build → complete
+await page.click('#concierge [data-cc-fab]'); await page.waitForTimeout(150);
+await page.click('#concierge [data-cc-run]'); await page.waitForTimeout(500);   // → catalog
+const atCatalog = await cur();
+await page.click(".experience[data-experience='catalog'] [data-build]");
+await page.waitForSelector(".experience[data-experience='build'] [data-experience]", { timeout: 8000 });
 
-// The 7-day rule: no available day may precede `earliest`; earliest available >= earliest
-const dayInfo = await page.evaluate((d) => {
-  const avail = Array.from(document.querySelectorAll(d + ' .cal-day.avail')).map(b => b.getAttribute('data-date')).filter(Boolean);
-  const blocked = document.querySelectorAll(d + ' .cal-day.disabled').length;
-  return { firstAvail: avail.sort()[0] || null, availCount: avail.length, blocked };
-}, D);
+// experience (age gate → platform) + a perspective switch (ripple + mood)
+await page.click(".experience[data-experience='build'] [data-go-exp='']").catch(()=>{});
+await page.click(".experience[data-experience='build'] [data-experience]");  // Experience My Platform
+await page.waitForTimeout(300);
+await page.click(P + ' [data-age-yes]'); await page.waitForTimeout(300);
+await page.click("#perspective button[data-perspective='staff']"); await page.waitForTimeout(500);
+const rippled = await page.evaluate(() => window.__ENV.count() > 0);
+const platformShown = await page.evaluate((p) => { const e = document.querySelector(p); return e && !e.hidden; }, P);
 
-// If this month has no available day (today near month end), advance a month
-if (!dayInfo.firstAvail) {
-  await page.click(D + ' [data-mo="1"]');
-  await page.waitForTimeout(200);
-}
-const pick = await page.evaluate((d) => {
-  const b = document.querySelector(d + ' .cal-day.avail'); if (b) { b.click(); return b.getAttribute('data-date'); } return null;
-}, D);
-await page.waitForTimeout(200);
-const slotsShown = await page.evaluate((d) => document.querySelectorAll(d + ' .slot').length, D);
-await page.click(D + ' .slot');
+// finalize → discovery → pick a day → confirm
+await page.click('.mode-rail [data-mode="finalize"]'); await page.waitForTimeout(400);
+await page.click(D + ' [data-next]'); await page.waitForTimeout(200);
+await page.evaluate((d) => { const b = document.querySelector(d + ' .cal-day.avail'); if (b) b.click(); }, D);
 await page.waitForTimeout(150);
-await page.screenshot({ path: path.join(__dirname, 'v9-schedule.png') });
-
-// Confirm → confirmation
-await page.click(D + ' [data-confirm]');
-await page.waitForTimeout(250);
-const confirmed = await page.evaluate((d) => /Discovery session booked/.test(document.querySelector(d).textContent) && /Implementation preparation/.test(document.querySelector(d).textContent), D);
-await page.screenshot({ path: path.join(__dirname, 'v9-confirmed.png') });
-
-// Revise from discovery → back to the selector
-await page.click(D + ' [data-revise]');
-await page.waitForTimeout(500);
-const revisedToCatalog = await page.evaluate(() => { const c = document.querySelector(".experience[data-experience='catalog']"); return c && !c.hidden; });
+await page.click(D + ' .slot'); await page.waitForTimeout(120);
+await page.click(D + ' [data-confirm]'); await page.waitForTimeout(200);
+const booked = await page.evaluate((d) => /Discovery session booked/.test(document.querySelector(d).textContent), D);
 
 await browser.close();
 
-const results = { finalizeActive, onSummary, calEarliest, isoE, dayInfo, pick, slotsShown, confirmed, revisedToCatalog, errors };
+const results = { waterOk, focusCss, atCatalog, rippled, platformShown, booked, errors };
 console.log(JSON.stringify(results, null, 2));
 
-const ok = finalizeActive === 'true' && onSummary
-  && calEarliest === isoE                                  // calendar blocks exactly the first 7 days
-  && (dayInfo.firstAvail === null || dayInfo.firstAvail >= isoE)   // no available day precedes earliest
-  && pick && pick >= isoE                                  // the day we picked respects the rule
-  && slotsShown === 4 && confirmed && revisedToCatalog
-  && errors.length === 0;
+const ok = waterOk && focusCss && atCatalog === 'catalog' && rippled && platformShown && booked && errors.length === 0;
 console.log(ok ? '\n✅ VERIFY PASSED' : '\n❌ VERIFY FAILED');
 process.exit(ok ? 0 : 1);

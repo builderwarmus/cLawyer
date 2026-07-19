@@ -109,6 +109,12 @@ Proposal → Build My Platform → Generate → Complete → Experience (age-gat
 four perspectives) → Revise ⟲ / Finalize → Discovery (Summary → Schedule →
 Confirm) → Implementation Preparation — with the Concierge guiding throughout.
 
+- **Visual refinement (pass 1)** — a **depth-motes** layer added to the Living
+  Environment (slow-rising, light-catching particles that react to the mood's
+  energy — a first, non-committal step toward the richer CR-001 water), plus a
+  keyboard-accessibility pass: an on-brand `:focus-visible` ring on every
+  interactive control (visible for keyboard users, never on click).
+
 ### Not yet built (later increments, in Directive priority order)
 
 1. ~~Experience Shell~~ ✅

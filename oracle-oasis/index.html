@@ -84,6 +84,14 @@ body{
   min-height:100vh;
 }
 
+/* Keyboard accessibility: a clear, on-brand focus ring for every interactive
+   control — visible only for keyboard users (:focus-visible), never on click. */
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible,
+input:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline:2px solid var(--gold-bright); outline-offset:2px; border-radius:6px;
+}
+:focus:not(:focus-visible){ outline:none; }
+
 /* ── Layer 0: Living Environment ─────────────────────────────────────
    Two composited water layers behind everything. Both are reused
    verbatim from the proposal's procedural canvas water; here they are
@@ -3317,7 +3325,7 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
   (function(){
     var cv = document.getElementById("env-ambient"); if(!cv) return;
     var ctx = cv.getContext("2d"), W, H, dpr = Math.min(window.devicePixelRatio||1, 1.6);
-    var blobs = [];
+    var blobs = [], motes = [];
     function isLight(){ var t=root.getAttribute("data-theme"); if(t) return t==="light"; return !window.matchMedia("(prefers-color-scheme: dark)").matches; }
     function resize(){
       W = cv.width = Math.floor(window.innerWidth*dpr); H = cv.height = Math.floor(window.innerHeight*dpr);
@@ -3333,6 +3341,22 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
           sx: (i%2? 1:-1)*(0.00004 + (i%3)*0.00002),
           sy: (i%2? -1:1)*(0.00003 + (i%2)*0.00002),
           hue: i%3
+        });
+      }
+      // Depth layer: slow-rising motes (like light catching particles in water).
+      // Deterministic seeding keeps them dependency-free and stable across renders.
+      // (First pass toward CR-001 — richer layering awaits the client's notes.)
+      motes = [];
+      var m = 22;
+      for(var j=0;j<m;j++){
+        var s = Math.sin(j*12.9898)*43758.5453; s -= Math.floor(s);   // deterministic 0..1
+        var s2 = Math.sin(j*78.233)*12543.331; s2 -= Math.floor(s2);
+        motes.push({
+          x: s, y: (j/m + s2*0.1) % 1,
+          r: 0.6 + s2*1.8,                 // px radius (scaled by dpr at draw)
+          rise: 0.00006 + s*0.00012,       // upward speed (fraction of H per frame)
+          sway: 0.4 + s2*1.1, phase: s*6.28,
+          hue: j%3
         });
       }
     }
@@ -3355,6 +3379,21 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
         g.addColorStop(0,"rgba("+col[0]+","+col[1]+","+col[2]+","+a+")");
         g.addColorStop(1,"rgba("+col[0]+","+col[1]+","+col[2]+",0)");
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.fill();
+      }
+      // depth motes — slow-rising particles catching the light, energy-reactive
+      if(motes.length){
+        var mt = ENV._t = (ENV._t || 0) + (reduce ? 0 : 0.6);
+        for(var mi=0;mi<motes.length;mi++){
+          var mo = motes[mi];
+          if(!reduce){ mo.y -= mo.rise * energy; if(mo.y < -0.03){ mo.y = 1.03; } }
+          var mx = (mo.x + Math.sin(mt*0.01 + mo.phase) * mo.sway * 0.02) * W;
+          var my = mo.y * H;
+          var mcol = mo.hue===1 ? "210,180,110" : (mo.hue===0 ? "120,200,210" : "150,190,200");
+          var depth = 0.5 + (1-mo.y)*0.5;                 // brighter as they rise
+          var ma = (light ? 0.05 : 0.11) * depth;
+          ctx.beginPath(); ctx.arc(mx, my, mo.r*dpr, 0, Math.PI*2);
+          ctx.fillStyle = "rgba("+mcol+","+ma+")"; ctx.fill();
+        }
       }
       // ripples — expanding rings from the point of interaction, fading out
       if(!reduce && ENV.ripples.length){

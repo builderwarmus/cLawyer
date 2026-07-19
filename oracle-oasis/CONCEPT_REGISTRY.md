@@ -28,6 +28,12 @@ specific layering they want. Ask for those notes when we return to this.
 controller (`setMood` / `ripple` / eased `step`) drives energy + warm/cool tint
 and interaction ripples. The future depth/foam/parallax layers plug into this
 same controller, so mood and ripples will carry through them for free.
+**Update (Increment #10):** a first depth layer landed — deterministic
+slow-rising **motes** on the ambient canvas, energy-reactive via `ENV`. This is
+NOT the full CR-001 layering; it's a tasteful placeholder that proves the layer
+stack. **Still waiting on the client's water notes** for the specific
+foam/parallax/light-shaft layering they described — do not lock that in without
+them.
 
 ---
 
