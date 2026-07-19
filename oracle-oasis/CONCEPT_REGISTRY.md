@@ -53,3 +53,38 @@ The shell's inert mode rail is the placeholder for this.
 **Scheduling rule:** live calendar with the first 7 days blocked (finalize on the
 1st → earliest appointment the 8th).
 **Placement:** registers like any other module; entered after Finalize.
+
+---
+
+## CR-005 · Full-canvas modules + Shadow-DOM isolation ✅
+**Raised by:** implementation, Increment #3 (migrating the proposal).
+**Adopted pattern:** two module presentations coexist under one runtime:
+- **Staged** modules (Catalog, …) mount into the stage with the transform+opacity
+  morph.
+- **Full-canvas** modules (the Proposal) declare `fullCanvas:true`, render inside
+  a **Shadow DOM** for total style isolation, and transition **opacity-only (no
+  transform)** — a transformed ancestor would become the containing block for
+  their `position:fixed` elements (gateway, elevator, water) and break them.
+Modules are mounted once and cached (hidden via the `[hidden]` attribute), so a
+full-canvas module keeps its internal state across swaps.
+**Gotcha logged:** never set `display` on the proposal's `:host` — it overrides
+`[hidden]` and the off-stage module won't collapse.
+
+## CR-006 · Unify the Living Environment (strip the proposal's own water) 🔍
+The migrated proposal still carries its **own** ambient + hero water (identical
+code to Oracle's Living Environment), so while it's active two water systems run.
+Faithful for now; later, strip the proposal's `#water`/`#herowater` and let the
+single Oracle environment show through a transparent host — one environment,
+better perf (no duplicate canvases). Depends partly on CR-001 (water refinement).
+
+## CR-007 · Reachability / journey nav 🌱
+The Catalog is currently reachable only via the runtime handle
+(`window.Oracle.navigate('catalog')`) — the migrated proposal has no shell button
+to it yet. This resolves naturally when **Build My Platform** wires the mode rail
+(Build · Experience · Finalize · Revise) to real transitions. Until then the shell
+chrome (brand, perspective) is the visible continuity proof over the proposal.
+
+## CR-008 · Accessibility landmark dedup 🌱
+The proposal brings its own `<main>` inside its shadow root, so the flattened a11y
+tree can expose two `main` landmarks. Reconcile when perspectives/landmarks get a
+dedicated pass (roadmap #6 / #10).

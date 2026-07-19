@@ -32,7 +32,7 @@ intentionally deferred ("implement before optimizing").
 The `?build=` URL parameter (shared with the proposal) seeds the client's
 selected enhancements. Config is the single source of truth; modules re-read it.
 
-## Status — Increment #1: Experience Shell
+## Status — Increments #1–#3
 
 Delivered:
 
@@ -42,15 +42,20 @@ Delivered:
   plumbing, but do not yet change authorization or drive the journey).
 - **Oracle Runtime** — config store seeded from `?build=`, module registry,
   single stage, context-preserving 250–400ms morph transition (reduced-motion
-  aware).
-- **Two stub modules** — Proposal + Product Catalog — proving the module-swap
-  morph and the config-driven contract end-to-end.
+  aware). Modules are mounted once and cached (see CR-005).
+- **Proposal (migrated)** — the full, approved proposal now runs as a real
+  Experience Module: rendered **full-canvas** inside a **Shadow DOM** for total
+  style isolation, opacity-only transition so its `position:fixed` gateway /
+  elevator / water stay anchored. Design tokens inherit from Oracle's `:root`
+  through the shadow boundary. (`images/` holds the proposal's photography.)
+- **Product Catalog** — stub module proving multi-module swap and the
+  config-driven, capability-ID contract end-to-end.
 
 ### Not yet built (later increments, in Directive priority order)
 
 1. ~~Experience Shell~~ ✅
 2. ~~Living Environment~~ ✅
-3. Proposal (migrate the real proposal here)
+3. ~~Proposal (migrate the real proposal here)~~ ✅
 4. Product Catalog (real enhancement selection engine)
 5. Platform Experience
 6. Perspectives (Guest / Member / Staff / Management — real)
