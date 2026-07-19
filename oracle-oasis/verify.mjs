@@ -10,74 +10,42 @@ const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
 page.on('console', m => { if (m.type() === 'error') errors.push('console.error: ' + m.text()); });
 page.on('pageerror', e => errors.push('pageerror: ' + e.message));
 
-const cc = () => page.evaluate(() => {
-  const el = document.getElementById('concierge');
-  return {
-    open: el.classList.contains('open'),
-    fresh: el.classList.contains('fresh'),
-    title: el.querySelector('[data-cc-title]').textContent.trim(),
-    body: el.querySelector('[data-cc-body]').textContent.trim(),
-    action: (el.querySelector('[data-cc-run]') || {}).textContent || null
-  };
-});
+const env = () => page.evaluate(() => ({ tgt: { ...window.__ENV.tgt }, cur: { ...window.__ENV.cur }, count: window.__ENV.count() }));
+const P = ".experience[data-experience='platform']";
 
-await page.goto(file + '?build=guest', { waitUntil: 'networkidle' });
-await page.waitForTimeout(700);
-
-// On the proposal: concierge present, pulsing (not auto-opened over the gateway)
-const onProposal = await cc();
-
-// Concierge suggests Build My Platform → follow it to the catalog
-await page.click('#concierge [data-cc-fab]');
-await page.waitForTimeout(200);
-const openedOnProposal = await cc();
-await page.click('#concierge [data-cc-run]');   // "Build My Platform"
+await page.goto(file + '?build=guest,community,marketing', { waitUntil: 'networkidle' });
 await page.waitForTimeout(600);
-const onCatalog = await cc();   // should now guide the catalog (guest already selected → "Ready when you are")
-await page.screenshot({ path: path.join(__dirname, 'v7-catalog.png') });
+const envInitial = await env();
 
-// Its action generates the platform
-await page.click('#concierge [data-cc-run]');   // "Build My Platform" → build
-await page.waitForSelector(".experience[data-experience='build'] [data-experience]", { timeout: 8000 });
-await page.click(".experience[data-experience='build'] [data-experience]");   // Experience My Platform
+// Enter the platform (member): a transition should have rippled + set mood
+await page.click('.mode-rail [data-mode="experience"]');
+await page.waitForTimeout(300);
+await page.click(P + ' [data-age-yes]');
 await page.waitForTimeout(400);
-await page.click(".experience[data-experience='platform'] [data-age-yes]");
-await page.waitForTimeout(400);
-const onPlatformMember = await cc();
+const afterEnter = await env();
 
-// Concierge's "Try the Staff view" action switches perspective
-await page.click('#concierge [data-cc-run]');
-await page.waitForTimeout(500);
-const onPlatformStaff = await cc();
+// Switch to Staff → higher-energy mood target
+await page.click("#perspective button[data-perspective='staff']");
+await page.waitForTimeout(1100);   // let it ripple + ease toward the target
+const staff = await env();
 
-// Management with no BI → concierge offers to add it; action toggles config
-await page.click("#perspective button[data-perspective='management']");
+// Switch to Guest → cooler, calmer mood target
+await page.click("#perspective button[data-perspective='guest']");
 await page.waitForTimeout(400);
-const mgmtBefore = await cc();
-await page.click('#concierge [data-cc-run]');   // "Add the BI Suite"
-await page.waitForTimeout(400);
-const mgmtAfter = await cc();
-await page.screenshot({ path: path.join(__dirname, 'v7-mgmt.png') });
-
-// Close button collapses it
-await page.click('#concierge [data-cc-close]');
-await page.waitForTimeout(150);
-const closed = await cc();
+const guest = await env();
 
 await browser.close();
 
-const results = { onProposal, openedOnProposal, onCatalog, onPlatformMember, onPlatformStaff, mgmtBefore, mgmtAfter, closed, errors };
+const results = { envInitial, afterEnter, staff, guest, errors };
 console.log(JSON.stringify(results, null, 2));
 
 const ok =
-  /Welcome to Oracle/.test(onProposal.title) && !onProposal.open && onProposal.fresh
-  && openedOnProposal.open
-  && /Ready when you are/.test(onCatalog.title) && /Build My Platform/.test(onCatalog.action || '')
-  && /Your platform, live/.test(onPlatformMember.title)
-  && /staff view/i.test(onPlatformStaff.title)
-  && /Unlock the numbers/.test(mgmtBefore.title) && /Add the BI Suite/.test(mgmtBefore.action || '')
-  && /management view/i.test(mgmtAfter.title)     // after adding BI, guidance advances
-  && !closed.open
+  afterEnter.count > 0                                   // transitions fire ripples
+  && Math.abs(staff.tgt.energy - 1.25) < 1e-6            // staff mood target set
+  && staff.cur.energy > 1.15                             // and the current value eased toward it
+  && Math.abs(guest.tgt.tint - 0.34) < 1e-6             // guest is cooler
+  && Math.abs(guest.tgt.energy - 0.80) < 1e-6          // and calmer
+  && guest.count > staff.count                           // perspective change on platform rippled again
   && errors.length === 0;
 console.log(ok ? '\n✅ VERIFY PASSED' : '\n❌ VERIFY FAILED');
 process.exit(ok ? 0 : 1);

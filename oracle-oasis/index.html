@@ -3188,12 +3188,48 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
   })();
 
   /* =================================================================
-     LIVING ENVIRONMENT — persistent water world
-     Both canvases are reused verbatim from the proposal's procedural
-     water. Layer A: deep caustics (full-viewport). Layer B: drifting
-     ambient blobs. Composited, they read as one continuous environment.
-     (Concept Registry: add further depth/foam/parallax layers later.)
+     LIVING ENVIRONMENT — persistent, context-reactive water world
+     Two composited canvases (caustics + ambient blobs) reused from the
+     proposal. Increment #8 makes them RESPOND to context: the mood (energy +
+     warm/cool tint) shifts per perspective and mode, and a ripple emanates
+     from the point of interaction on every transition. Everything eases, so
+     the world feels alive rather than switched.
      ================================================================= */
+
+  // Shared environment state. cur eases toward tgt every frame; ripples expand
+  // and fade. One owner (the ambient loop) steps it; the caustics loop reads it.
+  var ENV = (function(){
+    var cur = { energy:1, tint:0.5 };
+    var tgt = { energy:1, tint:0.5 };
+    var ripples = [];
+    var count = 0;
+    // mood presets — energy scales motion, tint biases warm(gold)↔cool(aqua)
+    var MOODS = {
+      neutral:    { energy:1.00, tint:0.50 },
+      build:      { energy:1.35, tint:0.50 },
+      guest:      { energy:0.80, tint:0.34 },
+      member:     { energy:1.00, tint:0.50 },
+      staff:      { energy:1.25, tint:0.56 },
+      management: { energy:0.90, tint:0.64 }
+    };
+    function setMood(name){ var m = MOODS[name]; if(m){ tgt.energy = m.energy; tgt.tint = m.tint; } }
+    function ripple(x, y){
+      if(reduce) return;
+      ripples.push({ x:x, y:y, t:0 }); count++;
+      if(ripples.length > 6) ripples.shift();
+    }
+    function step(){
+      cur.energy += (tgt.energy - cur.energy) * 0.045;
+      cur.tint   += (tgt.tint   - cur.tint)   * 0.045;
+      for(var i=ripples.length-1;i>=0;i--){ ripples[i].t += 1/60; if(ripples[i].t > 1.5) ripples.splice(i,1); }
+    }
+    return { cur:cur, tgt:tgt, ripples:ripples, setMood:setMood, ripple:ripple, step:step,
+             count:function(){ return count; } };
+  })();
+  // remember where the user last interacted, so ripples originate there
+  var lastPointer = { x: window.innerWidth/2, y: window.innerHeight*0.28 };
+  window.addEventListener("pointerdown", function(e){ lastPointer.x = e.clientX; lastPointer.y = e.clientY; }, { passive:true });
+  window.__ENV = ENV;  // debug/verification handle
 
   /* Layer A — caustics (from proposal hero water, now full-viewport) */
   (function(){
@@ -3231,7 +3267,7 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       ctx.drawImage(off,0,0,cv.width,cv.height);
     }
     var t=0;
-    function loop(){ t+=0.013; render(t); requestAnimationFrame(loop); }
+    function loop(){ t += 0.013 * (0.6 + 0.55 * ENV.cur.energy); render(t); requestAnimationFrame(loop); }
     resize();
     if(reduce){ render(1.9); } else { loop(); }
     var rz; window.addEventListener("resize", function(){ clearTimeout(rz); rz=setTimeout(function(){ resize(); if(reduce) render(1.9); }, 200); });
@@ -3261,20 +3297,36 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
       }
     }
     function draw(){
+      if(!reduce) ENV.step();                 // ambient loop owns the env stepping
+      var energy = ENV.cur.energy, tint = ENV.cur.tint;
       ctx.clearRect(0,0,W,H);
       ctx.globalCompositeOperation = "lighter";
       var light = isLight();
       for(var i=0;i<blobs.length;i++){
         var b = blobs[i];
-        if(!reduce){ b.x += b.sx; b.y += b.sy;
+        if(!reduce){ b.x += b.sx * energy; b.y += b.sy * energy;
           if(b.x<-0.2) b.x=1.2; if(b.x>1.2) b.x=-0.2; if(b.y<-0.2) b.y=1.2; if(b.y>1.2) b.y=-0.2; }
         var cx = b.x*W, cy = b.y*H, rad = b.r*Math.max(W,H);
         var g = ctx.createRadialGradient(cx,cy,0,cx,cy,rad);
         var col = b.hue===0 ? [79,186,203] : (b.hue===1 ? [201,162,75] : [30,107,120]);
         var a = light ? 0.05 : 0.09;
+        // warm/cool bias: gold blobs strengthen with tint, aqua/deep with its inverse
+        a *= (b.hue===1) ? (0.7 + 0.9*tint) : (0.7 + 0.9*(1-tint));
         g.addColorStop(0,"rgba("+col[0]+","+col[1]+","+col[2]+","+a+")");
         g.addColorStop(1,"rgba("+col[0]+","+col[1]+","+col[2]+",0)");
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx,cy,rad,0,Math.PI*2); ctx.fill();
+      }
+      // ripples — expanding rings from the point of interaction, fading out
+      if(!reduce && ENV.ripples.length){
+        var maxR = Math.max(W,H) * 0.5;
+        for(var r=0;r<ENV.ripples.length;r++){
+          var rp = ENV.ripples[r], k = rp.t/1.5;           // 0→1
+          var rad2 = k * maxR, alpha = (1-k)*(1-k) * 0.22;
+          ctx.beginPath(); ctx.arc(rp.x*dpr, rp.y*dpr, rad2, 0, Math.PI*2);
+          ctx.strokeStyle = "rgba(120,200,210,"+alpha+")"; ctx.lineWidth = 2*dpr; ctx.stroke();
+          ctx.beginPath(); ctx.arc(rp.x*dpr, rp.y*dpr, rad2*0.7, 0, Math.PI*2);
+          ctx.strokeStyle = "rgba(210,180,110,"+(alpha*0.7)+")"; ctx.lineWidth = 1.5*dpr; ctx.stroke();
+        }
       }
       ctx.globalCompositeOperation = "source-over";
       if(!reduce) requestAnimationFrame(draw);
@@ -3327,6 +3379,25 @@ window.OASIS_PROPOSAL_INIT = function(ROOT){
     if(x) x.setAttribute("data-active", expActive ? "true" : "false");
     Oracle.api.setConfig({ mode: buildActive ? "build" : (expActive ? "experience" : "view") });
   });
+
+  /* The Living Environment reacts to context: a ripple emanates from the point
+     of interaction on every transition, and the water's mood (energy + warm/cool
+     tint) shifts with the module and perspective. */
+  (function(){
+    var lastMood = null, lastPersp = Oracle.api.config.perspective;
+    function moodKey(){
+      var id = Oracle.api.current();
+      if(id === "platform") return Oracle.api.config.perspective;
+      if(id === "build") return "build";
+      return "neutral";
+    }
+    function apply(){ var k = moodKey(); if(k !== lastMood){ lastMood = k; ENV.setMood(k); } }
+    Oracle.api.onNavigate(function(){ ENV.ripple(lastPointer.x, lastPointer.y); apply(); });
+    Oracle.api.onConfig(function(){
+      var p = Oracle.api.config.perspective;
+      if(p !== lastPersp){ lastPersp = p; if(Oracle.api.current() === "platform"){ ENV.ripple(lastPointer.x, lastPointer.y); } apply(); }
+    });
+  })();
 
   /* =================================================================
      CONCIERGE — persistent, rule-driven contextual guide (NOT AI).

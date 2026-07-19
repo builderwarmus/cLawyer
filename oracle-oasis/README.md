@@ -90,6 +90,13 @@ Delivered:
   Management view with no analytics (which toggles config and enriches the view
   live). A gold FAB (bottom-right) pulses on new guidance and expands to the panel.
 
+- **Environmental interactions** — the Living Environment now *reacts to context*.
+  A **ripple** emanates from the point of interaction on every transition, and the
+  water's **mood** (energy + warm/cool tint) eases per module and perspective:
+  Guest is calm and cool, Staff more energetic, Management deeper and warmer, the
+  Build sequence briefly livelier. Nothing snaps — everything eases, and it's
+  reduced-motion aware.
+
 ### Not yet built (later increments, in Directive priority order)
 
 1. ~~Experience Shell~~ ✅
@@ -99,6 +106,7 @@ Delivered:
 5. ~~Platform Experience~~ ✅
 6. ~~Perspectives (Guest / Member / Staff / Management — real)~~ ✅
 7. ~~Concierge (rule-driven, not AI)~~ ✅
+8. ~~Environmental interactions~~ ✅
 8. Environmental interactions
 9. Configuration integration (against the live Master Registry)
 10. Visual refinement

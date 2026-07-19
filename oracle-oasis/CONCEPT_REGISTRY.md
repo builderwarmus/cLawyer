@@ -24,6 +24,10 @@ blobs), both reused verbatim from the proposal.
 - Keep it dependency-free and reduced-motion aware; performance budget first.
 **Do not** start until the client's "notes" are on hand — they described a
 specific layering they want. Ask for those notes when we return to this.
+**Update (Increment #8):** the reactive hook now exists — a shared `ENV`
+controller (`setMood` / `ripple` / eased `step`) drives energy + warm/cool tint
+and interaction ripples. The future depth/foam/parallax layers plug into this
+same controller, so mood and ripples will carry through them for free.
 
 ---
 
